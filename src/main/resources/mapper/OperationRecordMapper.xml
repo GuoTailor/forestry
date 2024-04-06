@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.gyh.forestry.mapper.OperationRecordMapper">
+    <resultMap id="BaseResultMap" type="org.gyh.forestry.domain.OperationRecord">
+        <!--@mbg.generated-->
+        <!--@Table operation_record-->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="model_name" jdbcType="VARCHAR" property="modelName"/>
+        <result column="operation" jdbcType="VARCHAR" property="operation"/>
+        <result column="method" jdbcType="VARCHAR" property="method"/>
+        <result column="url" jdbcType="VARCHAR" property="url"/>
+        <result column="ip" jdbcType="VARCHAR" property="ip"/>
+        <result column="location" jdbcType="VARCHAR" property="location"/>
+        <result column="state" jdbcType="BOOLEAN" property="state"/>
+        <result column="function" jdbcType="VARCHAR" property="function"/>
+        <result column="request" jdbcType="VARCHAR" property="request"/>
+        <result column="response" jdbcType="VARCHAR" property="response"/>
+        <result column="operation_user" jdbcType="VARCHAR" property="operationUser"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id,
+        model_name,
+        "operation",
+        "method",
+        url,
+        ip,
+        "location",
+        "state",
+        "function",
+        request,
+        response,
+        operation_user,
+        create_time
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from operation_record
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        <!--@mbg.generated-->
+        delete
+        from operation_record
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="org.gyh.forestry.domain.OperationRecord">
+        <!--@mbg.generated-->
+        insert into operation_record (id, model_name, "operation",
+                                      "method", url, ip, "location",
+                                      "state", "function", request,
+                                      response, operation_user, create_time)
+        values (#{id,jdbcType=INTEGER}, #{modelName,jdbcType=VARCHAR}, #{operation,jdbcType=VARCHAR},
+                #{method,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, #{ip,jdbcType=VARCHAR},
+                #{location,jdbcType=VARCHAR},
+                #{state,jdbcType=BOOLEAN}, #{function,jdbcType=VARCHAR}, #{request,jdbcType=VARCHAR},
+                #{response,jdbcType=VARCHAR}, #{operationUser,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" parameterType="org.gyh.forestry.domain.OperationRecord">
+        <!--@mbg.generated-->
+        insert into operation_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="modelName != null">
+                model_name,
+            </if>
+            <if test="operation != null">
+                "operation",
+            </if>
+            <if test="method != null">
+                "method",
+            </if>
+            <if test="url != null">
+                url,
+            </if>
+            <if test="ip != null">
+                ip,
+            </if>
+            <if test="location != null">
+                "location",
+            </if>
+            <if test="state != null">
+                "state",
+            </if>
+            <if test="function != null">
+                "function",
+            </if>
+            <if test="request != null">
+                request,
+            </if>
+            <if test="response != null">
+                response,
+            </if>
+            <if test="operationUser != null">
+                operation_user,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="modelName != null">
+                #{modelName,jdbcType=VARCHAR},
+            </if>
+            <if test="operation != null">
+                #{operation,jdbcType=VARCHAR},
+            </if>
+            <if test="method != null">
+                #{method,jdbcType=VARCHAR},
+            </if>
+            <if test="url != null">
+                #{url,jdbcType=VARCHAR},
+            </if>
+            <if test="ip != null">
+                #{ip,jdbcType=VARCHAR},
+            </if>
+            <if test="location != null">
+                #{location,jdbcType=VARCHAR},
+            </if>
+            <if test="state != null">
+                #{state,jdbcType=BOOLEAN},
+            </if>
+            <if test="function != null">
+                #{function,jdbcType=VARCHAR},
+            </if>
+            <if test="request != null">
+                #{request,jdbcType=VARCHAR},
+            </if>
+            <if test="response != null">
+                #{response,jdbcType=VARCHAR},
+            </if>
+            <if test="operationUser != null">
+                #{operationUser,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="org.gyh.forestry.domain.OperationRecord">
+        <!--@mbg.generated-->
+        update operation_record
+        <set>
+            <if test="modelName != null">
+                model_name = #{modelName,jdbcType=VARCHAR},
+            </if>
+            <if test="operation != null">
+                "operation" = #{operation,jdbcType=VARCHAR},
+            </if>
+            <if test="method != null">
+                "method" = #{method,jdbcType=VARCHAR},
+            </if>
+            <if test="url != null">
+                url = #{url,jdbcType=VARCHAR},
+            </if>
+            <if test="ip != null">
+                ip = #{ip,jdbcType=VARCHAR},
+            </if>
+            <if test="location != null">
+                "location" = #{location,jdbcType=VARCHAR},
+            </if>
+            <if test="state != null">
+                "state" = #{state,jdbcType=BOOLEAN},
+            </if>
+            <if test="function != null">
+                "function" = #{function,jdbcType=VARCHAR},
+            </if>
+            <if test="request != null">
+                request = #{request,jdbcType=VARCHAR},
+            </if>
+            <if test="response != null">
+                response = #{response,jdbcType=VARCHAR},
+            </if>
+            <if test="operationUser != null">
+                operation_user = #{operationUser,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="org.gyh.forestry.domain.OperationRecord">
+        <!--@mbg.generated-->
+        update operation_record
+        set model_name     = #{modelName,jdbcType=VARCHAR},
+            "operation"    = #{operation,jdbcType=VARCHAR},
+            "method"       = #{method,jdbcType=VARCHAR},
+            url            = #{url,jdbcType=VARCHAR},
+            ip             = #{ip,jdbcType=VARCHAR},
+            "location"     = #{location,jdbcType=VARCHAR},
+            "state"        = #{state,jdbcType=BOOLEAN},
+            "function"     = #{function,jdbcType=VARCHAR},
+            request        = #{request,jdbcType=VARCHAR},
+            response       = #{response,jdbcType=VARCHAR},
+            operation_user = #{operationUser,jdbcType=VARCHAR},
+            create_time    = #{createTime,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="selectBySelective" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
+        from operation_record
+        <where>
+            <if test="method != null and method != ''">
+                method = #{method}
+            </if>
+            <if test="modelName != null and modelName != ''">
+                and model_name = #{modelName,jdbcType=VARCHAR}
+            </if>
+            <if test="operationUser != null and operationUser != ''">
+                and "operation_user" = #{operationUser,jdbcType=VARCHAR}
+            </if>
+            <if test="state != null">
+                and state = #{state}
+            </if>
+            <if test="startCreateTime != null">
+                and create_time &gt;= #{startCreateTime}
+            </if>
+            <if test="endCreateTime != null">
+                and create_time &lt;= #{endCreateTime}
+            </if>
+        </where>
+    </select>
+</mapper>

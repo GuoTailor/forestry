@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.gyh.forestry.mapper.AnimalMapper">
+    <resultMap id="BaseResultMap" type="org.gyh.forestry.domain.Animal">
+        <!--@mbg.generated-->
+        <!--@Table animal-->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="location_zh" jdbcType="VARCHAR" property="locationZh"/>
+        <result column="location" jdbcType="OTHER" property="location"/>
+        <result column="type" jdbcType="VARCHAR" property="type"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="camera_id" jdbcType="VARCHAR" property="cameraId"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id,
+        location_zh,
+        "location",
+        "type",
+        create_time,
+        camera_id,
+        "name"
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from animal
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        <!--@mbg.generated-->
+        delete
+        from animal
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="org.gyh.forestry.domain.Animal">
+        <!--@mbg.generated-->
+        insert into animal (id, location_zh, "location",
+                            "type", create_time, camera_id,
+                            "name")
+        values (#{id,jdbcType=INTEGER}, #{locationZh,jdbcType=VARCHAR}, #{location,jdbcType=OTHER},
+                #{type,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{cameraId,jdbcType=VARCHAR},
+                #{name,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="org.gyh.forestry.domain.Animal">
+        <!--@mbg.generated-->
+        insert into animal
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="locationZh != null">
+                location_zh,
+            </if>
+            <if test="location != null">
+                "location",
+            </if>
+            <if test="type != null">
+                "type",
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="cameraId != null">
+                camera_id,
+            </if>
+            <if test="name != null">
+                "name",
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="locationZh != null">
+                #{locationZh,jdbcType=VARCHAR},
+            </if>
+            <if test="location != null">
+                #{location,jdbcType=OTHER},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="cameraId != null">
+                #{cameraId,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="org.gyh.forestry.domain.Animal">
+        <!--@mbg.generated-->
+        update animal
+        <set>
+            <if test="locationZh != null">
+                location_zh = #{locationZh,jdbcType=VARCHAR},
+            </if>
+            <if test="location != null">
+                "location" = #{location,jdbcType=OTHER},
+            </if>
+            <if test="type != null">
+                "type" = #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="cameraId != null">
+                camera_id = #{cameraId,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                "name" = #{name,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="org.gyh.forestry.domain.Animal">
+        <!--@mbg.generated-->
+        update animal
+        set location_zh = #{locationZh,jdbcType=VARCHAR},
+            "location"  = #{location,jdbcType=OTHER},
+            "type"      = #{type,jdbcType=VARCHAR},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            camera_id   = #{cameraId,jdbcType=VARCHAR},
+            "name"      = #{name,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from animal
+    </select>
+</mapper>

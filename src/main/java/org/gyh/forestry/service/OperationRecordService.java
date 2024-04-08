@@ -23,6 +23,10 @@ public class OperationRecordService {
         operationRecordMapper.insert(operationRecord);
     }
 
+    public void insertSelective(OperationRecord operationRecord) {
+        operationRecordMapper.insertSelective(operationRecord);
+    }
+
     public PageInfo<OperationRecord> selectByPage(OperationRecordPage pageReq) {
         Page<OperationRecord> page = PageHelper.startPage(pageReq.getPage(), pageReq.getPageSize());
         operationRecordMapper.selectBySelective(pageReq);

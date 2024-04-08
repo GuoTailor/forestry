@@ -9,6 +9,7 @@ import org.gyh.forestry.dto.resp.AddUserInfo;
 import org.gyh.forestry.mapper.RoleMapper;
 import org.gyh.forestry.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -16,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -44,6 +46,23 @@ public class UserService implements UserDetailsService {
         return userMapper.findAll();
     }
 
+    public User findById(Integer userId) {
+        if (userId == null) {
+            User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            userId = user.getId();
+        }
+        User user = userMapper.selectByPrimaryKey(userId);
+        if (user != null) {
+            List<Role> rolesByUserId = roleMapper.getRolesByUserId(userId);
+            user.setRoles(rolesByUserId);
+        }
+        return user;
+    }
+
+    public Boolean deleteUserById(Integer uid) {
+        return userMapper.deleteByPrimaryKey(uid) > 0;
+    }
+
     public PageInfo<User> findByPage(UserPageReq pageReq) {
         return PageInfo.ok(userMapper.countByPage(pageReq), pageReq, userMapper.findByPage(pageReq));
     }
@@ -51,7 +70,8 @@ public class UserService implements UserDetailsService {
     public User addUser(AddUserInfo addUserInfo) {
         User user = addUserInfo.toUser();
         user.setPassword(passwordEncoder.encode(addUserInfo.password()));
-        userMapper.insert(user);
+        user.setCreateTime(LocalDateTime.now());
+        userMapper.insertSelective(user);
         if (!CollectionUtils.isEmpty(addUserInfo.roles())) {
             for (Integer roleId : addUserInfo.roles()) {
                 userMapper.insertUserRole(user.getId(), roleId);

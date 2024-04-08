@@ -7,7 +7,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.gyh.forestry.domain.Animal;
 import org.gyh.forestry.dto.PageInfo;
 import org.gyh.forestry.dto.PageReq;
+import org.gyh.forestry.dto.resp.AnimalResp;
+import org.gyh.forestry.dto.resp.JsonPoint;
 import org.gyh.forestry.mapper.AnimalMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,20 +26,31 @@ public class AnimalService {
 
     /**
      * 添加
-     * @param animal
      */
     public void addAnimal(Animal animal) {
         animalMapper.insertSelective(animal);
         log.info("插入一个{}", animal.getId());
     }
 
-    public Animal selectById(Integer id) {
-        return animalMapper.selectByPrimaryKey(id);
+    public AnimalResp selectById(Integer id) {
+        Animal animal = animalMapper.selectByPrimaryKey(id);
+        AnimalResp resp = new AnimalResp();
+        BeanUtils.copyProperties(animal, resp);
+        JsonPoint jsonPoint = new JsonPoint(animal.getLocation());
+        resp.setLocation(jsonPoint);
+        return resp;
     }
 
-    public PageInfo<Animal> selectByPage(PageReq pageReq) {
+    public PageInfo<AnimalResp> selectByPage(PageReq pageReq) {
         Page<Animal> page = PageHelper.startPage(pageReq.getPage(), pageReq.getPageSize());
         List<Animal> animals = animalMapper.selectAll();
-        return PageInfo.ok(page.getTotal(), pageReq, animals);
+        List<AnimalResp> list = animals.stream().map(it -> {
+            AnimalResp resp = new AnimalResp();
+            BeanUtils.copyProperties(it, resp);
+            JsonPoint jsonPoint = new JsonPoint(it.getLocation());
+            resp.setLocation(jsonPoint);
+            return resp;
+        }).toList();
+        return PageInfo.ok(page.getTotal(), pageReq, list);
     }
 }

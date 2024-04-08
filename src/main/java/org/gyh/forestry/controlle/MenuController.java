@@ -1,8 +1,10 @@
 package org.gyh.forestry.controlle;
 
+import org.gyh.forestry.domain.Menu;
 import org.gyh.forestry.domain.Role;
 import org.gyh.forestry.domain.vo.MenuVO;
 import org.gyh.forestry.dto.ResponseInfo;
+import org.gyh.forestry.dto.req.AddMenu;
 import org.gyh.forestry.service.MenuService;
 import org.gyh.forestry.service.RoleService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,14 +30,26 @@ public class MenuController {
 
     @GetMapping("/")
     @Operation(summary = "获取所有角色", security = {@SecurityRequirement(name = "Authorization")})
-    public List<Role> getAllRoles() {
-        return roleService.getAllRoles();
+    public ResponseInfo<List<Role>> getAllRoles() {
+        return ResponseInfo.ok(roleService.getAllRoles());
     }
 
     @Operation(summary = "获取所有菜单", security = {@SecurityRequirement(name = "Authorization")})
     @GetMapping("/menus/all")
-    public List<MenuVO> getAllMenus() {
-        return menuService.getAllMenus();
+    public ResponseInfo<List<MenuVO>> getAllMenus() {
+        return ResponseInfo.ok(menuService.getAllMenus());
+    }
+
+    @Operation(summary = "添加菜单", security = {@SecurityRequirement(name = "Authorization")})
+    @PostMapping("/menus/all")
+    public ResponseInfo<Menu> addMenu(@RequestBody AddMenu addMenu) {
+        return ResponseInfo.ok(menuService.addMenu(addMenu));
+    }
+
+    @Operation(summary = "删除菜单", security = {@SecurityRequirement(name = "Authorization")})
+    @GetMapping("/menus/{rid}")
+    public ResponseInfo<Boolean> deleteMenuById(@PathVariable Integer rid) {
+        return ResponseInfo.ok(menuService.deleteMenuById(rid));
     }
 
     @Operation(summary = "获取当前用户的所有菜单", security = {@SecurityRequirement(name = "Authorization")})
@@ -46,8 +60,8 @@ public class MenuController {
 
     @Operation(summary = "获取指定角色的所有菜单", security = {@SecurityRequirement(name = "Authorization")})
     @GetMapping("/mids/{rid}")
-    public List<Integer> getMidsByRid(@PathVariable Integer rid) {
-        return menuService.getMidsByRid(rid);
+    public ResponseInfo<List<Integer>> getMidsByRid(@PathVariable Integer rid) {
+        return ResponseInfo.ok(menuService.getMidsByRid(rid));
     }
 
     @Operation(summary = "更新角色的菜单", security = {@SecurityRequirement(name = "Authorization")})

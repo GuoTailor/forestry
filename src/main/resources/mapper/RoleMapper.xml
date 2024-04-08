@@ -73,4 +73,11 @@
             role_name = #{roleName,jdbcType=VARCHAR}
         where id = #{id,jdbcType=INTEGER}
     </update>
+
+    <select id="getRolesByUserId" resultMap="BaseResultMap">
+        select r.*
+        from role r
+                 left join user_role ur on r.id = ur.role_id
+        where ur.user_id = #{userId}
+    </select>
 </mapper>

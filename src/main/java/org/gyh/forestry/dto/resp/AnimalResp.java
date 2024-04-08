@@ -1,7 +1,6 @@
 package org.gyh.forestry.dto.resp;
 
 import lombok.Data;
-import net.postgis.jdbc.geometry.Point;
 
 import java.time.LocalDateTime;
 
@@ -20,7 +19,7 @@ public class AnimalResp {
     /**
      * 经纬度
      */
-    private Point location;
+    private JsonPoint location;
 
     /**
      * 类型

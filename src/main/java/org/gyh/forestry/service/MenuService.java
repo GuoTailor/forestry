@@ -1,11 +1,15 @@
 package org.gyh.forestry.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.gyh.forestry.domain.Menu;
 import org.gyh.forestry.domain.User;
 import org.gyh.forestry.domain.vo.MenuVO;
 import org.gyh.forestry.domain.vo.MenuWithRole;
+import org.gyh.forestry.dto.req.AddMenu;
+import org.gyh.forestry.exception.BusinessException;
 import org.gyh.forestry.mapper.MenuMapper;
 import org.gyh.forestry.mapper.MenuRoleMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -45,6 +49,25 @@ public class MenuService {
 
     public List<MenuVO> getAllMenus() {
         return menuMapper.getAllMenus();
+    }
+
+    @CacheEvict(cacheNames = "AllMenus", key = "'AllMenus'")
+    public Menu addMenu(AddMenu addMenu) {
+        Menu menu = new Menu();
+        BeanUtils.copyProperties(addMenu, menu);
+        if (addMenu.getParentId() != null) {
+            Menu menusByParentId = menuMapper.selectByPrimaryKey(addMenu.getParentId());
+            if (menusByParentId == null) {
+                throw new BusinessException("父级菜单不存在");
+            }
+        }
+        menuMapper.insertSelective(menu);
+        return menu;
+    }
+
+    @CacheEvict(cacheNames = "AllMenus", key = "'AllMenus'")
+    public Boolean deleteMenuById(Integer rid) {
+        return menuMapper.deleteByPrimaryKey(rid) > 0;
     }
 
     public List<Integer> getMidsByRid(Integer rid) {

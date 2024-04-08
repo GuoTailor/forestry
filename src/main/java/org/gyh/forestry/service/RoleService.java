@@ -21,7 +21,7 @@ public class RoleService {
         if (!role.getAuthority().startsWith("ROLE_")) {
             role.setAuthority("ROLE_" + role.getAuthority());
         }
-        return roleMapper.insert(role);
+        return roleMapper.insertSelective(role);
     }
 
     public Integer updateRole(Role role) {

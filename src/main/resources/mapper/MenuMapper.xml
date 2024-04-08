@@ -54,7 +54,7 @@
         select
         <include refid="Base_Column_List"/>
         from menu
-        where id = #{id,jdbcType=INTEGER}
+        where parent_id = #{id,jdbcType=INTEGER}
     </select>
     <select id="getAllMenusWithRole" resultMap="MenuWithRole">
         select m.*, r."id" as rid, r.authority as authority, r.role_name as role_name

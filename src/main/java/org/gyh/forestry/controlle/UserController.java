@@ -11,10 +11,7 @@ import org.gyh.forestry.dto.req.UserPageReq;
 import org.gyh.forestry.dto.resp.AddUserInfo;
 import org.gyh.forestry.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -46,4 +43,15 @@ public class UserController {
         return ResponseInfo.ok(userService.findAll());
     }
 
+    @GetMapping()
+    @Operation(summary = "获取用户信息，不传id就默认获取当前登录用户信息", security = {@SecurityRequirement(name = "Authorization")})
+    public ResponseInfo<User> findById(@RequestParam(required = false) Integer id) {
+        return ResponseInfo.ok(userService.findById(id));
+    }
+
+    @GetMapping("/{uid}")
+    @Operation(summary = "删除用户", security = {@SecurityRequirement(name = "Authorization")})
+    public ResponseInfo<Boolean> deleteUserById(@PathVariable Integer uid) {
+        return ResponseInfo.ok(userService.deleteUserById(uid));
+    }
 }

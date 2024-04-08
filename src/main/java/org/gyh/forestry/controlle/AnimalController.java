@@ -3,10 +3,10 @@ package org.gyh.forestry.controlle;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.gyh.forestry.domain.Animal;
 import org.gyh.forestry.dto.PageInfo;
 import org.gyh.forestry.dto.PageReq;
 import org.gyh.forestry.dto.ResponseInfo;
+import org.gyh.forestry.dto.resp.AnimalResp;
 import org.gyh.forestry.service.AnimalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -23,13 +23,13 @@ public class AnimalController {
 
     @Operation(summary = "分页查询动物", security = {@SecurityRequirement(name = "Authorization")})
     @PostMapping("/page")
-    public PageInfo<Animal> selectByPage(@RequestBody PageReq pageReq) {
+    public PageInfo<AnimalResp> selectByPage(@RequestBody PageReq pageReq) {
         return animalService.selectByPage(pageReq);
     }
 
     @Operation(summary = "获取详情", security = {@SecurityRequirement(name = "Authorization")})
     @GetMapping()
-    public ResponseInfo<Animal> selectById(@RequestParam Integer id) {
+    public ResponseInfo<AnimalResp> selectById(@RequestParam Integer id) {
         return ResponseInfo.ok(animalService.selectById(id));
     }
 }

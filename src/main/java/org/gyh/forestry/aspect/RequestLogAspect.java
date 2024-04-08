@@ -123,7 +123,7 @@ public class RequestLogAspect {
                     record.setOperation(user.getUsername());
                 }
                 record.setCreateTime(LocalDateTime.now());
-                operationRecordService.insert(record);
+                operationRecordService.insertSelective(record);
             }
             return result;
         } finally {

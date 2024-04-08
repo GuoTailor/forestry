@@ -97,7 +97,7 @@ public class AuthenticationHandler implements AuthenticationSuccessHandler,
         User user = (User) userToken.getPrincipal();
         String redisKey = Constant.tokenKey + user.getUsername() + Constant.tokenInfix + token;
         try {
-            String value = json.writeValueAsString(new ResponseInfo<>(ResponseInfo.OK_CODE, token));
+            String value = json.writeValueAsString(new ResponseInfo<>(ResponseInfo.OK_CODE, "登录成功", token));
             Duration expired = Duration.ofMillis(Constant.tokenTtlMillis);
             Set<String> keys = redisTemplate.keys(Constant.tokenKey + user.getUsername() + Constant.tokenInfix + "*");
             if (keys != null) {

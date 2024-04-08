@@ -8,6 +8,7 @@ import org.gyh.forestry.domain.Animal;
 import org.gyh.forestry.domain.User;
 import org.gyh.forestry.dto.PageInfo;
 import org.gyh.forestry.dto.PageReq;
+import org.gyh.forestry.dto.resp.AnimalResp;
 import org.gyh.forestry.mapper.UserMapper;
 import org.gyh.forestry.service.AnimalService;
 import org.junit.jupiter.api.Test;
@@ -39,7 +40,7 @@ class ForestryApplicationTests {
         animal.setLocationZh("nmka");
         animalService.addAnimal(animal);
 
-        Animal animal1 = animalService.selectById(animal.getId());
+        AnimalResp animal1 = animalService.selectById(animal.getId());
         System.out.println(animal1);
     }
 
@@ -48,7 +49,7 @@ class ForestryApplicationTests {
         PageReq pageReq = new PageReq();
         pageReq.setPage(0);
         pageReq.setPageSize(2);
-        PageInfo<Animal> animalPageInfo = animalService.selectByPage(pageReq);
+        PageInfo<AnimalResp> animalPageInfo = animalService.selectByPage(pageReq);
         String x = json.writeValueAsString(animalPageInfo);
         System.out.println(x);
         PageInfo<Animal> animalPageInfo1 = json.readValue(x, new TypeReference<PageInfo<Animal>>() {

@@ -15,6 +15,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDateTime;
+
 @SpringBootTest
 class ForestryApplicationTests {
     @Autowired
@@ -24,6 +26,16 @@ class ForestryApplicationTests {
     @Autowired
     private ObjectMapper json;
 
+    @Test
+    void testAdd() {
+        User user = new User();
+        user.setUsername("gyh");
+        user.setPassword("123456");
+        user.setEnable(true);
+        user.setCreateTime(LocalDateTime.now());
+        userMapper.insertSelective(user);
+        System.out.println(user.getId());
+    }
 
     @Test
     void contextLoads() {

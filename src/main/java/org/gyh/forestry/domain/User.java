@@ -16,12 +16,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * create by GYH on 2022/10/27
+ * create by GYH on 2024/5/14
  */
 @Data
 public class User implements UserDetails, Serializable {
     @Id
     private Integer id;
+
+    /**
+     * 用户名
+     */
     private String username;
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
@@ -32,6 +36,21 @@ public class User implements UserDetails, Serializable {
     private LocalDateTime createTime;
     @Transient
     private Boolean credentialsNonExpired = true;
+
+    /**
+     * 手机号
+     */
+    private String tel;
+
+    /**
+     * 邮箱
+     */
+    private String email;
+
+    /**
+     * 创建人
+     */
+    private String creator;
 
     @JsonIgnore
     public List<String> getStringRoles() {

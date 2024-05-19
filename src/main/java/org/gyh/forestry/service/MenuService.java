@@ -76,12 +76,12 @@ public class MenuService {
 
     @CacheEvict(cacheNames = "AllMenus", key = "'AllMenus'")
     @Transactional(rollbackFor = Exception.class)
-    public boolean updateMenuRole(Integer rid, Integer[] mids) {
+    public boolean updateMenuRole(Integer rid, List<Integer> mids) {
         menuRoleMapper.deleteByRid(rid);
-        if (mids == null || mids.length == 0) {
+        if (mids == null || mids.isEmpty()) {
             return true;
         }
         Integer result = menuRoleMapper.insertRecord(rid, mids);
-        return result == mids.length;
+        return result == mids.size();
     }
 }

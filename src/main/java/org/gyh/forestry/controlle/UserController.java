@@ -9,6 +9,7 @@ import org.gyh.forestry.dto.PageInfo;
 import org.gyh.forestry.dto.ResponseInfo;
 import org.gyh.forestry.dto.req.UserPageReq;
 import org.gyh.forestry.dto.resp.AddUserInfo;
+import org.gyh.forestry.dto.resp.UserInfo;
 import org.gyh.forestry.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +34,7 @@ public class UserController {
 
     @PostMapping("/find/page")
     @Operation(summary = "分页查询用户列表", security = {@SecurityRequirement(name = "Authorization")})
-    public PageInfo<User> findByPage(@RequestBody UserPageReq pageReq) {
+    public PageInfo<UserInfo> findByPage(@RequestBody UserPageReq pageReq) {
         return userService.findByPage(pageReq);
     }
 

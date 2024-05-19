@@ -1,13 +1,18 @@
 package org.gyh.forestry.service;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import jakarta.annotation.Resource;
+import org.gyh.forestry.domain.OperationRecord;
 import org.gyh.forestry.domain.Role;
 import org.gyh.forestry.domain.User;
 import org.gyh.forestry.dto.PageInfo;
 import org.gyh.forestry.dto.req.UserPageReq;
 import org.gyh.forestry.dto.resp.AddUserInfo;
+import org.gyh.forestry.dto.resp.UserInfo;
 import org.gyh.forestry.mapper.RoleMapper;
 import org.gyh.forestry.mapper.UserMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -63,8 +68,20 @@ public class UserService implements UserDetailsService {
         return userMapper.deleteByPrimaryKey(uid) > 0;
     }
 
-    public PageInfo<User> findByPage(UserPageReq pageReq) {
-        return PageInfo.ok(userMapper.countByPage(pageReq), pageReq, userMapper.findByPage(pageReq));
+    /**
+     * 分页查询
+     * @param pageReq 分页条件
+     */
+    public PageInfo<UserInfo> findByPage(UserPageReq pageReq) {
+        try (Page<OperationRecord> page = PageHelper.startPage(pageReq.getPage(), pageReq.getPageSize())) {
+            List<User> all = userMapper.findByPage(pageReq);
+            List<UserInfo> list = all.stream().map(it -> {
+                UserInfo userInfo = new UserInfo();
+                BeanUtils.copyProperties(it, userInfo);
+                return userInfo;
+            }).toList();
+            return PageInfo.ok(page.getTotal(), pageReq, list);
+        }
     }
 
     public User addUser(AddUserInfo addUserInfo) {

@@ -28,9 +28,10 @@ public class OperationRecordService {
     }
 
     public PageInfo<OperationRecord> selectByPage(OperationRecordPage pageReq) {
-        Page<OperationRecord> page = PageHelper.startPage(pageReq.getPage(), pageReq.getPageSize());
-        operationRecordMapper.selectBySelective(pageReq);
-        return PageInfo.ok(page.getTotal(), pageReq, page.getResult());
+        try (Page<OperationRecord> page = PageHelper.startPage(pageReq.getPage(), pageReq.getPageSize())) {
+            operationRecordMapper.selectBySelective(pageReq);
+            return PageInfo.ok(page.getTotal(), pageReq, page.getResult());
+        }
     }
 
     public OperationRecord selectById(Integer id) {

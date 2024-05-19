@@ -7,16 +7,22 @@
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="username" jdbcType="VARCHAR" property="username"/>
         <result column="password" jdbcType="VARCHAR" property="password"/>
-        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="enable" jdbcType="BOOLEAN" property="enable"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="tel" jdbcType="VARCHAR" property="tel"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="creator" jdbcType="VARCHAR" property="creator"/>
     </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
         id,
         username,
-        password,
+        "password",
+        "enable",
         create_time,
-        "enable"
+        tel,
+        email,
+        creator
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         <!--@mbg.generated-->
@@ -25,30 +31,20 @@
         from "user"
         where id = #{id,jdbcType=INTEGER}
     </select>
-    <select id="findUserByUserName" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List"/>
-        from "user"
-        where username = #{username}
-    </select>
-    <select id="findRolesByUserId" resultType="org.gyh.forestry.domain.Role">
-        select role.* from role left join user_role ur on role.id = ur.role_id where user_id = #{userId}
-    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         <!--@mbg.generated-->
         delete
         from "user"
         where id = #{id,jdbcType=INTEGER}
     </delete>
-    <insert id="insert" parameterType="org.gyh.forestry.domain.User" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" parameterType="org.gyh.forestry.domain.User">
         <!--@mbg.generated-->
-        insert into "user" (id, username, password,
-                            create_time, "enable")
+        insert into "user" (id, username, "password",
+                            "enable", create_time, tel,
+                            email, creator)
         values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
-                #{createTime,jdbcType=TIMESTAMP}, #{enable,jdbcType=BOOLEAN})
-    </insert>
-    <insert id="insertUserRole">
-        insert into user_role (user_id, role_id) values (#{userId}, #{roleId})
+                #{enable,jdbcType=BOOLEAN}, #{createTime,jdbcType=TIMESTAMP}, #{tel,jdbcType=VARCHAR},
+                #{email,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR})
     </insert>
     <insert id="insertSelective" parameterType="org.gyh.forestry.domain.User" useGeneratedKeys="true" keyProperty="id">
         <!--@mbg.generated-->
@@ -61,13 +57,22 @@
                 username,
             </if>
             <if test="password != null">
-                password,
+                "password",
+            </if>
+            <if test="enable != null">
+                "enable",
             </if>
             <if test="createTime != null">
                 create_time,
             </if>
-            <if test="enable != null">
-                "enable",
+            <if test="tel != null">
+                tel,
+            </if>
+            <if test="email != null">
+                email,
+            </if>
+            <if test="creator != null">
+                creator,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -80,11 +85,20 @@
             <if test="password != null">
                 #{password,jdbcType=VARCHAR},
             </if>
+            <if test="enable != null">
+                #{enable,jdbcType=BOOLEAN},
+            </if>
             <if test="createTime != null">
                 #{createTime,jdbcType=TIMESTAMP},
             </if>
-            <if test="enable != null">
-                #{enable,jdbcType=BOOLEAN},
+            <if test="tel != null">
+                #{tel,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="creator != null">
+                #{creator,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -96,13 +110,22 @@
                 username = #{username,jdbcType=VARCHAR},
             </if>
             <if test="password != null">
-                password = #{password,jdbcType=VARCHAR},
+                "password" = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="enable != null">
+                "enable" = #{enable,jdbcType=BOOLEAN},
             </if>
             <if test="createTime != null">
                 create_time = #{createTime,jdbcType=TIMESTAMP},
             </if>
-            <if test="enable != null">
-                "enable" = #{enable,jdbcType=BOOLEAN},
+            <if test="tel != null">
+                tel = #{tel,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                email = #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="creator != null">
+                creator = #{creator,jdbcType=VARCHAR},
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
@@ -111,11 +134,30 @@
         <!--@mbg.generated-->
         update "user"
         set username    = #{username,jdbcType=VARCHAR},
-            password    = #{password,jdbcType=VARCHAR},
+            "password"  = #{password,jdbcType=VARCHAR},
+            "enable"    = #{enable,jdbcType=BOOLEAN},
             create_time = #{createTime,jdbcType=TIMESTAMP},
-            "enable"    = #{enable,jdbcType=BOOLEAN}
+            tel         = #{tel,jdbcType=VARCHAR},
+            email       = #{email,jdbcType=VARCHAR},
+            creator     = #{creator,jdbcType=VARCHAR}
         where id = #{id,jdbcType=INTEGER}
     </update>
+    <select id="findUserByUserName" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from "user"
+        where username = #{username}
+    </select>
+    <select id="findRolesByUserId" resultType="org.gyh.forestry.domain.Role">
+        select role.*
+        from role
+                 left join user_role ur on role.id = ur.role_id
+        where user_id = #{userId}
+    </select>
+    <insert id="insertUserRole">
+        insert into user_role (user_id, role_id)
+        values (#{userId}, #{roleId})
+    </insert>
 
     <select id="findAll" resultMap="BaseResultMap">
         select
@@ -127,11 +169,15 @@
         select
         <include refid="Base_Column_List"/>
         from "user"
+        <where>
+            <if test="username != null and username != ''">
+                username = #{username}
+            </if>
+            <if test="tel != null and tel != ''">
+                and tel = #{tel}
+            </if>
+        </where>
         order by create_time desc
-        limit #{page} offset #{pageSize}
     </select>
 
-    <select id="countByPage" resultType="java.lang.Long">
-        select count(1) from "user"
-    </select>
 </mapper>

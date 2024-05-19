@@ -1,37 +1,52 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.gyh.forestry.mapper.RoleMapper">
     <resultMap id="BaseResultMap" type="org.gyh.forestry.domain.Role">
-        <id column="id" property="id" jdbcType="INTEGER"/>
-        <result column="authority" property="authority" jdbcType="VARCHAR"/>
-        <result column="role_name" property="roleName" jdbcType="VARCHAR"/>
+        <!--@mbg.generated-->
+        <!--@Table "role"-->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="authority" jdbcType="VARCHAR" property="authority"/>
+        <result column="role_name" jdbcType="VARCHAR" property="roleName"/>
+        <result column="sort_num" jdbcType="INTEGER" property="sortNum"/>
+        <result column="enable" jdbcType="BOOLEAN" property="enable"/>
+        <result column="describe" jdbcType="VARCHAR" property="describe"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
     </resultMap>
     <sql id="Base_Column_List">
+        <!--@mbg.generated-->
         id,
         authority,
-        role_name
+        role_name,
+        sort_num,
+        "enable",
+        "describe",
+        create_time
     </sql>
-    <select id="getAllRoles" resultMap="BaseResultMap">
-        select *
-        from role;
-    </select>
-    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
         select
         <include refid="Base_Column_List"/>
-        from role
+        from "role"
         where id = #{id,jdbcType=INTEGER}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        <!--@mbg.generated-->
         delete
-        from role
+        from "role"
         where id = #{id,jdbcType=INTEGER}
     </delete>
-    <insert id="insert" parameterType="org.gyh.forestry.domain.Role" useGeneratedKeys="true" keyProperty="id">
-        insert into role (id, authority, role_name)
-        values (#{id,jdbcType=INTEGER}, #{authority,jdbcType=VARCHAR}, #{roleName,jdbcType=VARCHAR})
+    <insert id="insert" parameterType="org.gyh.forestry.domain.Role">
+        <!--@mbg.generated-->
+        insert into "role" (id, authority, role_name,
+                            sort_num, "enable", "describe",
+                            create_time)
+        values (#{id,jdbcType=INTEGER}, #{authority,jdbcType=VARCHAR}, #{roleName,jdbcType=VARCHAR},
+                #{sortNum,jdbcType=INTEGER}, #{enable,jdbcType=BOOLEAN}, #{describe,jdbcType=VARCHAR},
+                #{createTime,jdbcType=TIMESTAMP})
     </insert>
-    <insert id="insertSelective" parameterType="org.gyh.forestry.domain.Role" useGeneratedKeys="true" keyProperty="id">
-        insert into role
+    <insert id="insertSelective" parameterType="org.gyh.forestry.domain.Role">
+        <!--@mbg.generated-->
+        insert into "role"
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
                 id,
@@ -41,6 +56,18 @@
             </if>
             <if test="roleName != null">
                 role_name,
+            </if>
+            <if test="sortNum != null">
+                sort_num,
+            </if>
+            <if test="enable != null">
+                "enable",
+            </if>
+            <if test="describe != null">
+                "describe",
+            </if>
+            <if test="createTime != null">
+                create_time,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -53,10 +80,23 @@
             <if test="roleName != null">
                 #{roleName,jdbcType=VARCHAR},
             </if>
+            <if test="sortNum != null">
+                #{sortNum,jdbcType=INTEGER},
+            </if>
+            <if test="enable != null">
+                #{enable,jdbcType=BOOLEAN},
+            </if>
+            <if test="describe != null">
+                #{describe,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
         </trim>
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="org.gyh.forestry.domain.Role">
-        update role
+        <!--@mbg.generated-->
+        update "role"
         <set>
             <if test="authority != null">
                 authority = #{authority,jdbcType=VARCHAR},
@@ -64,20 +104,57 @@
             <if test="roleName != null">
                 role_name = #{roleName,jdbcType=VARCHAR},
             </if>
+            <if test="sortNum != null">
+                sort_num = #{sortNum,jdbcType=INTEGER},
+            </if>
+            <if test="enable != null">
+                "enable" = #{enable,jdbcType=BOOLEAN},
+            </if>
+            <if test="describe != null">
+                "describe" = #{describe,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
     <update id="updateByPrimaryKey" parameterType="org.gyh.forestry.domain.Role">
-        update role
-        set authority = #{authority,jdbcType=VARCHAR},
-            role_name = #{roleName,jdbcType=VARCHAR}
+        <!--@mbg.generated-->
+        update "role"
+        set authority   = #{authority,jdbcType=VARCHAR},
+            role_name   = #{roleName,jdbcType=VARCHAR},
+            sort_num    = #{sortNum,jdbcType=INTEGER},
+            "enable"    = #{enable,jdbcType=BOOLEAN},
+            "describe"  = #{describe,jdbcType=VARCHAR},
+            create_time = #{createTime,jdbcType=TIMESTAMP}
         where id = #{id,jdbcType=INTEGER}
     </update>
-
+    <select id="getAllRoles" resultMap="BaseResultMap">
+        select *
+        from role;
+    </select>
     <select id="getRolesByUserId" resultMap="BaseResultMap">
         select r.*
         from role r
                  left join user_role ur on r.id = ur.role_id
         where ur.user_id = #{userId}
+    </select>
+
+    <select id="getByReq" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from role
+        <where>
+            <if test="startTime != null">
+                create_time &gt;= #{startTime}
+            </if>
+            <if test="endTime != null ">
+                and create_time &lt;= #{endTime}
+            </if>
+            <if test="roleName != null and roleName != ''">
+                and role_name = #{roleName}
+            </if>
+        </where>
     </select>
 </mapper>

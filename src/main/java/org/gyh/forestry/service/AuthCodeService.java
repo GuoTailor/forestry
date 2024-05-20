@@ -9,6 +9,7 @@ import org.gyh.forestry.domain.User;
 import org.gyh.forestry.dto.PageInfo;
 import org.gyh.forestry.dto.req.AddAuthCodeReq;
 import org.gyh.forestry.dto.req.AuthCodePageReq;
+import org.gyh.forestry.dto.req.AuthCodeUpdateReq;
 import org.gyh.forestry.mapper.AuthCodeMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,7 +27,7 @@ public class AuthCodeService {
 
     public Integer insert(AddAuthCodeReq authCodeReq) {
         AuthCode authCode = new AuthCode();
-        BeanUtils.copyProperties(authCode, authCode);
+        BeanUtils.copyProperties(authCodeReq, authCode);
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         authCode.setHandler(user.getUsername());
         authCode.setCreateTime(LocalDateTime.now());
@@ -43,7 +44,9 @@ public class AuthCodeService {
         return authCodeMapper.deleteByPrimaryKey(id);
     }
 
-    public Integer updateById(AuthCode authCode) {
+    public Integer updateById(AuthCodeUpdateReq authCodeUpdateReq) {
+        AuthCode authCode = new AuthCode();
+        BeanUtils.copyProperties(authCodeUpdateReq, authCode);
         return authCodeMapper.updateByPrimaryKeySelective(authCode);
     }
 

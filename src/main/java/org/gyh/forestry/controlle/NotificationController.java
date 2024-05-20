@@ -1,7 +1,11 @@
 package org.gyh.forestry.controlle;
 
-import org.gyh.forestry.domain.Notification;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.gyh.forestry.domain.Notifications;
 import org.gyh.forestry.domain.UserNotification;
+import org.gyh.forestry.dto.ResponseInfo;
 import org.gyh.forestry.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +16,7 @@ import java.util.List;
 /**
  * create by GYH on 2024/5/20
  */
+@Tag(name = "通知")
 @RestController
 @RequestMapping("/notifications")
 public class NotificationController {
@@ -19,26 +24,28 @@ public class NotificationController {
     private NotificationService notificationService;
 
     @PostMapping("/create")
-    public ResponseEntity<String> createNotification(@RequestBody Notification notification, @RequestParam List<Integer> userIds) {
+    @Operation(summary = "创建一个通知", security = {@SecurityRequirement(name = "Authorization")})
+    public ResponseInfo<String> createNotification(@RequestBody Notifications notification, @RequestParam List<Integer> userIds) {
         notificationService.createNotification(notification, userIds);
-        return ResponseEntity.ok("Notification created successfully.");
+        return ResponseInfo.ok("Notification created successfully.");
     }
 
     @GetMapping("/unread/{userId}")
-    public ResponseEntity<List<UserNotification>> getUnreadNotifications(@PathVariable int userId) {
+    @Operation(summary = "创建一个通知", security = {@SecurityRequirement(name = "Authorization")})
+    public ResponseInfo<List<UserNotification>> getUnreadNotifications(@PathVariable int userId) {
         List<UserNotification> unreadNotifications = notificationService.getUnreadNotifications(userId);
-        return ResponseEntity.ok(unreadNotifications);
+        return ResponseInfo.ok(unreadNotifications);
     }
 
     @GetMapping("/unread/count/{userId}")
-    public ResponseEntity<Integer> getUnreadNotificationCount(@PathVariable int userId) {
+    public ResponseInfo<Integer> getUnreadNotificationCount(@PathVariable int userId) {
         int count = notificationService.getUnreadNotificationCount(userId);
-        return ResponseEntity.ok(count);
+        return ResponseInfo.ok(count);
     }
 
     @PostMapping("/read/{id}")
-    public ResponseEntity<String> markAsRead(@PathVariable int id) {
+    public ResponseInfo<String> markAsRead(@PathVariable int id) {
         notificationService.markAsRead(id);
-        return ResponseEntity.ok("Notification marked as read.");
+        return ResponseInfo.ok("Notification marked as read.");
     }
 }

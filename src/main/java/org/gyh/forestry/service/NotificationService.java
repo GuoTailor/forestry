@@ -1,10 +1,12 @@
 package org.gyh.forestry.service;
 
-import org.gyh.forestry.domain.Notification;
+import org.gyh.forestry.domain.Notifications;
+import org.gyh.forestry.domain.User;
 import org.gyh.forestry.domain.UserNotification;
-import org.gyh.forestry.mapper.NotificationMapper;
+import org.gyh.forestry.mapper.NotificationsMapper;
 import org.gyh.forestry.mapper.UserNotificationMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,26 +17,39 @@ import java.util.List;
 @Service
 public class NotificationService {
     @Autowired
-    private NotificationMapper notificationMapper;
+    private NotificationsMapper notificationMapper;
 
     @Autowired
     private UserNotificationMapper userNotificationMapper;
 
-    public void createNotification(Notification notification, List<Integer> userIds) {
-        notificationMapper.insertNotification(notification);
+    public void createNotification(Notifications notification, List<Integer> userIds) {
+        notificationMapper.insertSelective(notification);
         for (int userId : userIds) {
             userNotificationMapper.insertUserNotification(userId, notification.getId());
         }
     }
 
-    public List<UserNotification> getUnreadNotifications(int userId) {
+    /**
+     * 获取未读通知消息
+     */
+    public List<UserNotification> getUnreadNotifications() {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Integer userId = user.getId();
         return userNotificationMapper.getUnreadNotifications(userId);
     }
 
-    public int getUnreadNotificationCount(int userId) {
+    /**
+     * 获取未读消息数
+     */
+    public int getUnreadNotificationCount() {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Integer userId = user.getId();
         return userNotificationMapper.getUnreadNotificationCount(userId);
     }
 
+    /**
+     * 标记消息为已读
+     */
     public void markAsRead(int userNotificationId) {
         userNotificationMapper.markAsRead(userNotificationId);
     }

@@ -1,0 +1,23 @@
+<mapper namespace="org.gyh.forestry.mapper.UserNotificationMapper">
+    <insert id="insertUserNotification">
+        INSERT INTO user_notifications (user_id, notification_id)
+        VALUES (#{userId}, #{notificationId})
+    </insert>
+    <select id="getUnreadNotifications" resultType="org.gyh.forestry.domain.UserNotification">
+        SELECT *
+        FROM user_notifications
+        WHERE user_id = #{userId}
+          AND is_read = FALSE
+    </select>
+    <select id="getUnreadNotificationCount" resultType="int">
+        SELECT COUNT(*)
+        FROM user_notifications
+        WHERE user_id = #{userId}
+          AND is_read = FALSE
+    </select>
+    <update id="markAsRead">
+        UPDATE user_notifications
+        SET is_read = TRUE
+        WHERE id = #{id}
+    </update>
+</mapper>

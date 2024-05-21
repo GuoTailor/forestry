@@ -1,6 +1,5 @@
 package org.gyh.forestry.mapper;
 
-import org.gyh.forestry.domain.Notification;
 import org.gyh.forestry.domain.Notifications;
 
 import java.util.List;
@@ -21,5 +20,5 @@ public interface NotificationsMapper {
 
     int updateByPrimaryKey(Notifications record);
 
-    List<Notification> getAllNotifications();
+    List<Notifications> getAllNotifications();
 }

@@ -2,6 +2,7 @@ package org.gyh.forestry.mapper;
 
 import org.apache.ibatis.annotations.Param;
 import org.gyh.forestry.domain.UserNotification;
+import org.gyh.forestry.dto.resp.UserNotificationResp;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ public interface UserNotificationMapper {
 
     void insertUserNotification(@Param("userId") int userId, @Param("notificationId") int notificationId);
 
-    List<UserNotification> getUnreadNotifications(int userId);
+    List<UserNotificationResp> getUnreadNotifications(int userId);
 
     int getUnreadNotificationCount(int userId);
 

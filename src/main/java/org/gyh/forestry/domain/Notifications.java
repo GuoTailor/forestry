@@ -1,5 +1,6 @@
 package org.gyh.forestry.domain;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
@@ -25,12 +26,12 @@ public class Notifications {
     /**
     * 创建时间
     */
-    private Date createdAt;
+    private LocalDateTime createdAt;
 
     /**
     * 发送时间
     */
-    private Date sendTime;
+    private LocalDateTime sendTime;
 
     /**
     * 创建人

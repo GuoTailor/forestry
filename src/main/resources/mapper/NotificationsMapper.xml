@@ -116,7 +116,7 @@
             creator    = #{creator,jdbcType=VARCHAR}
         where id = #{id,jdbcType=INTEGER}
     </update>
-    <select id="getAllNotifications" resultType="org.gyh.forestry.domain.Notification">
+    <select id="getAllNotifications" resultType="org.gyh.forestry.domain.Notifications">
         SELECT *
         FROM notifications
     </select>

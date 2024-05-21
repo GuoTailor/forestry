@@ -3,11 +3,12 @@
         INSERT INTO user_notifications (user_id, notification_id)
         VALUES (#{userId}, #{notificationId})
     </insert>
-    <select id="getUnreadNotifications" resultType="org.gyh.forestry.domain.UserNotification">
-        SELECT *
-        FROM user_notifications
-        WHERE user_id = #{userId}
-          AND is_read = FALSE
+    <select id="getUnreadNotifications" resultType="org.gyh.forestry.dto.resp.UserNotificationResp">
+        SELECT un.*, n.title, n.content
+        FROM user_notifications un
+        left join notifications n on n.id = un.notification_id
+        WHERE un.user_id = #{userId}
+          AND un.is_read = FALSE
     </select>
     <select id="getUnreadNotificationCount" resultType="int">
         SELECT COUNT(*)

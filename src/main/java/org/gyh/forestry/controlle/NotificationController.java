@@ -5,7 +5,10 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.gyh.forestry.domain.Notifications;
 import org.gyh.forestry.domain.UserNotification;
+import org.gyh.forestry.dto.PageInfo;
 import org.gyh.forestry.dto.ResponseInfo;
+import org.gyh.forestry.dto.req.UnreadNotificationReq;
+import org.gyh.forestry.dto.resp.UserNotificationResp;
 import org.gyh.forestry.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -30,16 +33,21 @@ public class NotificationController {
         return ResponseInfo.ok("Notification created successfully.");
     }
 
-    @GetMapping("/unread/{userId}")
-    @Operation(summary = "创建一个通知", security = {@SecurityRequirement(name = "Authorization")})
-    public ResponseInfo<List<UserNotification>> getUnreadNotifications(@PathVariable int userId) {
-        List<UserNotification> unreadNotifications = notificationService.getUnreadNotifications(userId);
-        return ResponseInfo.ok(unreadNotifications);
+    @PostMapping("/user")
+    @Operation(summary = "获取当前用户的消息列表", security = {@SecurityRequirement(name = "Authorization")})
+    public PageInfo<UserNotificationResp> getNotifications(@RequestBody UnreadNotificationReq pageReq) {
+        return notificationService.getNotifications(pageReq);
+    }
+
+    @PostMapping("/all")
+    @Operation(summary = "获取当前用户的消息列表", security = {@SecurityRequirement(name = "Authorization")})
+    public PageInfo<Notifications> getAll(@RequestBody UnreadNotificationReq pageReq) {
+        return notificationService.getAllNotifications(pageReq);
     }
 
     @GetMapping("/unread/count/{userId}")
-    public ResponseInfo<Integer> getUnreadNotificationCount(@PathVariable int userId) {
-        int count = notificationService.getUnreadNotificationCount(userId);
+    public ResponseInfo<Integer> getUnreadNotificationCount() {
+        int count = notificationService.getUnreadNotificationCount();
         return ResponseInfo.ok(count);
     }
 

@@ -1,8 +1,14 @@
 package org.gyh.forestry.service;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import org.gyh.forestry.domain.Notifications;
+import org.gyh.forestry.domain.OperationRecord;
 import org.gyh.forestry.domain.User;
 import org.gyh.forestry.domain.UserNotification;
+import org.gyh.forestry.dto.PageInfo;
+import org.gyh.forestry.dto.req.UnreadNotificationReq;
+import org.gyh.forestry.dto.resp.UserNotificationResp;
 import org.gyh.forestry.mapper.NotificationsMapper;
 import org.gyh.forestry.mapper.UserNotificationMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,12 +36,25 @@ public class NotificationService {
     }
 
     /**
-     * 获取未读通知消息
+     * 获取用户获取通知消息
      */
-    public List<UserNotification> getUnreadNotifications() {
+    public PageInfo<UserNotificationResp> getNotifications(UnreadNotificationReq pageReq) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Integer userId = user.getId();
-        return userNotificationMapper.getUnreadNotifications(userId);
+        try (Page<OperationRecord> page = PageHelper.startPage(pageReq.getPage(), pageReq.getPageSize())) {
+            List<UserNotificationResp> unreadNotifications = userNotificationMapper.getUnreadNotifications(userId);
+            return PageInfo.ok(page.getTotal(), pageReq, unreadNotifications);
+        }
+    }
+
+    /**
+     * 获取所有通知消息
+     */
+    public PageInfo<Notifications> getAllNotifications(UnreadNotificationReq pageReq) {
+        try (Page<OperationRecord> page = PageHelper.startPage(pageReq.getPage(), pageReq.getPageSize())) {
+            List<Notifications> notifications = notificationMapper.getAllNotifications();
+            return PageInfo.ok(page.getTotal(), pageReq, notifications);
+        }
     }
 
     /**

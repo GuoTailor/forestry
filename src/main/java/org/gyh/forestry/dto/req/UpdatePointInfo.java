@@ -1,5 +1,6 @@
 package org.gyh.forestry.dto.req;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.gyh.forestry.dto.resp.JsonPoint;
@@ -20,7 +21,11 @@ public class UpdatePointInfo {
      * 名字
      */
     private String name;
-
+    /**
+     * 描述
+     */
+    @Schema(description = "描述")
+    private String describe;
     /**
      * 类型（预警点，动物位置）
      */

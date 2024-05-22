@@ -4,12 +4,16 @@ import io.swagger.v3.oas.annotations.servers.Server;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.gyh.forestry.domain.PointInfo;
+import org.gyh.forestry.domain.User;
 import org.gyh.forestry.dto.req.AddPointInfo;
 import org.gyh.forestry.dto.req.UpdatePointInfo;
 import org.gyh.forestry.dto.resp.JsonPoint;
 import org.gyh.forestry.dto.resp.PointInfoResp;
 import org.gyh.forestry.mapper.PointInfoMapper;
 import org.springframework.beans.BeanUtils;
+import org.springframework.security.core.context.SecurityContextHolder;
+
+import java.time.LocalDateTime;
 
 /**
  * create by GYH on 2024/4/6
@@ -24,15 +28,18 @@ public class PointInfoService {
     /**
      * 新增点位
      */
-    public void save(AddPointInfo pointInfo) {
+    public boolean save(AddPointInfo pointInfo) {
         PointInfo pointInfo1 = new PointInfo();
         BeanUtils.copyProperties(pointInfo, pointInfo1);
         pointInfo1.setPoint(pointInfo.getPoint().toPoint());
-        pointInfoMapper.insertSelective(pointInfo1);
+        pointInfo1.setCreatedTime(LocalDateTime.now());
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        pointInfo1.setCreator(user.getUsername());
+        return pointInfoMapper.insertSelective(pointInfo1) == 1;
     }
 
-    public void deleteById(Integer id) {
-        pointInfoMapper.deleteByPrimaryKey(id);
+    public boolean deleteById(Integer id) {
+        return pointInfoMapper.deleteByPrimaryKey(id) == 1;
     }
 
     public void updateById(UpdatePointInfo pointInfo) {

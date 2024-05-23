@@ -1,6 +1,5 @@
 package org.gyh.forestry.service;
 
-import io.swagger.v3.oas.annotations.servers.Server;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.gyh.forestry.domain.PointInfo;
@@ -12,6 +11,7 @@ import org.gyh.forestry.dto.resp.PointInfoResp;
 import org.gyh.forestry.mapper.PointInfoMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
  * create by GYH on 2024/4/6
  */
 @Slf4j
-@Server
+@Service
 public class PointInfoService {
     @Resource
     private PointInfoMapper pointInfoMapper;

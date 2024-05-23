@@ -1,5 +1,6 @@
 package org.gyh.forestry.dto.resp;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,12 +17,14 @@ public class JsonPoint {
      * The X coordinate of the point.
      * In most long/lat systems, this is the longitude.
      */
+    @NotNull
     public double x;
 
     /**
      * The Y coordinate of the point.
      * In most long/lat systems, this is the latitude.
      */
+    @NotNull
     public double y;
 
     /**
@@ -30,6 +33,7 @@ public class JsonPoint {
      * center of the earth, or the height / elevation over
      * the ground.
      */
+    @NotNull
     public double z;
 
     public JsonPoint(Point point) {

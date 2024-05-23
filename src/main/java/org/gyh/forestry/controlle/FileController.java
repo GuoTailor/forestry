@@ -23,8 +23,7 @@ public class FileController {
 
     @PostMapping("/upload")
     @Operation(summary = "上传文件", security = {@SecurityRequirement(name = "Authorization")})
-    public ResponseInfo<?> uploadFile(MultipartFile file) {
-        fileService.uploadFile(file);
-        return ResponseInfo.ok();
+    public ResponseInfo<String> uploadFile(MultipartFile file) {
+        return ResponseInfo.ok(fileService.uploadFile(file));
     }
 }

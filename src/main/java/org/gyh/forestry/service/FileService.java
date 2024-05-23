@@ -17,7 +17,7 @@ public class FileService {
     @Value("${fileUploadPath}")
     private String fileUploadPath;
 
-    public void uploadFile(MultipartFile file) {
+    public String uploadFile(MultipartFile file) {
         if (file != null) {
             String fileName = file.getOriginalFilename();
             String filePath = fileUploadPath + fileName;
@@ -26,6 +26,8 @@ public class FileService {
             } catch (IOException e) {
                 log.error("上传文件失败", e);
             }
+            return filePath;
         }
+        return fileUploadPath;
     }
 }

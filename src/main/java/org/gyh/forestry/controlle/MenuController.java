@@ -68,7 +68,7 @@ public class MenuController {
     }
 
     @Operation(summary = "添加菜单", security = {@SecurityRequirement(name = "Authorization")})
-    @PostMapping("/menus/all")
+    @PostMapping("/menus/add")
     public ResponseInfo<Menu> addMenu(@RequestBody AddMenu addMenu) {
         return ResponseInfo.ok(menuService.addMenu(addMenu));
     }

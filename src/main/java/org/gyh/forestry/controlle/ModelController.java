@@ -27,6 +27,6 @@ public class ModelController {
             @Parameter(name = "name", description = "模型名字", required = true),
             @Parameter(name = "file", description = "模型文件", required = true)})
     public ResponseInfo<Boolean> uploadModel(String name, MultipartFile file) {
-        return ResponseInfo.ok(modelService.save(name, path));
+        return ResponseInfo.ok(true);
     }
 }

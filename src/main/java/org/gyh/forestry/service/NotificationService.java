@@ -5,7 +5,6 @@ import com.github.pagehelper.PageHelper;
 import org.gyh.forestry.domain.Notifications;
 import org.gyh.forestry.domain.OperationRecord;
 import org.gyh.forestry.domain.User;
-import org.gyh.forestry.domain.UserNotification;
 import org.gyh.forestry.dto.PageInfo;
 import org.gyh.forestry.dto.req.UnreadNotificationReq;
 import org.gyh.forestry.dto.resp.UserNotificationResp;

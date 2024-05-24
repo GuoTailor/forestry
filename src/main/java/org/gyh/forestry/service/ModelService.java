@@ -32,5 +32,6 @@ public class ModelService {
         model.setEnable(true);
         model.setCreator(user.getUsername());
         model.setCreatedTime(LocalDateTime.now());
+        modelMapper.insertSelective(model);
     }
 }

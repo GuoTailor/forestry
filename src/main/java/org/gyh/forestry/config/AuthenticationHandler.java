@@ -28,8 +28,7 @@ import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.time.Duration;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * create by GYH on 2023/5/12
@@ -113,8 +112,13 @@ public class AuthenticationHandler implements AuthenticationSuccessHandler,
     @Override
     public SecurityContext loadContext(HttpRequestResponseHolder httpRequestResponseHolder) {
         String authHeader = httpRequestResponseHolder.getRequest().getHeader(HttpHeaders.AUTHORIZATION);
+        String authToken = null;
         if (StringUtils.hasText(authHeader) && authHeader.startsWith("Bearer ")) {
-            String authToken = authHeader.replaceFirst("Bearer ", "");
+            authToken = authHeader.replaceFirst("Bearer ", "");
+        } else if (Objects.equals("/room", httpRequestResponseHolder.getRequest().getRequestURI())) {
+            authToken = getQueryMap(httpRequestResponseHolder.getRequest().getQueryString()).get("bearer");
+        }
+        if (authToken != null) {
             try {
                 Set<String> keys = redisTemplate.keys(Constant.tokenKey + "*" + Constant.tokenInfix + authToken);
                 if (!CollectionUtils.isEmpty(keys)) {
@@ -133,6 +137,20 @@ public class AuthenticationHandler implements AuthenticationSuccessHandler,
         }
         return new SecurityContextImpl();
     }
+
+    private Map<String, String> getQueryMap(String queryStr) {
+        HashMap<String, String> queryMap = new HashMap<>();
+        if (StringUtils.hasLength(queryStr)) {
+            String[] queryParam = queryStr.split("&");
+            for (String s : queryParam) {
+                String[] kv = s.split("=", 2);
+                String value = kv.length == 2 ? kv[1] : "";
+                queryMap.put(kv[0], value);
+            }
+        }
+        return queryMap;
+    }
+
 
     @Override
     public void saveContext(SecurityContext securityContext, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {

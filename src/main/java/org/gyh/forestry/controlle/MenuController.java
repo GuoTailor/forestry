@@ -11,6 +11,7 @@ import org.gyh.forestry.dto.ResponseInfo;
 import org.gyh.forestry.dto.req.AddMenu;
 import org.gyh.forestry.dto.req.AddRole;
 import org.gyh.forestry.dto.req.RolePageReq;
+import org.gyh.forestry.dto.req.UpdateMenuReq;
 import org.gyh.forestry.service.MenuService;
 import org.gyh.forestry.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,7 @@ public class MenuController {
         return ResponseInfo.ok(roleService.getAllRoles());
     }
 
-    @GetMapping("/role/page")
+    @PostMapping("/role/page")
     @Operation(summary = "分页获取角色", security = {@SecurityRequirement(name = "Authorization")})
     public PageInfo<Role> getRoleByPage(@RequestBody RolePageReq req) {
         return roleService.getRoleByPage(req);
@@ -80,6 +81,12 @@ public class MenuController {
     @PostMapping("/menus/add")
     public ResponseInfo<Menu> addMenu(@RequestBody AddMenu addMenu) {
         return ResponseInfo.ok(menuService.addMenu(addMenu));
+    }
+
+    @Operation(summary = "修改菜单", security = {@SecurityRequirement(name = "Authorization")})
+    @PostMapping("/menus/update")
+    public ResponseInfo<Menu> updateMenu(@RequestBody UpdateMenuReq req) {
+        return ResponseInfo.ok(menuService.updateMenu(req));
     }
 
     @Operation(summary = "删除菜单", security = {@SecurityRequirement(name = "Authorization")})

@@ -54,6 +54,7 @@ public class AuthenticationHandler implements AuthenticationSuccessHandler,
         log.info("未登录 {} {}", httpServletRequest.getRequestURI(), e.getLocalizedMessage());
         httpServletResponse.setContentType(MediaType.APPLICATION_JSON_VALUE);
         httpServletResponse.setCharacterEncoding("UTF-8");
+        httpServletResponse.setStatus(403);
         try {
             httpServletResponse.getWriter().write(json.writeValueAsString(ResponseInfo.failed(e.getLocalizedMessage())));
         } catch (JsonProcessingException exception) {
@@ -66,6 +67,7 @@ public class AuthenticationHandler implements AuthenticationSuccessHandler,
         log.info("授权失败 {} {}", httpServletRequest.getRequestURI(), e.getLocalizedMessage());
         httpServletResponse.setContentType(MediaType.APPLICATION_JSON_VALUE);
         httpServletResponse.setCharacterEncoding("UTF-8");
+        httpServletResponse.setStatus(403);
         try {
             httpServletResponse.getWriter().write(json.writeValueAsString(ResponseInfo.failed(e.getLocalizedMessage())));
         } catch (JsonProcessingException exception) {

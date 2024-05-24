@@ -4,11 +4,12 @@ import org.apache.ibatis.annotations.Param;
 import org.gyh.forestry.domain.Role;
 import org.gyh.forestry.domain.User;
 import org.gyh.forestry.dto.req.UserPageReq;
+import org.gyh.forestry.dto.resp.UserInfo;
 
 import java.util.List;
 
 /**
- * create by GYH on 2024/5/14
+ * create by GYH on 2024/5/24
  */
 public interface UserMapper {
     int deleteByPrimaryKey(Integer id);
@@ -31,8 +32,8 @@ public interface UserMapper {
 
     List<Role> findRolesByUserId(Integer userId);
 
-    List<User> findAll();
+    List<UserInfo> findAll();
 
-    List<User> findByPage(UserPageReq req);
+    List<UserInfo> findByPage(UserPageReq req);
 
 }

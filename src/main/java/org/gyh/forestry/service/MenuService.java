@@ -6,6 +6,7 @@ import org.gyh.forestry.domain.User;
 import org.gyh.forestry.domain.vo.MenuVO;
 import org.gyh.forestry.domain.vo.MenuWithRole;
 import org.gyh.forestry.dto.req.AddMenu;
+import org.gyh.forestry.dto.req.UpdateMenuReq;
 import org.gyh.forestry.exception.BusinessException;
 import org.gyh.forestry.mapper.MenuMapper;
 import org.gyh.forestry.mapper.MenuRoleMapper;
@@ -72,6 +73,20 @@ public class MenuService {
 
     public List<Integer> getMidsByRid(Integer rid) {
         return menuMapper.getMidsByRid(rid);
+    }
+
+    @CacheEvict(cacheNames = "AllMenus", key = "'AllMenus'")
+    public Menu updateMenu(UpdateMenuReq req) {
+        Menu menu = new Menu();
+        BeanUtils.copyProperties(req, menu);
+        if (req.getParentId() != null) {
+            Menu menusByParentId = menuMapper.selectByPrimaryKey(req.getParentId());
+            if (menusByParentId == null) {
+                throw new BusinessException("父级菜单不存在");
+            }
+        }
+        menuMapper.updateByPrimaryKeySelective(menu);
+        return menu;
     }
 
     @CacheEvict(cacheNames = "AllMenus", key = "'AllMenus'")

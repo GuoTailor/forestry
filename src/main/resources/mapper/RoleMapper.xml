@@ -157,4 +157,8 @@
             </if>
         </where>
     </select>
+
+    <select id="countBySort" resultType="int">
+        select count(*) from role where sort_num = #{sort}
+    </select>
 </mapper>

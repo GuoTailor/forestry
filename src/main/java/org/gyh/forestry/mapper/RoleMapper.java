@@ -26,4 +26,6 @@ public interface RoleMapper {
     List<Role> getByReq(RolePageReq req);
 
     List<Role> getRolesByUserId(Integer userId);
+
+    int countBySort(Integer sort);
 }

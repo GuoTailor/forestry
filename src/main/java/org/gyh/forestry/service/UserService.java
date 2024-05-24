@@ -48,7 +48,7 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
-    public List<User> findAll() {
+    public List<UserInfo> findAll() {
         return userMapper.findAll();
     }
 
@@ -75,13 +75,8 @@ public class UserService implements UserDetailsService {
      */
     public PageInfo<UserInfo> findByPage(UserPageReq pageReq) {
         try (Page<OperationRecord> page = PageHelper.startPage(pageReq.getPage(), pageReq.getPageSize())) {
-            List<User> all = userMapper.findByPage(pageReq);
-            List<UserInfo> list = all.stream().map(it -> {
-                UserInfo userInfo = new UserInfo();
-                BeanUtils.copyProperties(it, userInfo);
-                return userInfo;
-            }).toList();
-            return PageInfo.ok(page.getTotal(), pageReq, list);
+            List<UserInfo> all = userMapper.findByPage(pageReq);
+            return PageInfo.ok(page.getTotal(), pageReq, all);
         }
     }
 

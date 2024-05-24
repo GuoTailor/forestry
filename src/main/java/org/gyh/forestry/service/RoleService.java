@@ -7,6 +7,7 @@ import org.gyh.forestry.domain.Role;
 import org.gyh.forestry.dto.PageInfo;
 import org.gyh.forestry.dto.req.AddRole;
 import org.gyh.forestry.dto.req.RolePageReq;
+import org.gyh.forestry.exception.BusinessException;
 import org.gyh.forestry.mapper.RoleMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,12 @@ public class RoleService {
     }
 
     public Integer addRole(AddRole addRole) {
+        if (addRole.getSortNum() != null) {
+            int count = roleMapper.countBySort(addRole.getSortNum());
+            if (count >= 1) {
+                throw new BusinessException("排序重复");
+            }
+        }
         if (!addRole.getAuthority().startsWith("ROLE_")) {
             addRole.setAuthority("ROLE_" + addRole.getAuthority());
         }

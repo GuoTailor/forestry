@@ -41,7 +41,7 @@ public class UserController {
 
     @PostMapping("/find/all")
     @Operation(summary = "查询全部用户列表", security = {@SecurityRequirement(name = "Authorization")})
-    public ResponseInfo<List<User>> findAll() {
+    public ResponseInfo<List<UserInfo>> findAll() {
         return ResponseInfo.ok(userService.findAll());
     }
 

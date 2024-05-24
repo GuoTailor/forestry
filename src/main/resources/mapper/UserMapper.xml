@@ -12,6 +12,15 @@
         <result column="tel" jdbcType="VARCHAR" property="tel"/>
         <result column="email" jdbcType="VARCHAR" property="email"/>
         <result column="creator" jdbcType="VARCHAR" property="creator"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+    </resultMap>
+    <resultMap id="UseWithRole" type="org.gyh.forestry.dto.resp.UserInfo" extends="BaseResultMap">
+        <collection
+                property="roles"
+                ofType="org.gyh.forestry.domain.Role"
+                select="org.gyh.forestry.mapper.RoleMapper.getRolesByUserId"
+                column="id">
+        </collection>
     </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
@@ -22,7 +31,8 @@
         create_time,
         tel,
         email,
-        creator
+        creator,
+        "name"
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         <!--@mbg.generated-->
@@ -41,12 +51,12 @@
         <!--@mbg.generated-->
         insert into "user" (id, username, "password",
                             "enable", create_time, tel,
-                            email, creator)
+                            email, creator, "name")
         values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
                 #{enable,jdbcType=BOOLEAN}, #{createTime,jdbcType=TIMESTAMP}, #{tel,jdbcType=VARCHAR},
-                #{email,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR})
+                #{email,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR})
     </insert>
-    <insert id="insertSelective" parameterType="org.gyh.forestry.domain.User" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertSelective" parameterType="org.gyh.forestry.domain.User">
         <!--@mbg.generated-->
         insert into "user"
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -74,6 +84,9 @@
             <if test="creator != null">
                 creator,
             </if>
+            <if test="name != null">
+                "name",
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -99,6 +112,9 @@
             </if>
             <if test="creator != null">
                 #{creator,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -127,6 +143,9 @@
             <if test="creator != null">
                 creator = #{creator,jdbcType=VARCHAR},
             </if>
+            <if test="name != null">
+                "name" = #{name,jdbcType=VARCHAR},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -139,7 +158,8 @@
             create_time = #{createTime,jdbcType=TIMESTAMP},
             tel         = #{tel,jdbcType=VARCHAR},
             email       = #{email,jdbcType=VARCHAR},
-            creator     = #{creator,jdbcType=VARCHAR}
+            creator     = #{creator,jdbcType=VARCHAR},
+            "name"      = #{name,jdbcType=VARCHAR}
         where id = #{id,jdbcType=INTEGER}
     </update>
     <select id="findUserByUserName" resultMap="BaseResultMap">
@@ -159,15 +179,27 @@
         values (#{userId}, #{roleId})
     </insert>
 
-    <select id="findAll" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List"/>
+    <select id="findAll" resultMap="UseWithRole">
+        select id,
+               username,
+               "enable",
+               create_time,
+               tel,
+               email,
+               creator,
+               "name"
         from "user"
     </select>
 
-    <select id="findByPage" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List"/>
+    <select id="findByPage" resultMap="UseWithRole">
+        select id,
+               username,
+               "enable",
+               create_time,
+               tel,
+               email,
+               creator,
+               "name"
         from "user"
         <where>
             <if test="username != null and username != ''">
@@ -181,6 +213,8 @@
     </select>
 
     <delete id="deleteAllRole">
-        delete from user_role where user_id = #{userId}
+        delete
+        from user_role
+        where user_id = #{userId}
     </delete>
 </mapper>

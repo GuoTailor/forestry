@@ -180,4 +180,7 @@
         order by create_time desc
     </select>
 
+    <delete id="deleteAllRole">
+        delete from user_role where user_id = #{userId}
+    </delete>
 </mapper>

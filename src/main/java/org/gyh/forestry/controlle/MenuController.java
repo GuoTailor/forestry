@@ -61,6 +61,15 @@ public class MenuController {
         return ResponseInfo.failed("删除失败!");
     }
 
+    @Operation(summary = "修改角色", security = {@SecurityRequirement(name = "Authorization")})
+    @PostMapping("/role/update")
+    public ResponseInfo<?> updateRole(@RequestBody Role role) {
+        if (roleService.updateRole(role) == 1) {
+            return ResponseInfo.ok("修改成功!");
+        }
+        return ResponseInfo.failed("修改失败!");
+    }
+
     @Operation(summary = "获取所有菜单", security = {@SecurityRequirement(name = "Authorization")})
     @GetMapping("/menus/all")
     public ResponseInfo<List<MenuVO>> getAllMenus() {

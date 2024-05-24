@@ -9,6 +9,7 @@ import org.gyh.forestry.dto.PageInfo;
 import org.gyh.forestry.dto.ResponseInfo;
 import org.gyh.forestry.dto.req.UserPageReq;
 import org.gyh.forestry.dto.resp.AddUserInfo;
+import org.gyh.forestry.dto.req.UpdateUserReq;
 import org.gyh.forestry.dto.resp.UserInfo;
 import org.gyh.forestry.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,5 +55,11 @@ public class UserController {
     @Operation(summary = "删除用户", security = {@SecurityRequirement(name = "Authorization")})
     public ResponseInfo<Boolean> deleteUserById(@PathVariable Integer uid) {
         return ResponseInfo.ok(userService.deleteUserById(uid));
+    }
+
+    @PostMapping("/update")
+    @Operation(summary = "修改用户信息", security = {@SecurityRequirement(name = "Authorization")})
+    public ResponseInfo<User> updateUser(@RequestBody UpdateUserReq updateUserReq) {
+        return ResponseInfo.ok(userService.updateUser(updateUserReq));
     }
 }

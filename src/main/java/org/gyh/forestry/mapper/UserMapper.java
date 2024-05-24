@@ -25,6 +25,8 @@ public interface UserMapper {
 
     int insertUserRole(@Param("userId") Integer userId, @Param("roleId") Integer roleId);
 
+    int deleteAllRole(@Param("userId") Integer userId);
+
     User findUserByUserName(String username);
 
     List<Role> findRolesByUserId(Integer userId);

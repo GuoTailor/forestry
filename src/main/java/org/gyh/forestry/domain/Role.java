@@ -5,7 +5,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * create by GYH on 2024/5/18
@@ -50,7 +50,7 @@ public class Role implements GrantedAuthority, Serializable {
     /**
      * 创建时间
      */
-    private Date createTime;
+    private LocalDateTime createTime;
 
     public Role() {
     }

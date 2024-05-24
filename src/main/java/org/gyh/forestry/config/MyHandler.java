@@ -2,8 +2,10 @@ package org.gyh.forestry.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.gyh.forestry.domain.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -21,7 +23,8 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 public class MyHandler extends TextWebSocketHandler {
     private final Map<String, WebSocketSession> webSocketSessionMap = new ConcurrentHashMap<>();
-
+    @Autowired
+    private DispatcherServlet servlet;
     //成功连接时
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {

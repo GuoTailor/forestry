@@ -9,6 +9,7 @@ import org.gyh.forestry.domain.User;
 import org.gyh.forestry.dto.PageInfo;
 import org.gyh.forestry.dto.req.UserPageReq;
 import org.gyh.forestry.dto.resp.AddUserInfo;
+import org.gyh.forestry.dto.req.UpdateUserReq;
 import org.gyh.forestry.dto.resp.UserInfo;
 import org.gyh.forestry.mapper.RoleMapper;
 import org.gyh.forestry.mapper.UserMapper;
@@ -97,4 +98,17 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
+    public User updateUser(UpdateUserReq updateUserReq) {
+        User user = updateUserReq.toUser();
+        user.setPassword(passwordEncoder.encode(updateUserReq.password()));
+        user.setCreateTime(LocalDateTime.now());
+        userMapper.updateByPrimaryKeySelective(user);
+        userMapper.deleteAllRole(user.getId());
+        if (!CollectionUtils.isEmpty(updateUserReq.roles())) {
+            for (Integer roleId : updateUserReq.roles()) {
+                userMapper.insertUserRole(user.getId(), roleId);
+            }
+        }
+        return user;
+    }
 }

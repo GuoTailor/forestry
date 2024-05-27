@@ -37,7 +37,7 @@ public class MenuService {
     @Autowired
     private MenuRoleMapper menuRoleMapper;
 
-    public List<MenuVO> getMenusByHrId() {
+    public List<MenuVO> getMenusByUserId() {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return menuMapper.getMenusByUserId(user.getId());
     }

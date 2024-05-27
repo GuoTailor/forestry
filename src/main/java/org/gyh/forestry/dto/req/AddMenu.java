@@ -1,6 +1,7 @@
 package org.gyh.forestry.dto.req;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 
@@ -18,6 +19,7 @@ import java.io.Serializable;
 public class AddMenu implements Serializable {
 
     @Schema(description = "url")
+    @NotNull
     private String url;
 
     @Schema(description = "路径")

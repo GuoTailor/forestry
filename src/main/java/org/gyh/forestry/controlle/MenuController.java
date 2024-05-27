@@ -3,6 +3,7 @@ package org.gyh.forestry.controlle;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.gyh.forestry.domain.Menu;
 import org.gyh.forestry.domain.Role;
 import org.gyh.forestry.domain.vo.MenuVO;
@@ -79,7 +80,7 @@ public class MenuController {
 
     @Operation(summary = "添加菜单", security = {@SecurityRequirement(name = "Authorization")})
     @PostMapping("/menus/add")
-    public ResponseInfo<Menu> addMenu(@RequestBody AddMenu addMenu) {
+    public ResponseInfo<Menu> addMenu(@Valid @RequestBody AddMenu addMenu) {
         return ResponseInfo.ok(menuService.addMenu(addMenu));
     }
 
@@ -97,8 +98,8 @@ public class MenuController {
 
     @Operation(summary = "获取当前用户的所有菜单", security = {@SecurityRequirement(name = "Authorization")})
     @GetMapping("/menus")
-    public ResponseInfo<List<MenuVO>> getMenusByHrId() {
-        return ResponseInfo.ok(menuService.getMenusByHrId());
+    public ResponseInfo<List<MenuVO>> getMenusByUserId() {
+        return ResponseInfo.ok(menuService.getMenusByUserId());
     }
 
     @Operation(summary = "获取指定角色的所有菜单", security = {@SecurityRequirement(name = "Authorization")})

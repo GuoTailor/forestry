@@ -74,6 +74,7 @@ public class SecurityConfiguration {
                             //1.2 和 menu 表中的记录进行比较
                             List<MenuWithRole> menuWithRoles = menuService.getAllMenusWithRole();
                             Authentication authe = authentication.get();
+                            log.info("== {}", requestURI);
                             for (MenuWithRole menuWithRole : menuWithRoles) {
                                 log.info(menuWithRole.getUrl());
                                 if (antPathMatcher.match(menuWithRole.getUrl(), requestURI)) {
@@ -128,8 +129,7 @@ public class SecurityConfiguration {
      */
     @Bean
     static MethodSecurityExpressionHandler methodSecurityExpressionHandler() {
-        var hierarchy = new RoleHierarchyImpl();
-        hierarchy.setHierarchy(Role.SUPER_ADMIN + " > " + Role.ADMIN + "\n" +
+        var hierarchy = RoleHierarchyImpl.fromHierarchy(Role.SUPER_ADMIN + " > " + Role.ADMIN + "\n" +
                 Role.ADMIN + " > " + Role.USER);
         DefaultMethodSecurityExpressionHandler expressionHandler = new DefaultMethodSecurityExpressionHandler();
         expressionHandler.setRoleHierarchy(hierarchy);

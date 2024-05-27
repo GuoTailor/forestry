@@ -76,7 +76,7 @@ public class RequestLogAspect {
         StringBuilder beforeReqLog = new StringBuilder(300);
         // 日志参数
         List<Object> beforeReqArgs = new ArrayList<>();
-        beforeReqLog.append("\n\n================  Request Start  ================\n");
+        beforeReqLog.append("\n\n================  Request Start  >>>>>>>>>>>>>>>> >>>>>\n");
         // 打印路由
         beforeReqLog.append("===> {}: {}");
         beforeReqArgs.add(requestMethod);
@@ -86,7 +86,7 @@ public class RequestLogAspect {
         logIngArgs(point, beforeReqLog, queryParams);
         beforeReqArgs.addAll(queryParams);
         // 打印请求 headers
-        logIngHeaders(request, beforeReqLog, beforeReqArgs);
+//        logIngHeaders(request, beforeReqLog, beforeReqArgs);
         beforeReqLog.append("================   Request End   ================\n");
 
         // 打印执行时间

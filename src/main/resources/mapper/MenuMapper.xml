@@ -65,7 +65,7 @@
           and mr."rid" = r."id"
         order by m."id"
     </select>
-    <select id="getMenusByUserId" resultMap="MenusByUser">
+    <select id="getMenusByUserId" resultType="org.gyh.forestry.domain.Menu">
         select m.*
         from menu m,
              user_role ur,

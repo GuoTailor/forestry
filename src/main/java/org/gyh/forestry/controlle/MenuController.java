@@ -9,10 +9,7 @@ import org.gyh.forestry.domain.Role;
 import org.gyh.forestry.domain.vo.MenuVO;
 import org.gyh.forestry.dto.PageInfo;
 import org.gyh.forestry.dto.ResponseInfo;
-import org.gyh.forestry.dto.req.AddMenu;
-import org.gyh.forestry.dto.req.AddRole;
-import org.gyh.forestry.dto.req.RolePageReq;
-import org.gyh.forestry.dto.req.UpdateMenuReq;
+import org.gyh.forestry.dto.req.*;
 import org.gyh.forestry.service.MenuService;
 import org.gyh.forestry.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,7 +95,7 @@ public class MenuController {
 
     @Operation(summary = "获取当前用户的所有菜单", security = {@SecurityRequirement(name = "Authorization")})
     @GetMapping("/menus")
-    public ResponseInfo<List<MenuVO>> getMenusByUserId() {
+    public ResponseInfo<MenuVO> getMenusByUserId() {
         return ResponseInfo.ok(menuService.getMenusByUserId());
     }
 
@@ -109,9 +106,9 @@ public class MenuController {
     }
 
     @Operation(summary = "更新角色的菜单", security = {@SecurityRequirement(name = "Authorization")})
-    @PutMapping("/")
-    public ResponseInfo<?> updateMenuRole(Integer rid, List<Integer> mids) {
-        if (menuService.updateMenuRole(rid, mids)) {
+    @PostMapping("/")
+    public ResponseInfo<?> updateMenuRole(@RequestBody @Valid UpdateMenuRoleRep req) {
+        if (menuService.updateMenuRole(req.getRid(), req.getMids())) {
             return ResponseInfo.ok("更新成功!");
         }
         return ResponseInfo.failed("更新失败!");

@@ -63,6 +63,8 @@ fileUploadPath: files/
 mybatis:
   type-handlers-package: org.gyh.forestry.typehandler
   mapper-locations: classpath:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
 
 pagehelper:
   helperDialect: postgresql

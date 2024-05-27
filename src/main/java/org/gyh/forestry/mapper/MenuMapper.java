@@ -17,7 +17,7 @@ import java.util.List;
  */
 public interface MenuMapper {
 
-    List<MenuVO> getMenusByUserId(@Param("userId") Integer userId);
+    List<Menu> getMenusByUserId(@Param("userId") Integer userId);
 
     List<MenuVO> getMenusByParentId(@Param("parentId") Integer parentId);
 

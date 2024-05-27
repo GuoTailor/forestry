@@ -18,7 +18,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -37,9 +41,24 @@ public class MenuService {
     @Autowired
     private MenuRoleMapper menuRoleMapper;
 
-    public List<MenuVO> getMenusByUserId() {
+    public MenuVO getMenusByUserId() {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return menuMapper.getMenusByUserId(user.getId());
+        List<Menu> menus = menuMapper.getMenusByUserId(user.getId());
+        Map<Integer, MenuVO> menuMaps = menus.stream().map(it -> {
+            MenuVO vo = new MenuVO();
+            BeanUtils.copyProperties(it, vo);
+            vo.setChildren(new ArrayList<>());
+            return vo;
+        }).collect(Collectors.toMap(MenuVO::getId, Function.identity()));
+        MenuVO root = null;
+        for (MenuVO menuVO : menuMaps.values()) {
+            if (menuVO.getParentId() == -1) {
+                root = menuVO;
+            } else {
+                menuMaps.get(menuVO.getParentId()).getChildren().add(menuVO);
+            }
+        }
+        return root;
     }
 
     @Cacheable(cacheNames = "AllMenus", key = "'AllMenus'")

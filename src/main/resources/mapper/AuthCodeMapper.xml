@@ -44,7 +44,7 @@
                 #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR},
                 #{createTime,jdbcType=TIMESTAMP})
     </insert>
-    <insert id="insertSelective" parameterType="org.gyh.forestry.domain.AuthCode">
+    <insert id="insertSelective" parameterType="org.gyh.forestry.domain.AuthCode" useGeneratedKeys="true" keyProperty="id">
         <!--@mbg.generated-->
         insert into auth_code
         <trim prefix="(" suffix=")" suffixOverrides=",">

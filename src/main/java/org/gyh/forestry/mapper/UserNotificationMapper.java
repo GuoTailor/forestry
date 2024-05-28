@@ -11,6 +11,8 @@ import java.util.List;
  */
 public interface UserNotificationMapper {
 
+    UserNotification selectByPrimaryKey(int id);
+
     void insertUserNotification(@Param("userId") int userId, @Param("notificationId") int notificationId);
 
     List<UserNotificationResp> getUnreadNotifications(int userId);

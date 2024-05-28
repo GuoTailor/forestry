@@ -44,11 +44,8 @@ public class MenuController {
 
     @Operation(summary = "添加角色", security = {@SecurityRequirement(name = "Authorization")})
     @PostMapping("/role")
-    public ResponseInfo<?> addRole(@RequestBody AddRole role) {
-        if (roleService.addRole(role) == 1) {
-            return ResponseInfo.ok("添加成功!");
-        }
-        return ResponseInfo.failed("添加失败!");
+    public ResponseInfo<Role> addRole(@RequestBody AddRole role) {
+        return ResponseInfo.ok(roleService.addRole(role));
     }
 
     @Operation(summary = "删除角色", security = {@SecurityRequirement(name = "Authorization")})

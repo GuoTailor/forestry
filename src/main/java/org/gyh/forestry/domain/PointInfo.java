@@ -2,6 +2,7 @@ package org.gyh.forestry.domain;
 
 import lombok.Data;
 import net.postgis.jdbc.geometry.Point;
+import org.gyh.forestry.enums.PointTypeEnum;
 import org.springframework.data.annotation.Id;
 
 import java.time.LocalDateTime;
@@ -32,7 +33,7 @@ public class PointInfo {
     /**
     * 类型（预警点，动物位置）
     */
-    private String type;
+    private PointTypeEnum type;
 
     /**
      * 设备id

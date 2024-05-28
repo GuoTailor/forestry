@@ -35,7 +35,7 @@ public class RoleService {
         }
     }
 
-    public Integer addRole(AddRole addRole) {
+    public Role addRole(AddRole addRole) {
         if (addRole.getSortNum() != null) {
             int count = roleMapper.countBySort(addRole.getSortNum());
             if (count >= 1) {
@@ -47,9 +47,9 @@ public class RoleService {
         }
         Role role = new Role();
         BeanUtils.copyProperties(addRole, role);
-        int i = roleMapper.insertSelective(role);
+        roleMapper.insertSelective(role);
         menuService.updateMenuRole(role.getId(), addRole.getMenuIds());
-        return i;
+        return role;
     }
 
     public Integer updateRole(Role role) {

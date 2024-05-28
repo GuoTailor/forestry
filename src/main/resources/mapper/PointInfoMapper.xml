@@ -29,14 +29,14 @@
         from point_info
         where id = #{id,jdbcType=INTEGER}
     </delete>
-    <insert id="insert" parameterType="org.gyh.forestry.domain.PointInfo">
+    <insert id="insert" parameterType="org.gyh.forestry.domain.PointInfo" useGeneratedKeys="true" keyProperty="id">
         <!--@mbg.generated-->
         insert into point_info (id, point, "name",
                                 "type")
         values (#{id,jdbcType=INTEGER}, #{point,jdbcType=OTHER}, #{name,jdbcType=VARCHAR},
                 #{type,jdbcType=VARCHAR})
     </insert>
-    <insert id="insertSelective" parameterType="org.gyh.forestry.domain.PointInfo">
+    <insert id="insertSelective" parameterType="org.gyh.forestry.domain.PointInfo" useGeneratedKeys="true" keyProperty="id">
         <!--@mbg.generated-->
         insert into point_info
         <trim prefix="(" suffix=")" suffixOverrides=",">

@@ -47,7 +47,7 @@
         from "user"
         where id = #{id,jdbcType=INTEGER}
     </delete>
-    <insert id="insert" parameterType="org.gyh.forestry.domain.User">
+    <insert id="insert" parameterType="org.gyh.forestry.domain.User" useGeneratedKeys="true" keyProperty="id">
         <!--@mbg.generated-->
         insert into "user" (id, username, "password",
                             "enable", create_time, tel,
@@ -56,7 +56,7 @@
                 #{enable,jdbcType=BOOLEAN}, #{createTime,jdbcType=TIMESTAMP}, #{tel,jdbcType=VARCHAR},
                 #{email,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR})
     </insert>
-    <insert id="insertSelective" parameterType="org.gyh.forestry.domain.User">
+    <insert id="insertSelective" parameterType="org.gyh.forestry.domain.User" useGeneratedKeys="true" keyProperty="id">
         <!--@mbg.generated-->
         insert into "user"
         <trim prefix="(" suffix=")" suffixOverrides=",">

@@ -5,6 +5,7 @@ import com.github.pagehelper.PageHelper;
 import org.gyh.forestry.domain.Notifications;
 import org.gyh.forestry.domain.OperationRecord;
 import org.gyh.forestry.domain.User;
+import org.gyh.forestry.domain.UserNotification;
 import org.gyh.forestry.dto.PageInfo;
 import org.gyh.forestry.dto.req.UnreadNotificationReq;
 import org.gyh.forestry.dto.resp.UserNotificationResp;
@@ -68,7 +69,9 @@ public class NotificationService {
     /**
      * 标记消息为已读
      */
-    public void markAsRead(int userNotificationId) {
+    public Notifications markAsRead(int userNotificationId) {
         userNotificationMapper.markAsRead(userNotificationId);
+        UserNotification userNotification = userNotificationMapper.selectByPrimaryKey(userNotificationId);
+        return notificationMapper.selectByPrimaryKey(userNotification.getNotificationId());
     }
 }

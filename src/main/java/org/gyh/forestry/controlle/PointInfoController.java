@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.gyh.forestry.domain.PointInfo;
 import org.gyh.forestry.dto.ResponseInfo;
 import org.gyh.forestry.dto.req.AddPointInfo;
 import org.gyh.forestry.dto.req.UpdatePointInfo;
@@ -24,7 +25,7 @@ public class PointInfoController {
 
     @PostMapping("/add")
     @Operation(summary = "添加点", security = {@SecurityRequirement(name = "Authorization")})
-    public ResponseInfo<Boolean> save(@RequestBody @Valid AddPointInfo pointInfo) {
+    public ResponseInfo<PointInfo> save(@RequestBody @Valid AddPointInfo pointInfo) {
         return ResponseInfo.ok(pointInfoService.save(pointInfo));
     }
 

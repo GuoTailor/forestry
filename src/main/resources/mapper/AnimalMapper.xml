@@ -44,7 +44,7 @@
                 #{type,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{cameraId,jdbcType=VARCHAR},
                 #{name,jdbcType=VARCHAR})
     </insert>
-    <insert id="insertSelective" parameterType="org.gyh.forestry.domain.Animal">
+    <insert id="insertSelective" parameterType="org.gyh.forestry.domain.Animal" useGeneratedKeys="true" keyProperty="id">
         <!--@mbg.generated-->
         insert into animal
         <trim prefix="(" suffix=")" suffixOverrides=",">

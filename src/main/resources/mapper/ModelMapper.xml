@@ -27,6 +27,14 @@
         from model
         where id = #{id,jdbcType=INTEGER}
     </select>
+    <select id="selectByEnable" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from model
+        where "enable" = true
+        limit 1
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         <!--@mbg.generated-->
         delete
@@ -40,7 +48,7 @@
         values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{enable,jdbcType=BOOLEAN},
                 #{path,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP})
     </insert>
-    <insert id="insertSelective" parameterType="org.gyh.forestry.domain.Model">
+    <insert id="insertSelective" parameterType="org.gyh.forestry.domain.Model" useGeneratedKeys="true" keyProperty="id">
         <!--@mbg.generated-->
         insert into model
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -116,4 +124,22 @@
             created_time = #{createdTime,jdbcType=TIMESTAMP}
         where id = #{id,jdbcType=INTEGER}
     </update>
+
+    <select id="findByPage" resultType="org.gyh.forestry.dto.resp.ModelResp">
+        select
+        <include refid="Base_Column_List"/>
+        from model
+        <where>
+            <if test="name != null">
+                "name" like concat('%', #{name}, '%')
+            </if>
+            <if test="createdTime != null">
+                and created_time &gt;= #{createdTime}
+            </if>
+            <if test="creator != null and creator != ''">
+                and creator = #{creator}
+            </if>
+        </where>
+        order by created_time desc
+    </select>
 </mapper>

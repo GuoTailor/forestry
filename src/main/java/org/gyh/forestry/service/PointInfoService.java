@@ -28,14 +28,15 @@ public class PointInfoService {
     /**
      * 新增点位
      */
-    public boolean save(AddPointInfo pointInfo) {
+    public PointInfo save(AddPointInfo pointInfo) {
         PointInfo pointInfo1 = new PointInfo();
         BeanUtils.copyProperties(pointInfo, pointInfo1);
         pointInfo1.setPoint(pointInfo.getPoint().toPoint());
         pointInfo1.setCreatedTime(LocalDateTime.now());
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         pointInfo1.setCreator(user.getUsername());
-        return pointInfoMapper.insertSelective(pointInfo1) == 1;
+        pointInfoMapper.insertSelective(pointInfo1);
+        return pointInfo1;
     }
 
     public boolean deleteById(Integer id) {

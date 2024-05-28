@@ -50,7 +50,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 public class RequestLogAspect {
     private static final ParameterNameDiscoverer PARAMETER_NAME_DISCOVERER = new DefaultParameterNameDiscoverer();
-
+    private static final List<String> headerWhiiteList = List.of("content-type", "authorization");
     private final ObjectMapper json;
     private final OperationRecordService operationRecordService;
 
@@ -62,7 +62,8 @@ public class RequestLogAspect {
      * @throws Throwable 异常
      */
     @Around(
-            "execution(!static org.gyh.forestry.dto.ResponseInfo *(..)) && " +
+            "(execution(!static org.gyh.forestry.dto.ResponseInfo *(..)) || " +
+                    "execution(!static org.gyh.forestry.dto.PageInfo *(..))) && " +
                     "(@within(org.springframework.stereotype.Controller) || " +
                     "@within(org.springframework.web.bind.annotation.RestController))"
     )
@@ -86,7 +87,7 @@ public class RequestLogAspect {
         logIngArgs(point, beforeReqLog, queryParams);
         beforeReqArgs.addAll(queryParams);
         // 打印请求 headers
-//        logIngHeaders(request, beforeReqLog, beforeReqArgs);
+        logIngHeaders(request, beforeReqLog, beforeReqArgs);
         beforeReqLog.append("================   Request End   ================\n");
 
         // 打印执行时间
@@ -244,10 +245,12 @@ public class RequestLogAspect {
         Enumeration<String> headers = request.getHeaderNames();
         while (headers.hasMoreElements()) {
             String headerName = headers.nextElement();
-            String headerValue = request.getHeader(headerName);
-            beforeReqLog.append("===Headers===  {}: {}\n");
-            beforeReqArgs.add(headerName);
-            beforeReqArgs.add(headerValue);
+            if (headerWhiiteList.contains(headerName)) {
+                String headerValue = request.getHeader(headerName);
+                beforeReqLog.append("===Headers===  {}: {}\n");
+                beforeReqArgs.add(headerName);
+                beforeReqArgs.add(headerValue);
+            }
         }
 
     }

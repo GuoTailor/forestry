@@ -33,14 +33,14 @@
         from notifications
         where id = #{id,jdbcType=INTEGER}
     </delete>
-    <insert id="insert" parameterType="org.gyh.forestry.domain.Notifications">
+    <insert id="insert" parameterType="org.gyh.forestry.domain.Notifications" useGeneratedKeys="true" keyProperty="id">
         <!--@mbg.generated-->
         insert into notifications (id, title, content,
                                    created_at, send_time, creator)
         values (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR},
                 #{createdAt,jdbcType=TIMESTAMP}, #{sendTime,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR})
     </insert>
-    <insert id="insertSelective" parameterType="org.gyh.forestry.domain.Notifications">
+    <insert id="insertSelective" parameterType="org.gyh.forestry.domain.Notifications" useGeneratedKeys="true" keyProperty="id">
         <!--@mbg.generated-->
         insert into notifications
         <trim prefix="(" suffix=")" suffixOverrides=",">

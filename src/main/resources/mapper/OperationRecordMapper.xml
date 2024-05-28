@@ -59,7 +59,7 @@
                 #{state,jdbcType=BOOLEAN}, #{function,jdbcType=VARCHAR}, #{request,jdbcType=VARCHAR},
                 #{response,jdbcType=VARCHAR}, #{operationUser,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP})
     </insert>
-    <insert id="insertSelective" parameterType="org.gyh.forestry.domain.OperationRecord">
+    <insert id="insertSelective" parameterType="org.gyh.forestry.domain.OperationRecord" useGeneratedKeys="true" keyProperty="id">
         <!--@mbg.generated-->
         insert into operation_record
         <trim prefix="(" suffix=")" suffixOverrides=",">

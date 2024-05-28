@@ -47,7 +47,7 @@
         select m.*
         from menu m
         where m."enabled" = true
-          and m."parent_id" is null
+          and m."parent_id" = -1
     </select>
 
     <select id="getMenusById" resultMap="MenusVo" parameterType="java.lang.Integer">

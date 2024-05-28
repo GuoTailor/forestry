@@ -61,8 +61,8 @@ public class SecurityConfiguration {
                 .logout(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/login", "/error",
-                                "/swagger-ui/*", "/swagger-resources/*", "/v3/api-docs/*", "/webjars/*",
-                                "/*.html", "/*.js", "/*.css", "/*.png", "/*.ico", "/lnfraredCamera/*"
+                                "/swagger-ui/*", "/swagger-resources/*", "/v3/api-docs/*", "/webjars/**",
+                                "/*.html", "/*.js", "/*.css", "/*.png", "/*.ico", "/lnfraredCamera/**"
                         ).permitAll()
                         .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                         .anyRequest().access((authentication, object) -> {

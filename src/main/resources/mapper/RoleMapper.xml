@@ -35,7 +35,7 @@
         from "role"
         where id = #{id,jdbcType=INTEGER}
     </delete>
-    <insert id="insert" parameterType="org.gyh.forestry.domain.Role">
+    <insert id="insert" parameterType="org.gyh.forestry.domain.Role" useGeneratedKeys="true" keyProperty="id">
         <!--@mbg.generated-->
         insert into "role" (id, authority, role_name,
                             sort_num, "enable", "describe",
@@ -44,7 +44,7 @@
                 #{sortNum,jdbcType=INTEGER}, #{enable,jdbcType=BOOLEAN}, #{describe,jdbcType=VARCHAR},
                 #{createTime,jdbcType=TIMESTAMP})
     </insert>
-    <insert id="insertSelective" parameterType="org.gyh.forestry.domain.Role">
+    <insert id="insertSelective" parameterType="org.gyh.forestry.domain.Role" useGeneratedKeys="true" keyProperty="id">
         <!--@mbg.generated-->
         insert into "role"
         <trim prefix="(" suffix=")" suffixOverrides=",">

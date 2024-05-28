@@ -1,5 +1,6 @@
 package org.gyh.forestry.dto.resp;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,6 +19,7 @@ public class JsonPoint {
      * In most long/lat systems, this is the longitude.
      */
     @NotNull
+    @Schema(description = "经度/longitude")
     public double x;
 
     /**
@@ -25,6 +27,7 @@ public class JsonPoint {
      * In most long/lat systems, this is the latitude.
      */
     @NotNull
+    @Schema(description = "纬度/latitude")
     public double y;
 
     /**
@@ -33,8 +36,8 @@ public class JsonPoint {
      * center of the earth, or the height / elevation over
      * the ground.
      */
-    @NotNull
-    public double z;
+    @Schema(description = "海拔/elevation")
+    public Double z;
 
     public JsonPoint(Point point) {
         if (point != null) {

@@ -44,14 +44,15 @@ public class NotificationController {
     }
 
     @GetMapping("/unread/count/{userId}")
+    @Operation(summary = "获取当前用户的未读消息数", security = {@SecurityRequirement(name = "Authorization")})
     public ResponseInfo<Integer> getUnreadNotificationCount() {
         int count = notificationService.getUnreadNotificationCount();
         return ResponseInfo.ok(count);
     }
 
     @PostMapping("/read/{id}")
-    public ResponseInfo<String> markAsRead(@PathVariable int id) {
-        notificationService.markAsRead(id);
-        return ResponseInfo.ok("Notification marked as read.");
+    @Operation(summary = "读取消息并标记为已读", security = {@SecurityRequirement(name = "Authorization")})
+    public ResponseInfo<Notifications> markAsRead(@PathVariable int id) {
+        return ResponseInfo.ok(notificationService.markAsRead(id));
     }
 }

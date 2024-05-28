@@ -7,13 +7,12 @@ import org.gyh.forestry.domain.OperationRecord;
 import org.gyh.forestry.domain.Role;
 import org.gyh.forestry.domain.User;
 import org.gyh.forestry.dto.PageInfo;
+import org.gyh.forestry.dto.req.UpdateUserReq;
 import org.gyh.forestry.dto.req.UserPageReq;
 import org.gyh.forestry.dto.resp.AddUserInfo;
-import org.gyh.forestry.dto.req.UpdateUserReq;
 import org.gyh.forestry.dto.resp.UserInfo;
 import org.gyh.forestry.mapper.RoleMapper;
 import org.gyh.forestry.mapper.UserMapper;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -71,6 +70,7 @@ public class UserService implements UserDetailsService {
 
     /**
      * 分页查询
+     *
      * @param pageReq 分页条件
      */
     public PageInfo<UserInfo> findByPage(UserPageReq pageReq) {

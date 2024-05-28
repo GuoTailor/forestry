@@ -31,7 +31,7 @@ public class AuthCodeService {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         authCode.setHandler(user.getUsername());
         authCode.setCreateTime(LocalDateTime.now());
-        return authCodeMapper.insert(authCode);
+        return authCodeMapper.insertSelective(authCode);
     }
 
     public PageInfo<AuthCode> getByPage(AuthCodePageReq authCodeReq) {

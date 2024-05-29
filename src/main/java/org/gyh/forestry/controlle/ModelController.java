@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.gyh.forestry.aspect.LogRecord;
 import org.gyh.forestry.domain.Model;
 import org.gyh.forestry.dto.PageInfo;
 import org.gyh.forestry.dto.ResponseInfo;
@@ -28,6 +29,7 @@ public class ModelController {
     @Operation(summary = "上传模型", security = {@SecurityRequirement(name = "Authorization")}, parameters = {
             @Parameter(name = "name", description = "模型名字", required = true),
             @Parameter(name = "file", description = "模型文件", required = true)})
+    @LogRecord(model = "模型管理", method = "上传模型")
     public ResponseInfo<Model> uploadModel(String name, MultipartFile file) {
         return ResponseInfo.ok(modelService.uploadModel(name, file));
     }
@@ -39,20 +41,22 @@ public class ModelController {
     @Operation(summary = "启用或停用模型", security = {@SecurityRequirement(name = "Authorization")}, parameters = {
             @Parameter(name = "id", description = "模型id", required = true),
             @Parameter(name = "enable", description = "true：启用，false：停用", required = true)})
+    @LogRecord(model = "模型管理", method = "启用或停用模型")
     public ResponseInfo<Model> switchModel(@RequestParam("id") Integer id, @RequestParam("enable") Boolean enable) {
        return ResponseInfo.ok(modelService.switchModel(id, enable));
     }
 
     @PostMapping("/reupload")
-    @Operation(summary = "上传模型", security = {@SecurityRequirement(name = "Authorization")}, parameters = {
+    @Operation(summary = "重新上传模型", security = {@SecurityRequirement(name = "Authorization")}, parameters = {
             @Parameter(name = "id", description = "模型id", required = true),
             @Parameter(name = "file", description = "模型文件", required = true)})
+    @LogRecord(model = "模型管理", method = "重新上传模型")
     public ResponseInfo<Model> reUpload(Integer id, MultipartFile file) {
         return ResponseInfo.ok(modelService.reUpload(id, file));
     }
 
     @PostMapping("/page")
-    @Operation(summary = "上传模型", security = {@SecurityRequirement(name = "Authorization")})
+    @Operation(summary = "分页获取模型", security = {@SecurityRequirement(name = "Authorization")})
     public PageInfo<ModelResp> getModels(@RequestBody ModelPageReq pageReq) {
         return modelService.getModels(pageReq);
     }

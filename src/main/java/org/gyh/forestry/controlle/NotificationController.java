@@ -3,9 +3,11 @@ package org.gyh.forestry.controlle;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.gyh.forestry.aspect.LogRecord;
 import org.gyh.forestry.domain.Notifications;
 import org.gyh.forestry.dto.PageInfo;
 import org.gyh.forestry.dto.ResponseInfo;
+import org.gyh.forestry.dto.req.NotificationsReq;
 import org.gyh.forestry.dto.req.UnreadNotificationReq;
 import org.gyh.forestry.dto.resp.UserNotificationResp;
 import org.gyh.forestry.service.NotificationService;
@@ -26,8 +28,9 @@ public class NotificationController {
 
     @PostMapping("/create")
     @Operation(summary = "创建一个通知", security = {@SecurityRequirement(name = "Authorization")})
-    public ResponseInfo<String> createNotification(@RequestBody Notifications notification, @RequestParam List<Integer> userIds) {
-        notificationService.createNotification(notification, userIds);
+    @LogRecord(model = "通知", method = "创建一个通知")
+    public ResponseInfo<String> createNotification(@RequestBody NotificationsReq notification) {
+        notificationService.createNotification(notification);
         return ResponseInfo.ok("Notification created successfully.");
     }
 

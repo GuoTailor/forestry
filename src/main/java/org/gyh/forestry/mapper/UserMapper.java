@@ -36,4 +36,5 @@ public interface UserMapper {
 
     List<UserInfo> findByPage(UserPageReq req);
 
+    List<Integer> findAllId();
 }

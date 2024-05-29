@@ -11,6 +11,13 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface LogRecord {
+    /**
+     * 模块名字
+     */
     String model();
+
+    /**
+     * 操作类型
+     */
     String method();
 }

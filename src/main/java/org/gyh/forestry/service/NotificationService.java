@@ -2,19 +2,25 @@ package org.gyh.forestry.service;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import jakarta.annotation.Resource;
 import org.gyh.forestry.domain.Notifications;
 import org.gyh.forestry.domain.OperationRecord;
 import org.gyh.forestry.domain.User;
 import org.gyh.forestry.domain.UserNotification;
 import org.gyh.forestry.dto.PageInfo;
+import org.gyh.forestry.dto.req.NotificationsReq;
 import org.gyh.forestry.dto.req.UnreadNotificationReq;
 import org.gyh.forestry.dto.resp.UserNotificationResp;
 import org.gyh.forestry.mapper.NotificationsMapper;
+import org.gyh.forestry.mapper.UserMapper;
 import org.gyh.forestry.mapper.UserNotificationMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -24,14 +30,24 @@ import java.util.List;
 public class NotificationService {
     @Autowired
     private NotificationsMapper notificationMapper;
-
+    @Resource
+    private UserMapper userMapper;
     @Autowired
     private UserNotificationMapper userNotificationMapper;
 
-    public void createNotification(Notifications notification, List<Integer> userIds) {
-        notificationMapper.insertSelective(notification);
+    public void createNotification(NotificationsReq notificationsReq) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        List<Integer> userIds = notificationsReq.getUserIds();
+        Notifications notifications = new Notifications();
+        BeanUtils.copyProperties(notificationsReq, notifications);
+        notifications.setCreatedAt(LocalDateTime.now());
+        notifications.setCreator(user.getUsername());
+        notificationMapper.insertSelective(notifications);
+        if (CollectionUtils.isEmpty(userIds)) {
+            userIds = userMapper.findAllId();
+        }
         for (int userId : userIds) {
-            userNotificationMapper.insertUserNotification(userId, notification.getId());
+            userNotificationMapper.insertUserNotification(userId, notifications.getId());
         }
     }
 

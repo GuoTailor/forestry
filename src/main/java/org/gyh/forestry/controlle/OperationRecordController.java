@@ -3,6 +3,7 @@ package org.gyh.forestry.controlle;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.gyh.forestry.aspect.LogRecord;
 import org.gyh.forestry.domain.OperationRecord;
 import org.gyh.forestry.dto.PageInfo;
 import org.gyh.forestry.dto.req.OperationRecordPage;
@@ -22,6 +23,7 @@ public class OperationRecordController {
 
     @Operation(summary = "分页查询日志", security = {@SecurityRequirement(name = "Authorization")})
     @PostMapping("/page")
+    @LogRecord(model = "日志", method = "分页查询日志")
     public PageInfo<OperationRecord> selectByPage(@RequestBody OperationRecordPage pageReq) {
         return operationRecordService.selectByPage(pageReq);
     }

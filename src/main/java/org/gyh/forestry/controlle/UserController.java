@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.gyh.forestry.aspect.LogRecord;
 import org.gyh.forestry.domain.User;
 import org.gyh.forestry.dto.PageInfo;
 import org.gyh.forestry.dto.ResponseInfo;
@@ -29,6 +30,7 @@ public class UserController {
 
     @PostMapping("/add")
     @Operation(summary = "添加用户", security = {@SecurityRequirement(name = "Authorization")})
+    @LogRecord(model = "用户", method = "添加用户")
     public ResponseInfo<User> addUser(@RequestBody @Valid AddUserInfo addUserInfo) {
         return ResponseInfo.ok(userService.addUser(addUserInfo));
     }
@@ -53,12 +55,14 @@ public class UserController {
 
     @GetMapping("/{uid}")
     @Operation(summary = "删除用户", security = {@SecurityRequirement(name = "Authorization")})
+    @LogRecord(model = "用户", method = "删除用户")
     public ResponseInfo<Boolean> deleteUserById(@PathVariable Integer uid) {
         return ResponseInfo.ok(userService.deleteUserById(uid));
     }
 
     @PostMapping("/update")
     @Operation(summary = "修改用户信息", security = {@SecurityRequirement(name = "Authorization")})
+    @LogRecord(model = "用户", method = "修改用户信息")
     public ResponseInfo<User> updateUser(@RequestBody UpdateUserReq updateUserReq) {
         return ResponseInfo.ok(userService.updateUser(updateUserReq));
     }

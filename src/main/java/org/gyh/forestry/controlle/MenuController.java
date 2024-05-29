@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.gyh.forestry.aspect.LogRecord;
 import org.gyh.forestry.domain.Menu;
 import org.gyh.forestry.domain.Role;
 import org.gyh.forestry.domain.vo.MenuVO;
@@ -44,12 +45,14 @@ public class MenuController {
 
     @Operation(summary = "添加角色", security = {@SecurityRequirement(name = "Authorization")})
     @PostMapping("/role")
+    @LogRecord(model = "菜单", method = "添加角色")
     public ResponseInfo<Role> addRole(@RequestBody AddRole role) {
         return ResponseInfo.ok(roleService.addRole(role));
     }
 
     @Operation(summary = "删除角色", security = {@SecurityRequirement(name = "Authorization")})
     @DeleteMapping("/role/{rid}")
+    @LogRecord(model = "菜单", method = "删除角色")
     public ResponseInfo<?> deleteRoleById(@PathVariable Integer rid) {
         if (roleService.deleteRoleById(rid) == 1) {
             return ResponseInfo.ok("删除成功!");
@@ -59,6 +62,7 @@ public class MenuController {
 
     @Operation(summary = "修改角色", security = {@SecurityRequirement(name = "Authorization")})
     @PostMapping("/role/update")
+    @LogRecord(model = "菜单", method = "修改角色")
     public ResponseInfo<?> updateRole(@RequestBody Role role) {
         if (roleService.updateRole(role) == 1) {
             return ResponseInfo.ok("修改成功!");
@@ -74,18 +78,21 @@ public class MenuController {
 
     @Operation(summary = "添加菜单", security = {@SecurityRequirement(name = "Authorization")})
     @PostMapping("/menus/add")
+    @LogRecord(model = "菜单", method = "添加菜单")
     public ResponseInfo<Menu> addMenu(@Valid @RequestBody AddMenu addMenu) {
         return ResponseInfo.ok(menuService.addMenu(addMenu));
     }
 
     @Operation(summary = "修改菜单", security = {@SecurityRequirement(name = "Authorization")})
     @PostMapping("/menus/update")
+    @LogRecord(model = "菜单", method = "修改菜单")
     public ResponseInfo<Menu> updateMenu(@RequestBody UpdateMenuReq req) {
         return ResponseInfo.ok(menuService.updateMenu(req));
     }
 
     @Operation(summary = "删除菜单", security = {@SecurityRequirement(name = "Authorization")})
     @GetMapping("/menus/{rid}")
+    @LogRecord(model = "菜单", method = "删除菜单")
     public ResponseInfo<Boolean> deleteMenuById(@PathVariable Integer rid) {
         return ResponseInfo.ok(menuService.deleteMenuById(rid));
     }
@@ -104,6 +111,7 @@ public class MenuController {
 
     @Operation(summary = "更新角色的菜单", security = {@SecurityRequirement(name = "Authorization")})
     @PostMapping("/")
+    @LogRecord(model = "菜单", method = "更新角色的菜单")
     public ResponseInfo<?> updateMenuRole(@RequestBody @Valid UpdateMenuRoleRep req) {
         if (menuService.updateMenuRole(req.getRid(), req.getMids())) {
             return ResponseInfo.ok("更新成功!");

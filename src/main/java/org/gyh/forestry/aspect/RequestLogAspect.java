@@ -117,11 +117,11 @@ public class RequestLogAspect {
                 record.setIp(request.getRemoteAddr());
                 record.setState(result instanceof ResponseInfo);
                 record.setFunction(method.getName());
-                record.setRequest(json.writeValueAsString(queryParams));
-                record.setRequest(resp);
+                record.setRequest(json.writeValueAsString(queryParams).replace("\\", ""));
+                record.setResponse(resp.replace("\\", ""));
                 User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
                 if (user != null) {
-                    record.setOperation(user.getUsername());
+                    record.setOperationUser(user.getUsername());
                 }
                 record.setCreateTime(LocalDateTime.now());
                 operationRecordService.insertSelective(record);

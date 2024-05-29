@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.gyh.forestry.aspect.LogRecord;
 import org.gyh.forestry.dto.ResponseInfo;
 import org.gyh.forestry.dto.req.AddPointInfo;
 import org.gyh.forestry.dto.req.UpdatePointInfo;
@@ -24,18 +25,21 @@ public class PointInfoController {
 
     @PostMapping("/add")
     @Operation(summary = "添加点", security = {@SecurityRequirement(name = "Authorization")})
+    @LogRecord(model = "点位管理", method = "添加点")
     public ResponseInfo<PointInfoResp> save(@RequestBody @Valid AddPointInfo pointInfo) {
         return ResponseInfo.ok(pointInfoService.save(pointInfo));
     }
 
     @PostMapping("/delete")
     @Operation(summary = "删除点", security = {@SecurityRequirement(name = "Authorization")})
+    @LogRecord(model = "点位管理", method = "删除点")
     public ResponseInfo<Boolean> deleteById(@RequestParam("id") Integer id) {
         return ResponseInfo.ok(pointInfoService.deleteById(id));
     }
 
     @PostMapping("/update")
     @Operation(summary = "更新点", security = {@SecurityRequirement(name = "Authorization")})
+    @LogRecord(model = "点位管理", method = "更新点")
     public ResponseInfo<Void> updateById(@RequestBody @Valid UpdatePointInfo pointInfo) {
         pointInfoService.updateById(pointInfo);
         return ResponseInfo.ok();

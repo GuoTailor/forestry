@@ -3,6 +3,7 @@ package org.gyh.forestry.controlle;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.gyh.forestry.aspect.LogRecord;
 import org.gyh.forestry.domain.AuthCode;
 import org.gyh.forestry.dto.PageInfo;
 import org.gyh.forestry.dto.ResponseInfo;
@@ -24,6 +25,7 @@ public class AuthCodeController {
     private AuthCodeService authCodeService;
 
     @PostMapping("/add")
+    @LogRecord(model = "授权码", method = "添加授权码")
     @Operation(summary = "添加授权码", security = {@SecurityRequirement(name = "Authorization")})
     public ResponseInfo<Boolean> addCode(@RequestBody AddAuthCodeReq authCodeReq) {
         Integer insert = authCodeService.insert(authCodeReq);
@@ -37,6 +39,7 @@ public class AuthCodeController {
     }
 
     @GetMapping("/delete")
+    @LogRecord(model = "授权码", method = "删除授权码")
     @Operation(summary = "删除授权码", security = {@SecurityRequirement(name = "Authorization")})
     public ResponseInfo<Boolean> deleteById(@RequestParam("id") Integer id) {
         Integer delete = authCodeService.deleteById(id);
@@ -44,6 +47,7 @@ public class AuthCodeController {
     }
     
     @PostMapping("/update")
+    @LogRecord(model = "授权码", method = "更新授权码")
     @Operation(summary = "更新授权码", security = {@SecurityRequirement(name = "Authorization")})
     public ResponseInfo<Boolean> updateById(@RequestBody AuthCodeUpdateReq req) {
         Integer update = authCodeService.updateById(req);

@@ -1,4 +1,4 @@
-package org.gyh.forestry.config;
+package org.gyh.forestry.websocket;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;

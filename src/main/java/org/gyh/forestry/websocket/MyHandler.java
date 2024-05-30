@@ -1,8 +1,14 @@
-package org.gyh.forestry.config;
+package org.gyh.forestry.websocket;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.ServletException;
 import lombok.extern.slf4j.Slf4j;
 import org.gyh.forestry.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.DispatcherServlet;
@@ -25,6 +31,9 @@ public class MyHandler extends TextWebSocketHandler {
     private final Map<String, WebSocketSession> webSocketSessionMap = new ConcurrentHashMap<>();
     @Autowired
     private DispatcherServlet servlet;
+    @Autowired
+    private ObjectMapper json;
+
     //成功连接时
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
@@ -37,9 +46,36 @@ public class MyHandler extends TextWebSocketHandler {
     }
 
     @Override
-    public void handleTextMessage(WebSocketSession session, TextMessage message) throws IOException {
+    public void handleTextMessage(WebSocketSession session, TextMessage message) throws IOException, ServletException {
+        UsernamePasswordAuthenticationToken principal = (UsernamePasswordAuthenticationToken)session.getPrincipal();
+        SecurityContextHolder.getContext().setAuthentication(principal);
+        log.info(message.getPayload());
+        ServiceRequestInfo serviceRequestInfo = json.readValue(message.getPayload(), ServiceRequestInfo.class);
+        if (serviceRequestInfo.getOrder().equals("/ping")) {
+            return;
+        }
+        if (serviceRequestInfo.getOrder().equals("/ok")) {
+            return;
+        }
+        SocketServletRequest socketServletRequest = new SocketServletRequest(HttpMethod.POST.name(), serviceRequestInfo.getOrder());
+        socketServletRequest.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        socketServletRequest.setContent(json.writeValueAsBytes(serviceRequestInfo.getBody()));
+
+        SocketServletResponse socketServletResponse = new SocketServletResponse();
+        socketServletResponse.setStatus(HttpStatus.OK.value());
+        ServiceResponseInfo serviceResponseInfo = new ServiceResponseInfo();
+        serviceResponseInfo.setOrder(0);
+        serviceResponseInfo.setReq(serviceRequestInfo.getReq());
+        try {
+            servlet.service(socketServletRequest, socketServletResponse);
+            serviceResponseInfo.setBody(socketServletResponse.getContentAsString());
+        } catch (Exception e) {
+            log.error("socket异常",e);
+            serviceResponseInfo.setBody(e.getMessage());
+        }
+        session.sendMessage(new TextMessage(json.writeValueAsBytes(serviceResponseInfo)));
         // 有消息就广播下
-        for (Map.Entry<String, WebSocketSession> entry : webSocketSessionMap.entrySet()) {
+        /*for (Map.Entry<String, WebSocketSession> entry : webSocketSessionMap.entrySet()) {
             String s = entry.getKey();
             WebSocketSession webSocketSession = entry.getValue();
             if (webSocketSession.isOpen()) {
@@ -47,7 +83,7 @@ public class MyHandler extends TextWebSocketHandler {
                 User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
                 log.info("send to {} msg:{} isVirtual:{}, user:{}", s, message.getPayload(), Thread.currentThread().isVirtual(), user.getUsername());
             }
-        }
+        }*/
     }
 
     //报错时

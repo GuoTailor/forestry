@@ -5,13 +5,10 @@ import com.github.pagehelper.PageHelper;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.gyh.forestry.domain.Model;
-import org.gyh.forestry.domain.OperationRecord;
 import org.gyh.forestry.domain.User;
 import org.gyh.forestry.dto.PageInfo;
-import org.gyh.forestry.dto.PageReq;
 import org.gyh.forestry.dto.req.ModelPageReq;
 import org.gyh.forestry.dto.resp.ModelResp;
-import org.gyh.forestry.dto.resp.UserInfo;
 import org.gyh.forestry.exception.BusinessException;
 import org.gyh.forestry.mapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,6 +71,12 @@ public class ModelService {
         }
     }
 
+    /**
+     * 重新上传
+     *
+     * @param id   模型id
+     * @param file 模型文件
+     */
     public Model reUpload(Integer id, MultipartFile file) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Model model = modelMapper.selectByPrimaryKey(id);
@@ -89,6 +92,9 @@ public class ModelService {
         return modelMapper.selectByPrimaryKey(id);
     }
 
+    /**
+     * 分页获取模型列表
+     */
     public PageInfo<ModelResp> getModels(ModelPageReq pageReq) {
         try (Page<ModelResp> page = PageHelper.startPage(pageReq.getPage(), pageReq.getPageSize())) {
             List<ModelResp> all = modelMapper.findByPage(pageReq);

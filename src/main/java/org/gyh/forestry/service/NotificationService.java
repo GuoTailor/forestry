@@ -6,14 +6,14 @@ import jakarta.annotation.Resource;
 import org.gyh.forestry.domain.Notifications;
 import org.gyh.forestry.domain.OperationRecord;
 import org.gyh.forestry.domain.User;
-import org.gyh.forestry.domain.UserNotification;
+import org.gyh.forestry.domain.UserNotifications;
 import org.gyh.forestry.dto.PageInfo;
 import org.gyh.forestry.dto.req.NotificationsReq;
 import org.gyh.forestry.dto.req.UnreadNotificationReq;
 import org.gyh.forestry.dto.resp.UserNotificationResp;
 import org.gyh.forestry.mapper.NotificationsMapper;
 import org.gyh.forestry.mapper.UserMapper;
-import org.gyh.forestry.mapper.UserNotificationMapper;
+import org.gyh.forestry.mapper.UserNotificationsMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -33,7 +33,7 @@ public class NotificationService {
     @Resource
     private UserMapper userMapper;
     @Autowired
-    private UserNotificationMapper userNotificationMapper;
+    private UserNotificationsMapper userNotificationMapper;
 
     public void createNotification(NotificationsReq notificationsReq) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -47,7 +47,12 @@ public class NotificationService {
             userIds = userMapper.findAllId();
         }
         for (int userId : userIds) {
-            userNotificationMapper.insertUserNotification(userId, notifications.getId());
+            UserNotifications userNotifications = new UserNotifications();
+            userNotifications.setSendTime(notifications.getSendTime());
+            userNotifications.setUserId(userId);
+            userNotifications.setNotificationId(notifications.getId());
+            userNotifications.setIsRead(false);
+            userNotificationMapper.insertSelective(userNotifications);
         }
     }
 
@@ -87,7 +92,7 @@ public class NotificationService {
      */
     public Notifications markAsRead(int userNotificationId) {
         userNotificationMapper.markAsRead(userNotificationId);
-        UserNotification userNotification = userNotificationMapper.selectByPrimaryKey(userNotificationId);
+        UserNotifications userNotification = userNotificationMapper.selectByPrimaryKey(userNotificationId);
         return notificationMapper.selectByPrimaryKey(userNotification.getNotificationId());
     }
 }

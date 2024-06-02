@@ -1,12 +1,12 @@
 package org.gyh.forestry.domain;
 
-import java.time.LocalDateTime;
-import java.util.Date;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 
+import java.time.LocalDateTime;
+
 /**
- * create by GYH on 2024/5/20
+ * create by GYH on 2024/5/31
  */
 @Data
 public class Notifications {
@@ -14,27 +14,27 @@ public class Notifications {
     private Integer id;
 
     /**
-    * 标题
-    */
+     * 标题
+     */
     private String title;
 
     /**
-    * 内容
-    */
+     * 内容
+     */
     private String content;
 
     /**
-    * 创建时间
-    */
-    private LocalDateTime createdAt;
+     * 创建时间
+     */
+    private LocalDateTime createTime;
 
     /**
-    * 发送时间
-    */
+     * 发送时间
+     */
     private LocalDateTime sendTime;
 
     /**
-    * 创建人
-    */
+     * 创建人
+     */
     private String creator;
 }

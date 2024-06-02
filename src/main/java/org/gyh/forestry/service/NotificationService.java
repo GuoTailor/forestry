@@ -40,7 +40,7 @@ public class NotificationService {
         List<Integer> userIds = notificationsReq.getUserIds();
         Notifications notifications = new Notifications();
         BeanUtils.copyProperties(notificationsReq, notifications);
-        notifications.setCreatedAt(LocalDateTime.now());
+        notifications.setCreateTime(LocalDateTime.now());
         notifications.setCreator(user.getUsername());
         notificationMapper.insertSelective(notifications);
         if (CollectionUtils.isEmpty(userIds)) {

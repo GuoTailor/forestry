@@ -5,7 +5,7 @@ import org.gyh.forestry.domain.Notifications;
 import java.util.List;
 
 /**
- * create by GYH on 2024/5/20
+ * create by GYH on 2024/5/31
  */
 public interface NotificationsMapper {
     int deleteByPrimaryKey(Integer id);

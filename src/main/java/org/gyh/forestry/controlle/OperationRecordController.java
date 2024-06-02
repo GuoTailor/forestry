@@ -23,7 +23,6 @@ public class OperationRecordController {
 
     @Operation(summary = "分页查询日志", security = {@SecurityRequirement(name = "Authorization")})
     @PostMapping("/page")
-    @LogRecord(model = "日志", method = "分页查询日志")
     public PageInfo<OperationRecord> selectByPage(@RequestBody OperationRecordPage pageReq) {
         return operationRecordService.selectByPage(pageReq);
     }

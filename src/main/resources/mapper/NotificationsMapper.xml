@@ -7,7 +7,7 @@
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="title" jdbcType="VARCHAR" property="title"/>
         <result column="content" jdbcType="VARCHAR" property="content"/>
-        <result column="created_at" jdbcType="TIMESTAMP" property="createdAt"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="send_time" jdbcType="TIMESTAMP" property="sendTime"/>
         <result column="creator" jdbcType="VARCHAR" property="creator"/>
     </resultMap>
@@ -16,7 +16,7 @@
         id,
         title,
         content,
-        created_at,
+        create_time,
         send_time,
         creator
     </sql>
@@ -36,9 +36,9 @@
     <insert id="insert" parameterType="org.gyh.forestry.domain.Notifications" useGeneratedKeys="true" keyProperty="id">
         <!--@mbg.generated-->
         insert into notifications (id, title, content,
-                                   created_at, send_time, creator)
+                                   create_time, send_time, creator)
         values (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR},
-                #{createdAt,jdbcType=TIMESTAMP}, #{sendTime,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR})
+                #{createTime,jdbcType=TIMESTAMP}, #{sendTime,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR})
     </insert>
     <insert id="insertSelective" parameterType="org.gyh.forestry.domain.Notifications" useGeneratedKeys="true" keyProperty="id">
         <!--@mbg.generated-->
@@ -53,8 +53,8 @@
             <if test="content != null">
                 content,
             </if>
-            <if test="createdAt != null">
-                created_at,
+            <if test="createTime != null">
+                create_time,
             </if>
             <if test="sendTime != null">
                 send_time,
@@ -73,8 +73,8 @@
             <if test="content != null">
                 #{content,jdbcType=VARCHAR},
             </if>
-            <if test="createdAt != null">
-                #{createdAt,jdbcType=TIMESTAMP},
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
             </if>
             <if test="sendTime != null">
                 #{sendTime,jdbcType=TIMESTAMP},
@@ -94,8 +94,8 @@
             <if test="content != null">
                 content = #{content,jdbcType=VARCHAR},
             </if>
-            <if test="createdAt != null">
-                created_at = #{createdAt,jdbcType=TIMESTAMP},
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
             </if>
             <if test="sendTime != null">
                 send_time = #{sendTime,jdbcType=TIMESTAMP},
@@ -109,11 +109,11 @@
     <update id="updateByPrimaryKey" parameterType="org.gyh.forestry.domain.Notifications">
         <!--@mbg.generated-->
         update notifications
-        set title      = #{title,jdbcType=VARCHAR},
-            content    = #{content,jdbcType=VARCHAR},
-            created_at = #{createdAt,jdbcType=TIMESTAMP},
-            send_time  = #{sendTime,jdbcType=TIMESTAMP},
-            creator    = #{creator,jdbcType=VARCHAR}
+        set title       = #{title,jdbcType=VARCHAR},
+            content     = #{content,jdbcType=VARCHAR},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            send_time   = #{sendTime,jdbcType=TIMESTAMP},
+            creator     = #{creator,jdbcType=VARCHAR}
         where id = #{id,jdbcType=INTEGER}
     </update>
     <select id="getAllNotifications" resultType="org.gyh.forestry.domain.Notifications">

@@ -1,12 +1,17 @@
 package org.gyh.forestry.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.gyh.forestry.domain.User;
+import org.gyh.forestry.exception.BusinessException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.UUID;
 
 /**
  * create by GYH on 2024/3/24
@@ -19,15 +24,32 @@ public class FileService {
 
     public String uploadFile(MultipartFile file) {
         if (file != null) {
-            String fileName = file.getOriginalFilename();
-            String filePath = fileUploadPath + fileName;
+            User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            Integer userId = user.getId();
+            String originalFilename = file.getOriginalFilename();
+            var suffix = "";
+            if (StringUtils.hasText(originalFilename)) {
+                var split = originalFilename.split("\\.");
+                if (split.length > 0) {
+                    suffix = "." + split[split.length - 1];
+                }
+            }
+            var fileName = userId + File.separator + UUID.randomUUID() + suffix;
+            String pathname = fileUploadPath + File.separator + fileName;
+            var dest = new File(pathname);
+
             try {
-                file.transferTo(new File(filePath));
+                if (!dest.getParentFile().exists()) {
+                    boolean mkdirs = dest.getParentFile().mkdirs();
+                    if (!mkdirs) throw new BusinessException("创建目录失败");
+                }
+                file.transferTo(dest.getAbsoluteFile());
             } catch (IOException e) {
                 log.error("上传文件失败", e);
+                throw new BusinessException(e);
             }
-            return filePath;
+            return fileName;
         }
-        return fileUploadPath;
+        throw new BusinessException("上传文件不能为空");
     }
 }

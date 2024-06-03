@@ -37,5 +37,5 @@ public class Model {
     /**
      * 上传时间
      */
-    private LocalDateTime createdTime;
+    private LocalDateTime createTime;
 }

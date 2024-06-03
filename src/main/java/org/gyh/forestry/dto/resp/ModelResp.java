@@ -40,5 +40,5 @@ public class ModelResp {
      * 上传时间
      */
     @Schema(description = "上传时间")
-    private LocalDateTime createdTime;
+    private LocalDateTime createTime;
 }

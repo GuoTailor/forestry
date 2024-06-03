@@ -14,7 +14,7 @@ public class ModelPageReq extends PageReq {
     @Schema(description = "模型名字")
     private String name;
     @Schema(description = "创建时间")
-    private LocalDateTime createdTime;
+    private LocalDateTime createTime;
     @Schema(description = "上传者")
     private String creator;
 }

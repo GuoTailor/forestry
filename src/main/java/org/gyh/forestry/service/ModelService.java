@@ -40,7 +40,7 @@ public class ModelService {
         model.setPath(path);
         model.setEnable(false);
         model.setCreator(user.getUsername());
-        model.setCreatedTime(LocalDateTime.now());
+        model.setCreateTime(LocalDateTime.now());
         modelMapper.insertSelective(model);
         return model;
     }

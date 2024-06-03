@@ -9,7 +9,7 @@
         <result column="enable" jdbcType="BOOLEAN" property="enable"/>
         <result column="path" jdbcType="VARCHAR" property="path"/>
         <result column="creator" jdbcType="VARCHAR" property="creator"/>
-        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
     </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
@@ -18,7 +18,7 @@
         "enable",
         "path",
         creator,
-        created_time
+        create_time
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         <!--@mbg.generated-->
@@ -44,9 +44,9 @@
     <insert id="insert" parameterType="org.gyh.forestry.domain.Model">
         <!--@mbg.generated-->
         insert into model (id, "name", "enable",
-                           "path", creator, created_time)
+                           "path", creator, create_time)
         values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{enable,jdbcType=BOOLEAN},
-                #{path,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP})
+                #{path,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP})
     </insert>
     <insert id="insertSelective" parameterType="org.gyh.forestry.domain.Model" useGeneratedKeys="true" keyProperty="id">
         <!--@mbg.generated-->
@@ -67,8 +67,8 @@
             <if test="creator != null">
                 creator,
             </if>
-            <if test="createdTime != null">
-                created_time,
+            <if test="createTime != null">
+                create_time,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -87,8 +87,8 @@
             <if test="creator != null">
                 #{creator,jdbcType=VARCHAR},
             </if>
-            <if test="createdTime != null">
-                #{createdTime,jdbcType=TIMESTAMP},
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
             </if>
         </trim>
     </insert>
@@ -108,8 +108,8 @@
             <if test="creator != null">
                 creator = #{creator,jdbcType=VARCHAR},
             </if>
-            <if test="createdTime != null">
-                created_time = #{createdTime,jdbcType=TIMESTAMP},
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
@@ -121,7 +121,7 @@
             "enable"     = #{enable,jdbcType=BOOLEAN},
             "path"       = #{path,jdbcType=VARCHAR},
             creator      = #{creator,jdbcType=VARCHAR},
-            created_time = #{createdTime,jdbcType=TIMESTAMP}
+            create_time = #{createTime,jdbcType=TIMESTAMP}
         where id = #{id,jdbcType=INTEGER}
     </update>
 
@@ -133,13 +133,13 @@
             <if test="name != null">
                 "name" like concat('%', #{name}, '%')
             </if>
-            <if test="createdTime != null">
-                and created_time &gt;= #{createdTime}
+            <if test="createTime != null">
+                and create_time &gt;= #{createTime}
             </if>
             <if test="creator != null and creator != ''">
                 and creator = #{creator}
             </if>
         </where>
-        order by created_time desc
+        order by create_time desc
     </select>
 </mapper>

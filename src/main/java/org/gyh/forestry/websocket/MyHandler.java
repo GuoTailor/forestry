@@ -3,7 +3,6 @@ package org.gyh.forestry.websocket;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import lombok.extern.slf4j.Slf4j;
-import org.gyh.forestry.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -47,7 +46,7 @@ public class MyHandler extends TextWebSocketHandler {
 
     @Override
     public void handleTextMessage(WebSocketSession session, TextMessage message) throws IOException, ServletException {
-        UsernamePasswordAuthenticationToken principal = (UsernamePasswordAuthenticationToken)session.getPrincipal();
+        UsernamePasswordAuthenticationToken principal = (UsernamePasswordAuthenticationToken) session.getPrincipal();
         SecurityContextHolder.getContext().setAuthentication(principal);
         log.info(message.getPayload());
         ServiceRequestInfo serviceRequestInfo = json.readValue(message.getPayload(), ServiceRequestInfo.class);
@@ -70,20 +69,10 @@ public class MyHandler extends TextWebSocketHandler {
             servlet.service(socketServletRequest, socketServletResponse);
             serviceResponseInfo.setBody(socketServletResponse.getContentAsString());
         } catch (Exception e) {
-            log.error("socket异常",e);
+            log.error("socket异常", e);
             serviceResponseInfo.setBody(e.getMessage());
         }
         session.sendMessage(new TextMessage(json.writeValueAsBytes(serviceResponseInfo)));
-        // 有消息就广播下
-        /*for (Map.Entry<String, WebSocketSession> entry : webSocketSessionMap.entrySet()) {
-            String s = entry.getKey();
-            WebSocketSession webSocketSession = entry.getValue();
-            if (webSocketSession.isOpen()) {
-                webSocketSession.sendMessage(new TextMessage(s + ":" + message.getPayload()));
-                User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-                log.info("send to {} msg:{} isVirtual:{}, user:{}", s, message.getPayload(), Thread.currentThread().isVirtual(), user.getUsername());
-            }
-        }*/
     }
 
     //报错时

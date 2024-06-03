@@ -48,5 +48,5 @@ public class PointInfo {
     /**
      * 创建时间
      */
-    private LocalDateTime createdTime;
+    private LocalDateTime createTime;
 }

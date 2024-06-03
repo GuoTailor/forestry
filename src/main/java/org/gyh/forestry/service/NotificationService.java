@@ -81,9 +81,11 @@ public class NotificationService {
     /**
      * 获取未读消息数
      */
-    public int getUnreadNotificationCount() {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Integer userId = user.getId();
+    public int getUnreadNotificationCount(Integer userId) {
+        if (userId == null) {
+            User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            userId = user.getId();
+        }
         return userNotificationMapper.getUnreadNotificationCount(userId);
     }
 

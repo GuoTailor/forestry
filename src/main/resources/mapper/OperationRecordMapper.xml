@@ -229,5 +229,6 @@
                 and create_time &lt;= #{endCreateTime}
             </if>
         </where>
+        order by create_time desc
     </select>
 </mapper>

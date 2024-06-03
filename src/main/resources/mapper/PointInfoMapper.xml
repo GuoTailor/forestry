@@ -11,7 +11,7 @@
         <result column="describe" jdbcType="VARCHAR" property="describe"/>
         <result column="device_id" jdbcType="INTEGER" property="deviceId"/>
         <result column="creator" jdbcType="VARCHAR" property="creator"/>
-        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
     </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
@@ -22,7 +22,7 @@
         "describe",
         device_id,
         creator,
-        created_time
+        create_time
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         <!--@mbg.generated-->
@@ -40,11 +40,11 @@
     <insert id="insert" parameterType="org.gyh.forestry.domain.PointInfo">
         <!--@mbg.generated-->
         insert into point_info (id, point, "name",
-                                "type", "describe", device_id,
-                                creator, created_time)
+        "type", "describe", device_id,
+        creator, create_time)
         values (#{id,jdbcType=INTEGER}, #{point,jdbcType=OTHER}, #{name,jdbcType=VARCHAR},
-                #{type,jdbcType=VARCHAR}, #{describe,jdbcType=VARCHAR}, #{deviceId,jdbcType=INTEGER},
-                #{creator,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP})
+        #{type,jdbcType=VARCHAR}, #{describe,jdbcType=VARCHAR}, #{deviceId,jdbcType=INTEGER},
+        #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP})
     </insert>
     <insert id="insertSelective" parameterType="org.gyh.forestry.domain.PointInfo">
         <!--@mbg.generated-->
@@ -71,8 +71,8 @@
             <if test="creator != null">
                 creator,
             </if>
-            <if test="createdTime != null">
-                created_time,
+            <if test="createTime != null">
+                create_time,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -97,8 +97,8 @@
             <if test="creator != null">
                 #{creator,jdbcType=VARCHAR},
             </if>
-            <if test="createdTime != null">
-                #{createdTime,jdbcType=TIMESTAMP},
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
             </if>
         </trim>
     </insert>
@@ -124,8 +124,8 @@
             <if test="creator != null">
                 creator = #{creator,jdbcType=VARCHAR},
             </if>
-            <if test="createdTime != null">
-                created_time = #{createdTime,jdbcType=TIMESTAMP},
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
@@ -133,13 +133,30 @@
     <update id="updateByPrimaryKey" parameterType="org.gyh.forestry.domain.PointInfo">
         <!--@mbg.generated-->
         update point_info
-        set point        = #{point,jdbcType=OTHER},
-            "name"       = #{name,jdbcType=VARCHAR},
-            "type"       = #{type,jdbcType=VARCHAR},
-            "describe"   = #{describe,jdbcType=VARCHAR},
-            device_id    = #{deviceId,jdbcType=INTEGER},
-            creator      = #{creator,jdbcType=VARCHAR},
-            created_time = #{createdTime,jdbcType=TIMESTAMP}
+        set point = #{point,jdbcType=OTHER},
+        "name" = #{name,jdbcType=VARCHAR},
+        "type" = #{type,jdbcType=VARCHAR},
+        "describe" = #{describe,jdbcType=VARCHAR},
+        device_id = #{deviceId,jdbcType=INTEGER},
+        creator = #{creator,jdbcType=VARCHAR},
+        create_time = #{createTime,jdbcType=TIMESTAMP}
         where id = #{id,jdbcType=INTEGER}
     </update>
+
+    <select id="selectByPage" resultType="org.gyh.forestry.dto.resp.PointInfoResp">
+        select
+        <include refid="Base_Column_List"/>
+        from point_info
+        <where>
+            <if test="name != null and name != ''">
+                "name" like concat('%', #{name}, '%')
+            </if>
+            <if test="startTime != null">
+                and create_time &gt;= #{startTime}
+            </if>
+            <if test="endTime != null">
+                and create_time &lt;= #{endTime}
+            </if>
+        </where>
+    </select>
 </mapper>

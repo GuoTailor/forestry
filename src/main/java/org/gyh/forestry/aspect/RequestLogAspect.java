@@ -50,7 +50,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 public class RequestLogAspect {
     private static final ParameterNameDiscoverer PARAMETER_NAME_DISCOVERER = new DefaultParameterNameDiscoverer();
-    private static final List<String> headerWhiiteList = List.of("content-type", "authorization");
+    private static final Set<String> headerWhiiteList = Set.of("content-type", "authorization");
     private final ObjectMapper json;
     private final OperationRecordService operationRecordService;
 

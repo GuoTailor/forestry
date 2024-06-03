@@ -5,8 +5,10 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.gyh.forestry.aspect.LogRecord;
+import org.gyh.forestry.dto.PageInfo;
 import org.gyh.forestry.dto.ResponseInfo;
 import org.gyh.forestry.dto.req.AddPointInfo;
+import org.gyh.forestry.dto.req.PointInfoPageReq;
 import org.gyh.forestry.dto.req.UpdatePointInfo;
 import org.gyh.forestry.dto.resp.PointInfoResp;
 import org.gyh.forestry.service.PointInfoService;
@@ -49,5 +51,11 @@ public class PointInfoController {
     @Operation(summary = "查询点信息", security = {@SecurityRequirement(name = "Authorization")})
     public ResponseInfo<PointInfoResp> selectById(@RequestParam("id") Integer id) {
         return ResponseInfo.ok(pointInfoService.selectById(id));
+    }
+
+    @PostMapping("/page")
+    @Operation(summary = "查询点列表信息", security = {@SecurityRequirement(name = "Authorization")})
+    public PageInfo<PointInfoResp> selectByPage(@RequestBody PointInfoPageReq pageReq) {
+        return pointInfoService.selectByPage(pageReq);
     }
 }

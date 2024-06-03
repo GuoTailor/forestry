@@ -1,10 +1,15 @@
 package org.gyh.forestry.service;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.gyh.forestry.domain.OperationRecord;
 import org.gyh.forestry.domain.PointInfo;
 import org.gyh.forestry.domain.User;
+import org.gyh.forestry.dto.PageInfo;
 import org.gyh.forestry.dto.req.AddPointInfo;
+import org.gyh.forestry.dto.req.PointInfoPageReq;
 import org.gyh.forestry.dto.req.UpdatePointInfo;
 import org.gyh.forestry.dto.resp.JsonPoint;
 import org.gyh.forestry.dto.resp.PointInfoResp;
@@ -14,6 +19,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * create by GYH on 2024/4/6
@@ -32,7 +38,7 @@ public class PointInfoService {
         PointInfo pointInfo1 = new PointInfo();
         BeanUtils.copyProperties(pointInfo, pointInfo1);
         pointInfo1.setPoint(pointInfo.getPoint().toPoint());
-        pointInfo1.setCreatedTime(LocalDateTime.now());
+        pointInfo1.setCreateTime(LocalDateTime.now());
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         pointInfo1.setCreator(user.getUsername());
         pointInfoMapper.insertSelective(pointInfo1);
@@ -60,5 +66,10 @@ public class PointInfoService {
         return resp;
     }
 
-
+    public PageInfo<PointInfoResp> selectByPage(PointInfoPageReq pageReq) {
+        try (Page<PointInfoResp> page = PageHelper.startPage(pageReq.getPage(), pageReq.getPageSize())) {
+            List<PointInfoResp> pointInfoResps = pointInfoMapper.selectByPage(pageReq);
+            return PageInfo.ok(page.getTotal(), pageReq, pointInfoResps);
+        }
+    }
 }

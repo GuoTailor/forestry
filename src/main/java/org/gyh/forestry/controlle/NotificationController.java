@@ -46,10 +46,10 @@ public class NotificationController {
         return notificationService.getAllNotifications(pageReq);
     }
 
-    @GetMapping("/unread/count/{userId}")
+    @GetMapping("/unread/count")
     @Operation(summary = "获取当前用户的未读消息数", security = {@SecurityRequirement(name = "Authorization")})
-    public ResponseInfo<Integer> getUnreadNotificationCount() {
-        int count = notificationService.getUnreadNotificationCount();
+    public ResponseInfo<Integer> getUnreadNotificationCount(@RequestParam(value = "userId", required = false) Integer userId) {
+        int count = notificationService.getUnreadNotificationCount(userId);
         return ResponseInfo.ok(count);
     }
 

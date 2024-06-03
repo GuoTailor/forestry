@@ -4,7 +4,6 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-import org.gyh.forestry.domain.OperationRecord;
 import org.gyh.forestry.domain.PointInfo;
 import org.gyh.forestry.domain.User;
 import org.gyh.forestry.dto.PageInfo;
@@ -44,6 +43,7 @@ public class PointInfoService {
         pointInfoMapper.insertSelective(pointInfo1);
         PointInfoResp resp = new PointInfoResp();
         BeanUtils.copyProperties(pointInfo1, resp);
+        resp.setPoint(new JsonPoint(pointInfo1.getPoint()));
         return resp;
     }
 
@@ -68,8 +68,14 @@ public class PointInfoService {
 
     public PageInfo<PointInfoResp> selectByPage(PointInfoPageReq pageReq) {
         try (Page<PointInfoResp> page = PageHelper.startPage(pageReq.getPage(), pageReq.getPageSize())) {
-            List<PointInfoResp> pointInfoResps = pointInfoMapper.selectByPage(pageReq);
-            return PageInfo.ok(page.getTotal(), pageReq, pointInfoResps);
+            List<PointInfo> pointInfoResps = pointInfoMapper.selectByPage(pageReq);
+            List<PointInfoResp> list = pointInfoResps.stream().map(it -> {
+                PointInfoResp resp = new PointInfoResp();
+                BeanUtils.copyProperties(it, resp);
+                resp.setPoint(new JsonPoint(it.getPoint()));
+                return resp;
+            }).toList();
+            return PageInfo.ok(page.getTotal(), pageReq, list);
         }
     }
 }

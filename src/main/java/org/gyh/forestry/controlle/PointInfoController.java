@@ -32,7 +32,7 @@ public class PointInfoController {
         return ResponseInfo.ok(pointInfoService.save(pointInfo));
     }
 
-    @PostMapping("/delete")
+    @GetMapping("/delete")
     @Operation(summary = "删除点", security = {@SecurityRequirement(name = "Authorization")})
     @LogRecord(model = "点位管理", method = "删除点")
     public ResponseInfo<Boolean> deleteById(@RequestParam("id") Integer id) {

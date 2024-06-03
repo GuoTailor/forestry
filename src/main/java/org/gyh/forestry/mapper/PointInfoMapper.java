@@ -22,5 +22,5 @@ public interface PointInfoMapper {
 
     int updateByPrimaryKey(PointInfo record);
 
-    List<PointInfoResp> selectByPage(PointInfoPageReq pageReq);
+    List<PointInfo> selectByPage(PointInfoPageReq pageReq);
 }

@@ -46,7 +46,7 @@
         #{type,jdbcType=VARCHAR}, #{describe,jdbcType=VARCHAR}, #{deviceId,jdbcType=INTEGER},
         #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP})
     </insert>
-    <insert id="insertSelective" parameterType="org.gyh.forestry.domain.PointInfo">
+    <insert id="insertSelective" parameterType="org.gyh.forestry.domain.PointInfo" useGeneratedKeys="true" keyProperty="id">
         <!--@mbg.generated-->
         insert into point_info
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -143,7 +143,7 @@
         where id = #{id,jdbcType=INTEGER}
     </update>
 
-    <select id="selectByPage" resultType="org.gyh.forestry.dto.resp.PointInfoResp">
+    <select id="selectByPage" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from point_info
@@ -158,5 +158,6 @@
                 and create_time &lt;= #{endTime}
             </if>
         </where>
+        order by create_time desc
     </select>
 </mapper>

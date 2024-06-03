@@ -110,7 +110,6 @@
                  left join notifications n on n.id = un.notification_id
         WHERE un.user_id = #{userId}
           and un.send_time &lt; now()
-          AND un.is_read = FALSE
     </select>
     <select id="getUnreadNotificationCount" resultType="int">
         SELECT COUNT(*)

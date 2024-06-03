@@ -14,8 +14,6 @@ import org.gyh.forestry.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 /**
  * create by GYH on 2024/5/20
  */
@@ -41,7 +39,7 @@ public class NotificationController {
     }
 
     @PostMapping("/all")
-    @Operation(summary = "获取当前用户的消息列表", security = {@SecurityRequirement(name = "Authorization")})
+    @Operation(summary = "获取所有的消息列表", security = {@SecurityRequirement(name = "Authorization")})
     public PageInfo<Notifications> getAll(@RequestBody UnreadNotificationReq pageReq) {
         return notificationService.getAllNotifications(pageReq);
     }

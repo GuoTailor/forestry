@@ -23,9 +23,13 @@ public class FileService {
     private String fileUploadPath;
 
     public String uploadFile(MultipartFile file) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Integer userId = user.getId();
+        return uploadFile(userId, file);
+    }
+
+    public String uploadFile(Integer userId, MultipartFile file) {
         if (file != null) {
-            User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            Integer userId = user.getId();
             String originalFilename = file.getOriginalFilename();
             var suffix = "";
             if (StringUtils.hasText(originalFilename)) {

@@ -1,6 +1,7 @@
 package org.gyh.forestry.dto.resp;
 
 import lombok.Data;
+import org.gyh.forestry.dto.JsonPoint;
 
 import java.time.LocalDateTime;
 

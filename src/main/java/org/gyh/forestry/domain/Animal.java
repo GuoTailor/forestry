@@ -7,7 +7,7 @@ import org.springframework.data.annotation.Id;
 import java.time.LocalDateTime;
 
 /**
- * create by GYH on 2024/3/28
+ * create by GYH on 2024/6/4
  */
 @Data
 public class Animal {
@@ -35,12 +35,22 @@ public class Animal {
     private LocalDateTime createTime;
 
     /**
-     * 相机id
+     * 上传人
      */
-    private String cameraId;
+    private String creator;
 
     /**
      * 动物名字
      */
     private String name;
+
+    /**
+     * 上传图片
+     */
+    private String pic;
+
+    /**
+     * 动物详情
+     */
+    private String details;
 }

@@ -9,8 +9,10 @@
         <result column="location" jdbcType="OTHER" property="location"/>
         <result column="type" jdbcType="VARCHAR" property="type"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
-        <result column="camera_id" jdbcType="VARCHAR" property="cameraId"/>
+        <result column="creator" jdbcType="VARCHAR" property="creator"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="pic" jdbcType="VARCHAR" property="pic"/>
+        <result column="details" jdbcType="VARCHAR" property="details"/>
     </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
@@ -19,8 +21,10 @@
         "location",
         "type",
         create_time,
-        camera_id,
-        "name"
+        creator,
+        "name",
+        pic,
+        details
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         <!--@mbg.generated-->
@@ -38,11 +42,11 @@
     <insert id="insert" parameterType="org.gyh.forestry.domain.Animal">
         <!--@mbg.generated-->
         insert into animal (id, location_zh, "location",
-                            "type", create_time, camera_id,
-                            "name")
+                            "type", create_time, creator,
+                            "name", pic, details)
         values (#{id,jdbcType=INTEGER}, #{locationZh,jdbcType=VARCHAR}, #{location,jdbcType=OTHER},
-                #{type,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{cameraId,jdbcType=VARCHAR},
-                #{name,jdbcType=VARCHAR})
+                #{type,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR},
+                #{name,jdbcType=VARCHAR}, #{pic,jdbcType=VARCHAR}, #{details,jdbcType=VARCHAR})
     </insert>
     <insert id="insertSelective" parameterType="org.gyh.forestry.domain.Animal" useGeneratedKeys="true" keyProperty="id">
         <!--@mbg.generated-->
@@ -63,11 +67,17 @@
             <if test="createTime != null">
                 create_time,
             </if>
-            <if test="cameraId != null">
-                camera_id,
+            <if test="creator != null">
+                creator,
             </if>
             <if test="name != null">
                 "name",
+            </if>
+            <if test="pic != null">
+                pic,
+            </if>
+            <if test="details != null">
+                details,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -86,11 +96,17 @@
             <if test="createTime != null">
                 #{createTime,jdbcType=TIMESTAMP},
             </if>
-            <if test="cameraId != null">
-                #{cameraId,jdbcType=VARCHAR},
+            <if test="creator != null">
+                #{creator,jdbcType=VARCHAR},
             </if>
             <if test="name != null">
                 #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="pic != null">
+                #{pic,jdbcType=VARCHAR},
+            </if>
+            <if test="details != null">
+                #{details,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -110,11 +126,17 @@
             <if test="createTime != null">
                 create_time = #{createTime,jdbcType=TIMESTAMP},
             </if>
-            <if test="cameraId != null">
-                camera_id = #{cameraId,jdbcType=VARCHAR},
+            <if test="creator != null">
+                creator = #{creator,jdbcType=VARCHAR},
             </if>
             <if test="name != null">
                 "name" = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="pic != null">
+                pic = #{pic,jdbcType=VARCHAR},
+            </if>
+            <if test="details != null">
+                details = #{details,jdbcType=VARCHAR},
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
@@ -126,8 +148,10 @@
             "location"  = #{location,jdbcType=OTHER},
             "type"      = #{type,jdbcType=VARCHAR},
             create_time = #{createTime,jdbcType=TIMESTAMP},
-            camera_id   = #{cameraId,jdbcType=VARCHAR},
-            "name"      = #{name,jdbcType=VARCHAR}
+            creator     = #{creator,jdbcType=VARCHAR},
+            "name"      = #{name,jdbcType=VARCHAR},
+            pic         = #{pic,jdbcType=VARCHAR},
+            details     = #{details,jdbcType=VARCHAR}
         where id = #{id,jdbcType=INTEGER}
     </update>
 
@@ -135,5 +159,19 @@
         select
         <include refid="Base_Column_List"/>
         from animal
+    </select>
+
+    <select id="selectByQuery" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from animal
+        <where>
+            <if test="name != null and name != ''">
+                name = #{name}
+            </if>
+            <if test="type != null and type != ''">
+                and type = #{type}
+            </if>
+        </where>
     </select>
 </mapper>

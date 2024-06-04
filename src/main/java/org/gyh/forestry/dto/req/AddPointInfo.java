@@ -2,7 +2,7 @@ package org.gyh.forestry.dto.req;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-import org.gyh.forestry.dto.resp.JsonPoint;
+import org.gyh.forestry.dto.JsonPoint;
 import org.gyh.forestry.enums.PointTypeEnum;
 
 /**

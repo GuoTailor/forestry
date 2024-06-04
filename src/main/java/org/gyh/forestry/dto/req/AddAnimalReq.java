@@ -1,16 +1,13 @@
-package org.gyh.forestry.dto.resp;
+package org.gyh.forestry.dto.req;
 
 import lombok.Data;
 import org.gyh.forestry.dto.JsonPoint;
 
-import java.time.LocalDateTime;
-
 /**
- * create by GYH on 2024/3/30
+ * create by GYH on 2024/6/4
  */
 @Data
-public class AnimalResp {
-    private Integer id;
+public class AddAnimalReq {
 
     /**
      * 位置
@@ -28,21 +25,12 @@ public class AnimalResp {
     private String type;
 
     /**
-     * 时间
-     */
-    private LocalDateTime createTime;
-
-    /** * 上传人
-     */
-    private String creator;
-
-    /**
      * 动物名字
      */
     private String name;
 
     /**
-     * 上传图片
+     * 图片地址
      */
     private String pic;
 

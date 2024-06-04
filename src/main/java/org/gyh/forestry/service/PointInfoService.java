@@ -10,7 +10,7 @@ import org.gyh.forestry.dto.PageInfo;
 import org.gyh.forestry.dto.req.AddPointInfo;
 import org.gyh.forestry.dto.req.PointInfoPageReq;
 import org.gyh.forestry.dto.req.UpdatePointInfo;
-import org.gyh.forestry.dto.resp.JsonPoint;
+import org.gyh.forestry.dto.JsonPoint;
 import org.gyh.forestry.dto.resp.PointInfoResp;
 import org.gyh.forestry.mapper.PointInfoMapper;
 import org.springframework.beans.BeanUtils;

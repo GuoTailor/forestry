@@ -72,11 +72,11 @@ public class SecurityConfiguration {
                             //1.1 获取当前请求 url 地址
                             String requestURI = object.getRequest().getRequestURI();
                             //1.2 和 menu 表中的记录进行比较
-                            List<MenuWithRole> menuWithRoles = menuService.getAllMenusWithRole();
+                            List<MenuWithRole> menuWithRoles = List.of();
                             Authentication authe = authentication.get();
                             log.info("== {}", requestURI);
                             for (MenuWithRole menuWithRole : menuWithRoles) {
-                                log.info(menuWithRole.getUrl());
+                                //log.info(menuWithRole.getUrl());
                                 if (antPathMatcher.match(menuWithRole.getUrl(), requestURI)) {
                                     isMatch = true;
                                     //如果匹配上了，说明当前请求的菜单就找到了

@@ -18,6 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.concurrent.DelayQueue;
 
 @SpringBootTest
 class ForestryApplicationTests {
@@ -27,6 +28,27 @@ class ForestryApplicationTests {
     private UserMapper userMapper;
     @Autowired
     private ObjectMapper json;
+
+    @Test
+    void testQuery() throws InterruptedException {
+        DelayQueue<MyDelayed> queue = new DelayQueue<>();
+        queue.add(new MyDelayed(3000, "11"));
+        Thread.ofPlatform().start(() -> {
+            while (true) {
+                try {
+                    MyDelayed take = queue.take();
+                    System.out.println(take.time + "  " + take.name);
+                    queue.removeIf(it -> it.name.equals("11"));
+                    queue.add(take);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+        Thread.sleep(1000);
+        queue.add(new MyDelayed(1000, "22"));
+        Thread.sleep(3000);
+    }
 
     @Test
     void testAdd() {

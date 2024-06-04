@@ -480,9 +480,17 @@ public class SocketServletRequest implements HttpServletRequest {
         return this.remoteAddr;
     }
 
+    public void setRemoteAddr(String remoteAddr) {
+        this.remoteAddr = remoteAddr;
+    }
+
     @Override
     public String getRemoteHost() {
         return this.remoteHost;
+    }
+
+    public void setRemoteHost(String remoteHost) {
+        this.remoteHost = remoteHost;
     }
 
     @Override
@@ -561,22 +569,39 @@ public class SocketServletRequest implements HttpServletRequest {
         return this.remotePort;
     }
 
+    public void setRemotePort(int remotePort) {
+        this.remotePort = remotePort;
+    }
 
     @Override
     public String getLocalName() {
         return this.localName;
     }
 
+    public void setLocalName(String localName) {
+        this.localName = localName;
+    }
 
     @Override
     public String getLocalAddr() {
         return this.localAddr;
     }
 
+    public void setLocalAddr(String localAddr) {
+        this.localAddr = localAddr;
+    }
 
     @Override
     public int getLocalPort() {
         return this.localPort;
+    }
+
+    public void setLocalPort(int localPort) {
+        this.localPort = localPort;
+    }
+
+    public void setServerPort(int serverPort) {
+        this.serverPort = serverPort;
     }
 
     @Override
@@ -817,6 +842,9 @@ public class SocketServletRequest implements HttpServletRequest {
         return this.userPrincipal;
     }
 
+    public void setUserPrincipal(@Nullable Principal userPrincipal) {
+        this.userPrincipal = userPrincipal;
+    }
 
     @Override
     @Nullable

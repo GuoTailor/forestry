@@ -1,8 +1,8 @@
 package org.gyh.forestry.websocket;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.ServletException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -18,16 +18,23 @@ import org.springframework.web.socket.handler.ConcurrentWebSocketSessionDecorato
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.DelayQueue;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * create by GYH on 2024/5/24
  */
 @Slf4j
 @Component
-public class MyHandler extends TextWebSocketHandler {
+public class MyHandler extends TextWebSocketHandler implements InitializingBean {
     private final Map<String, WebSocketSession> webSocketSessionMap = new ConcurrentHashMap<>();
+    private final DelayQueue<RetryEntity> retryQueue = new DelayQueue<>();
+    private final AtomicLong sequencer = new AtomicLong();
+    // 重试消息 毫秒
+    private final static long delayTime = 1000L;
     @Autowired
     private DispatcherServlet servlet;
     @Autowired
@@ -45,20 +52,35 @@ public class MyHandler extends TextWebSocketHandler {
     }
 
     @Override
-    public void handleTextMessage(WebSocketSession session, TextMessage message) throws IOException, ServletException {
+    public void handleTextMessage(WebSocketSession session, TextMessage message) throws IOException {
         UsernamePasswordAuthenticationToken principal = (UsernamePasswordAuthenticationToken) session.getPrincipal();
         SecurityContextHolder.getContext().setAuthentication(principal);
-        log.info(message.getPayload());
         ServiceRequestInfo serviceRequestInfo = json.readValue(message.getPayload(), ServiceRequestInfo.class);
         if (serviceRequestInfo.getOrder().equals("/ping")) {
             return;
         }
         if (serviceRequestInfo.getOrder().equals("/ok")) {
+            retryQueue.removeIf(it -> it.req == serviceRequestInfo.getReq());
             return;
         }
+        log.info(message.getPayload());
         SocketServletRequest socketServletRequest = new SocketServletRequest(HttpMethod.POST.name(), serviceRequestInfo.getOrder());
         socketServletRequest.setContentType(MediaType.APPLICATION_JSON_VALUE);
         socketServletRequest.setContent(json.writeValueAsBytes(serviceRequestInfo.getBody()));
+        socketServletRequest.setUserPrincipal(session.getPrincipal());
+        InetSocketAddress remoteAddress = session.getRemoteAddress();
+        if (remoteAddress != null) {
+            socketServletRequest.setRemoteAddr(remoteAddress.getAddress().getHostAddress());
+            socketServletRequest.setRemoteHost(remoteAddress.getHostName());
+            socketServletRequest.setRemotePort(remoteAddress.getPort());
+        }
+        InetSocketAddress localAddress = session.getLocalAddress();
+        if (localAddress != null) {
+            socketServletRequest.setLocalAddr(localAddress.getAddress().getHostAddress());
+            socketServletRequest.setLocalPort(localAddress.getPort());
+            socketServletRequest.setLocalName(localAddress.getHostName());
+            socketServletRequest.setServerPort(localAddress.getPort());
+        }
 
         SocketServletResponse socketServletResponse = new SocketServletResponse();
         socketServletResponse.setStatus(HttpStatus.OK.value());
@@ -72,7 +94,19 @@ public class MyHandler extends TextWebSocketHandler {
             log.error("socket异常", e);
             serviceResponseInfo.setBody(e.getMessage());
         }
-        session.sendMessage(new TextMessage(json.writeValueAsBytes(serviceResponseInfo)));
+        byte[] bytes;
+        if (serviceResponseInfo.getBody() instanceof String body) {
+            serviceResponseInfo.setBody(null);
+            String s = json.writeValueAsString(serviceResponseInfo);
+            bytes = s.replace("\"body\":null", "\"body\":" + body).getBytes();
+        } else {
+            bytes = json.writeValueAsBytes(serviceResponseInfo);
+        }
+        TextMessage textMessage = new TextMessage(bytes);
+        RetryEntity entity = new RetryEntity(delayTime, serviceRequestInfo.getReq(),3, session, textMessage);
+        session.sendMessage(textMessage);
+        boolean add = retryQueue.add(entity);
+        log.info("socket添加重试{}", add);
     }
 
     //报错时
@@ -101,5 +135,25 @@ public class MyHandler extends TextWebSocketHandler {
                 // ignore
             }
         }
+    }
+
+    @Override
+    public void afterPropertiesSet() {
+        Thread thread = new Thread(() -> {
+            while (true) {
+                try {
+                    RetryEntity take = retryQueue.take();
+                    take.session.sendMessage(take.textMessage);
+                    if (take.retryCount - 1 > 0) {
+                        boolean add = retryQueue.add(new RetryEntity(delayTime, take.req, take.retryCount - 1, take.session, take.textMessage));
+                        log.info("socket添加重试{} 第{}次", add, 3 - take.retryCount);
+                    }
+                } catch (InterruptedException | IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }, "socketRetryThread");
+        thread.setDaemon(true);
+        thread.start();
     }
 }

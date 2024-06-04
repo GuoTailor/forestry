@@ -105,16 +105,6 @@ public class SocketServletResponse implements HttpServletResponse {
 
 
     //---------------------------------------------------------------------
-    // Properties for MockRequestDispatcher
-    //---------------------------------------------------------------------
-
-    @Nullable
-    private String forwardedUrl;
-
-    private final List<String> includedUrls = new ArrayList<>();
-
-
-    //---------------------------------------------------------------------
     // ServletResponse interface
     //---------------------------------------------------------------------
 
@@ -565,15 +555,6 @@ public class SocketServletResponse implements HttpServletResponse {
     //---------------------------------------------------------------------
     // Methods for MockRequestDispatcher
     //---------------------------------------------------------------------
-
-    public void setForwardedUrl(@Nullable String forwardedUrl) {
-        this.forwardedUrl = forwardedUrl;
-    }
-
-    public void addIncludedUrl(String includedUrl) {
-        Assert.notNull(includedUrl, "Included URL must not be null");
-        this.includedUrls.add(includedUrl);
-    }
 
     /**
      * Inner class that adapts the ServletOutputStream to mark the

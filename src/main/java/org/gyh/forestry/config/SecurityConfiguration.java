@@ -72,7 +72,7 @@ public class SecurityConfiguration {
                             //1.1 获取当前请求 url 地址
                             String requestURI = object.getRequest().getRequestURI();
                             //1.2 和 menu 表中的记录进行比较
-                            List<MenuWithRole> menuWithRoles = List.of();
+                            List<MenuWithRole> menuWithRoles = menuService.getAllMenusWithRole();
                             Authentication authe = authentication.get();
                             log.info("== {}", requestURI);
                             for (MenuWithRole menuWithRole : menuWithRoles) {

@@ -5,11 +5,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -83,7 +83,6 @@ public class MyHandler extends TextWebSocketHandler implements InitializingBean 
         }
 
         SocketServletResponse socketServletResponse = new SocketServletResponse();
-        socketServletResponse.setStatus(HttpStatus.OK.value());
         ServiceResponseInfo serviceResponseInfo = new ServiceResponseInfo();
         serviceResponseInfo.setOrder(0);
         serviceResponseInfo.setReq(serviceRequestInfo.getReq());
@@ -95,13 +94,14 @@ public class MyHandler extends TextWebSocketHandler implements InitializingBean 
             serviceResponseInfo.setBody(e.getMessage());
         }
         byte[] bytes;
-        if (serviceResponseInfo.getBody() instanceof String body) {
+        if (serviceResponseInfo.getBody() instanceof String body && StringUtils.hasLength(body)) {
             serviceResponseInfo.setBody(null);
             String s = json.writeValueAsString(serviceResponseInfo);
             bytes = s.replace("\"body\":null", "\"body\":" + body).getBytes();
         } else {
             bytes = json.writeValueAsBytes(serviceResponseInfo);
         }
+        session = webSocketSessionMap.get(session.getId());
         TextMessage textMessage = new TextMessage(bytes);
         RetryEntity entity = new RetryEntity(delayTime, serviceRequestInfo.getReq(),3, session, textMessage);
         session.sendMessage(textMessage);
@@ -139,7 +139,7 @@ public class MyHandler extends TextWebSocketHandler implements InitializingBean 
 
     @Override
     public void afterPropertiesSet() {
-        Thread thread = new Thread(() -> {
+        Thread.ofVirtual().name("socketRetryThread").start(() -> {
             while (true) {
                 try {
                     RetryEntity take = retryQueue.take();
@@ -148,12 +148,10 @@ public class MyHandler extends TextWebSocketHandler implements InitializingBean 
                         boolean add = retryQueue.add(new RetryEntity(delayTime, take.req, take.retryCount - 1, take.session, take.textMessage));
                         log.info("socket添加重试{} 第{}次", add, 3 - take.retryCount);
                     }
-                } catch (InterruptedException | IOException e) {
-                    throw new RuntimeException(e);
+                } catch (Exception e) {
+                    log.info("socket重试异常", e);
                 }
             }
-        }, "socketRetryThread");
-        thread.setDaemon(true);
-        thread.start();
+        });
     }
 }

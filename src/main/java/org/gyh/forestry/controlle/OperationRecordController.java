@@ -3,7 +3,6 @@ package org.gyh.forestry.controlle;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.gyh.forestry.aspect.LogRecord;
 import org.gyh.forestry.domain.OperationRecord;
 import org.gyh.forestry.dto.PageInfo;
 import org.gyh.forestry.dto.req.OperationRecordPage;

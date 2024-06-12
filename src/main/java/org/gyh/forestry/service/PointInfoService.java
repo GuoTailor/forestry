@@ -78,4 +78,14 @@ public class PointInfoService {
             return PageInfo.ok(page.getTotal(), pageReq, list);
         }
     }
+
+    public List<PointInfoResp> getAll() {
+        List<PointInfo> pointInfoResps = pointInfoMapper.selectByPage(new PointInfoPageReq());
+        return pointInfoResps.stream().map(it -> {
+            PointInfoResp resp = new PointInfoResp();
+            BeanUtils.copyProperties(it, resp);
+            resp.setPoint(new JsonPoint(it.getPoint()));
+            return resp;
+        }).toList();
+    }
 }

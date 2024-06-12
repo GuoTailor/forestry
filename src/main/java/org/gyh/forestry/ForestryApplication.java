@@ -5,7 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
 
-@MapperScan("org.gyh.forestry.mapper")
+@MapperScan(basePackages = "org.gyh.forestry.mapper", sqlSessionTemplateRef = "sqlSessionTemplate")
 @EnableCaching
 @SpringBootApplication
 public class ForestryApplication {

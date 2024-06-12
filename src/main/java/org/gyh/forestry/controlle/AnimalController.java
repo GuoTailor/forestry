@@ -51,7 +51,7 @@ public class AnimalController {
     @Operation(summary = "添加动物识别结果", security = {@SecurityRequirement(name = "Authorization")})
     @PostMapping("/add")
     @LogRecord(model = "动物监测", method = "添加动物识别结果")
-    public ResponseInfo<List<Animal>> addAnimal(@RequestBody List<AddAnimalReq> animalReqs) {
+    public ResponseInfo<List<AnimalResp>> addAnimal(@RequestBody List<AddAnimalReq> animalReqs) {
         return ResponseInfo.ok(animalService.addAnimal(animalReqs));
     }
 }

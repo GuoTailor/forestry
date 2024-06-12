@@ -73,7 +73,7 @@ class ForestryApplicationTests {
         AddAnimalReq animal = new AddAnimalReq();
         animal.setLocation(point);
         animal.setLocationZh("nmka");
-        List<Animal> animals = animalService.addAnimal(List.of(animal));
+        List<AnimalResp> animals = animalService.addAnimal(List.of(animal));
 
         AnimalResp animal1 = animalService.selectById(animals.getFirst().getId());
         System.out.println(animal1);

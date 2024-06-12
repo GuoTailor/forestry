@@ -52,7 +52,7 @@ public class AnimalService {
     /**
      * 添加
      */
-    public List<Animal> addAnimal(List<AddAnimalReq> animalReqs) {
+    public List<AnimalResp> addAnimal(List<AddAnimalReq> animalReqs) {
         return animalReqs.stream().map(animalReq -> {
             Animal animal = new Animal();
             BeanUtils.copyProperties(animalReq, animal);
@@ -60,7 +60,11 @@ public class AnimalService {
             animal.setCreator(user.getUsername());
             animal.setCreateTime(LocalDateTime.now());
             animalMapper.insertSelective(animal);
-            return animal;
+            AnimalResp resp = new AnimalResp();
+            BeanUtils.copyProperties(animal, resp);
+            JsonPoint jsonPoint = new JsonPoint(animal.getLocation());
+            resp.setLocation(jsonPoint);
+            return resp;
         }).toList();
     }
 

@@ -2,7 +2,6 @@ package org.gyh.forestry.mapper;
 
 import org.gyh.forestry.domain.PointInfo;
 import org.gyh.forestry.dto.req.PointInfoPageReq;
-import org.gyh.forestry.dto.resp.PointInfoResp;
 
 import java.util.List;
 

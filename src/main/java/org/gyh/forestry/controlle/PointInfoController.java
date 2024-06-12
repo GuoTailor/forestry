@@ -15,6 +15,8 @@ import org.gyh.forestry.service.PointInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * create by GYH on 2024/5/23
  */
@@ -57,5 +59,11 @@ public class PointInfoController {
     @Operation(summary = "查询点列表信息", security = {@SecurityRequirement(name = "Authorization")})
     public PageInfo<PointInfoResp> selectByPage(@RequestBody PointInfoPageReq pageReq) {
         return pointInfoService.selectByPage(pageReq);
+    }
+
+    @PostMapping("/all")
+    @Operation(summary = "获取全部点列表信息", security = {@SecurityRequirement(name = "Authorization")})
+    public ResponseInfo<List<PointInfoResp>> getAll() {
+        return ResponseInfo.ok(pointInfoService.getAll());
     }
 }

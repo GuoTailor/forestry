@@ -36,7 +36,8 @@
         values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
                 #{enable,jdbcType=BOOLEAN})
     </insert>
-    <insert id="insertSelective" parameterType="org.gyh.forestry.domain.AnimalType">
+    <insert id="insertSelective" parameterType="org.gyh.forestry.domain.AnimalType" useGeneratedKeys="true"
+            keyProperty="id">
         <!--@mbg.generated-->
         insert into animal_type
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -92,4 +93,19 @@
             "enable"    = #{enable,jdbcType=BOOLEAN}
         where id = #{id,jdbcType=INTEGER}
     </update>
+
+    <select id="findByPage" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from animal_type
+        <where>
+            <if test="startTime != null">
+                and create_time &gt;= #{startTime}
+            </if>
+            <if test="endTime != null">
+                and create_time &lt;= #{endTime}
+            </if>
+        </where>
+        order by create_time desc
+    </select>
 </mapper>

@@ -4,15 +4,15 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-import org.gyh.forestry.domain.Animal;
+import org.gyh.forestry.domain.AnimalRecognition;
 import org.gyh.forestry.domain.User;
 import org.gyh.forestry.dto.JsonPoint;
 import org.gyh.forestry.dto.PageInfo;
-import org.gyh.forestry.dto.req.AddAnimalReq;
-import org.gyh.forestry.dto.req.AnimalPageReq;
-import org.gyh.forestry.dto.resp.AnimalResp;
+import org.gyh.forestry.dto.req.AddAnimalRecognitionReq;
+import org.gyh.forestry.dto.req.AnimalRecognitionPageReq;
+import org.gyh.forestry.dto.resp.AnimalRecognitionResp;
 import org.gyh.forestry.dto.resp.RecognitionResp;
-import org.gyh.forestry.mapper.AnimalMapper;
+import org.gyh.forestry.mapper.AnimalRecognitionMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,9 +27,9 @@ import java.util.List;
  */
 @Slf4j
 @Service
-public class AnimalService {
+public class AnimalRecognitionService {
     @Resource
-    private AnimalMapper animalMapper;
+    private AnimalRecognitionMapper animalRecognitionMapper;
     @Autowired
     private FileService fileService;
 
@@ -52,36 +52,36 @@ public class AnimalService {
     /**
      * 添加
      */
-    public List<AnimalResp> addAnimal(List<AddAnimalReq> animalReqs) {
+    public List<AnimalRecognitionResp> addAnimal(List<AddAnimalRecognitionReq> animalReqs) {
         return animalReqs.stream().map(animalReq -> {
-            Animal animal = new Animal();
-            BeanUtils.copyProperties(animalReq, animal);
+            AnimalRecognition animalRecognition = new AnimalRecognition();
+            BeanUtils.copyProperties(animalReq, animalRecognition);
             User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            animal.setCreator(user.getUsername());
-            animal.setCreateTime(LocalDateTime.now());
-            animalMapper.insertSelective(animal);
-            AnimalResp resp = new AnimalResp();
-            BeanUtils.copyProperties(animal, resp);
-            JsonPoint jsonPoint = new JsonPoint(animal.getLocation());
+            animalRecognition.setCreator(user.getUsername());
+            animalRecognition.setCreateTime(LocalDateTime.now());
+            animalRecognitionMapper.insertSelective(animalRecognition);
+            AnimalRecognitionResp resp = new AnimalRecognitionResp();
+            BeanUtils.copyProperties(animalRecognition, resp);
+            JsonPoint jsonPoint = new JsonPoint(animalRecognition.getLocation());
             resp.setLocation(jsonPoint);
             return resp;
         }).toList();
     }
 
-    public AnimalResp selectById(Integer id) {
-        Animal animal = animalMapper.selectByPrimaryKey(id);
-        AnimalResp resp = new AnimalResp();
-        BeanUtils.copyProperties(animal, resp);
-        JsonPoint jsonPoint = new JsonPoint(animal.getLocation());
+    public AnimalRecognitionResp selectById(Integer id) {
+        AnimalRecognition animalRecognition = animalRecognitionMapper.selectByPrimaryKey(id);
+        AnimalRecognitionResp resp = new AnimalRecognitionResp();
+        BeanUtils.copyProperties(animalRecognition, resp);
+        JsonPoint jsonPoint = new JsonPoint(animalRecognition.getLocation());
         resp.setLocation(jsonPoint);
         return resp;
     }
 
-    public PageInfo<AnimalResp> selectByPage(AnimalPageReq pageReq) {
-        Page<Animal> page = PageHelper.startPage(pageReq.getPage(), pageReq.getPageSize());
-        List<Animal> animals = animalMapper.selectByQuery(pageReq);
-        List<AnimalResp> list = animals.stream().map(it -> {
-            AnimalResp resp = new AnimalResp();
+    public PageInfo<AnimalRecognitionResp> selectByPage(AnimalRecognitionPageReq pageReq) {
+        Page<AnimalRecognition> page = PageHelper.startPage(pageReq.getPage(), pageReq.getPageSize());
+        List<AnimalRecognition> animalRecognitions = animalRecognitionMapper.selectByQuery(pageReq);
+        List<AnimalRecognitionResp> list = animalRecognitions.stream().map(it -> {
+            AnimalRecognitionResp resp = new AnimalRecognitionResp();
             BeanUtils.copyProperties(it, resp);
             JsonPoint jsonPoint = new JsonPoint(it.getLocation());
             resp.setLocation(jsonPoint);

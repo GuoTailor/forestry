@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.gyh.forestry.mapper.AnimalMapper">
-    <resultMap id="BaseResultMap" type="org.gyh.forestry.domain.Animal">
+<mapper namespace="org.gyh.forestry.mapper.AnimalRecognitionMapper">
+    <resultMap id="BaseResultMap" type="org.gyh.forestry.domain.AnimalRecognition">
         <!--@mbg.generated-->
-        <!--@Table animal-->
+        <!--@Table animal_recognition-->
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="location_zh" jdbcType="VARCHAR" property="locationZh"/>
         <result column="location" jdbcType="OTHER" property="location"/>
@@ -30,27 +30,27 @@
         <!--@mbg.generated-->
         select
         <include refid="Base_Column_List"/>
-        from animal
+        from animal_recognition
         where id = #{id,jdbcType=INTEGER}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         <!--@mbg.generated-->
         delete
-        from animal
+        from animal_recognition
         where id = #{id,jdbcType=INTEGER}
     </delete>
-    <insert id="insert" parameterType="org.gyh.forestry.domain.Animal">
+    <insert id="insert" parameterType="org.gyh.forestry.domain.AnimalRecognition">
         <!--@mbg.generated-->
-        insert into animal (id, location_zh, "location",
-                            "type", create_time, creator,
-                            "name", pic, details)
+        insert into animal_recognition (id, location_zh, "location",
+                                        "type", create_time, creator,
+                                        "name", pic, details)
         values (#{id,jdbcType=INTEGER}, #{locationZh,jdbcType=VARCHAR}, #{location,jdbcType=OTHER},
                 #{type,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR},
                 #{name,jdbcType=VARCHAR}, #{pic,jdbcType=VARCHAR}, #{details,jdbcType=VARCHAR})
     </insert>
-    <insert id="insertSelective" parameterType="org.gyh.forestry.domain.Animal" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertSelective" parameterType="org.gyh.forestry.domain.AnimalRecognition">
         <!--@mbg.generated-->
-        insert into animal
+        insert into animal_recognition
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
                 id,
@@ -110,9 +110,9 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="org.gyh.forestry.domain.Animal">
+    <update id="updateByPrimaryKeySelective" parameterType="org.gyh.forestry.domain.AnimalRecognition">
         <!--@mbg.generated-->
-        update animal
+        update animal_recognition
         <set>
             <if test="locationZh != null">
                 location_zh = #{locationZh,jdbcType=VARCHAR},
@@ -141,9 +141,9 @@
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
-    <update id="updateByPrimaryKey" parameterType="org.gyh.forestry.domain.Animal">
+    <update id="updateByPrimaryKey" parameterType="org.gyh.forestry.domain.AnimalRecognition">
         <!--@mbg.generated-->
-        update animal
+        update animal_recognition
         set location_zh = #{locationZh,jdbcType=VARCHAR},
             "location"  = #{location,jdbcType=OTHER},
             "type"      = #{type,jdbcType=VARCHAR},
@@ -158,13 +158,13 @@
     <select id="selectAll" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from animal
+        from animal_recognition
     </select>
 
     <select id="selectByQuery" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from animal
+        from animal_recognition
         <where>
             <if test="name != null and name != ''">
                 name = #{name}

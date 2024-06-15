@@ -3,15 +3,15 @@ package org.gyh.forestry;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.gyh.forestry.domain.Animal;
+import org.gyh.forestry.domain.AnimalRecognition;
 import org.gyh.forestry.domain.User;
 import org.gyh.forestry.dto.JsonPoint;
 import org.gyh.forestry.dto.PageInfo;
-import org.gyh.forestry.dto.req.AddAnimalReq;
-import org.gyh.forestry.dto.req.AnimalPageReq;
-import org.gyh.forestry.dto.resp.AnimalResp;
+import org.gyh.forestry.dto.req.AddAnimalRecognitionReq;
+import org.gyh.forestry.dto.req.AnimalRecognitionPageReq;
+import org.gyh.forestry.dto.resp.AnimalRecognitionResp;
 import org.gyh.forestry.mapper.UserMapper;
-import org.gyh.forestry.service.AnimalService;
+import org.gyh.forestry.service.AnimalRecognitionService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,7 +23,7 @@ import java.util.concurrent.DelayQueue;
 @SpringBootTest
 class ForestryApplicationTests {
     @Autowired
-    private AnimalService animalService;
+    private AnimalRecognitionService animalRecognitionService;
     @Autowired
     private UserMapper userMapper;
     @Autowired
@@ -70,24 +70,24 @@ class ForestryApplicationTests {
         point.setY(23.01);
         point.setZ(12.0);
 
-        AddAnimalReq animal = new AddAnimalReq();
+        AddAnimalRecognitionReq animal = new AddAnimalRecognitionReq();
         animal.setLocation(point);
         animal.setLocationZh("nmka");
-        List<AnimalResp> animals = animalService.addAnimal(List.of(animal));
+        List<AnimalRecognitionResp> animals = animalRecognitionService.addAnimal(List.of(animal));
 
-        AnimalResp animal1 = animalService.selectById(animals.getFirst().getId());
+        AnimalRecognitionResp animal1 = animalRecognitionService.selectById(animals.getFirst().getId());
         System.out.println(animal1);
     }
 
     @Test
     void testPage() throws JsonProcessingException {
-        AnimalPageReq pageReq = new AnimalPageReq();
+        AnimalRecognitionPageReq pageReq = new AnimalRecognitionPageReq();
         pageReq.setPage(0);
         pageReq.setPageSize(2);
-        PageInfo<AnimalResp> animalPageInfo = animalService.selectByPage(pageReq);
+        PageInfo<AnimalRecognitionResp> animalPageInfo = animalRecognitionService.selectByPage(pageReq);
         String x = json.writeValueAsString(animalPageInfo);
         System.out.println(x);
-        PageInfo<Animal> animalPageInfo1 = json.readValue(x, new TypeReference<PageInfo<Animal>>() {
+        PageInfo<AnimalRecognition> animalPageInfo1 = json.readValue(x, new TypeReference<PageInfo<AnimalRecognition>>() {
         });
         System.out.println(animalPageInfo1.getData().get(0).getLocation().getX());
     }

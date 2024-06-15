@@ -1,18 +1,13 @@
-package org.gyh.forestry.domain;
+package org.gyh.forestry.dto.req;
 
 import lombok.Data;
-import net.postgis.jdbc.geometry.Point;
-import org.springframework.data.annotation.Id;
-
-import java.time.LocalDateTime;
+import org.gyh.forestry.dto.JsonPoint;
 
 /**
  * create by GYH on 2024/6/4
  */
 @Data
-public class Animal {
-    @Id
-    private Integer id;
+public class AddAnimalRecognitionReq {
 
     /**
      * 位置
@@ -22,7 +17,7 @@ public class Animal {
     /**
      * 经纬度
      */
-    private Point location;
+    private JsonPoint location;
 
     /**
      * 类型
@@ -30,22 +25,12 @@ public class Animal {
     private String type;
 
     /**
-     * 时间
-     */
-    private LocalDateTime createTime;
-
-    /**
-     * 上传人
-     */
-    private String creator;
-
-    /**
      * 动物名字
      */
     private String name;
 
     /**
-     * 上传图片
+     * 图片地址
      */
     private String pic;
 

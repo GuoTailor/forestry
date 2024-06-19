@@ -10,7 +10,6 @@ import org.gyh.forestry.dto.PageInfo;
 import org.gyh.forestry.dto.req.AddAnimalTypeReq;
 import org.gyh.forestry.dto.req.AnimalTypePageReq;
 import org.gyh.forestry.dto.req.UpdateAnimalTypeReq;
-import org.gyh.forestry.dto.resp.UserInfo;
 import org.gyh.forestry.mapper.AnimalTypeMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -59,6 +58,10 @@ public class AnimalTypeService {
             List<AnimalType> all = animalTypeMapper.findByPage(pageReq);
             return PageInfo.ok(page.getTotal(), pageReq, all);
         }
+    }
+
+    public List<AnimalType> selectAll() {
+        return animalTypeMapper.findByPage(new AnimalTypePageReq());
     }
 
     public boolean deleteAnimalType(Integer id) {

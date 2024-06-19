@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.gyh.forestry.mapper.AnimalManageMapper">
+    <resultMap id="BaseResultMap" type="org.gyh.forestry.domain.AnimalManage">
+        <!--@mbg.generated-->
+        <!--@Table animal_manage-->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="animal_type_id" jdbcType="INTEGER" property="animalTypeId"/>
+        <result column="describe" jdbcType="VARCHAR" property="describe"/>
+        <result column="enable" jdbcType="BOOLEAN" property="enable"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id,
+        "name",
+        animal_type_id,
+        "describe",
+        "enable",
+        create_time
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from animal_manage
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        <!--@mbg.generated-->
+        delete
+        from animal_manage
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="org.gyh.forestry.domain.AnimalManage">
+        <!--@mbg.generated-->
+        insert into animal_manage (id, "name", animal_type_id,
+                                   "describe", "enable", create_time)
+        values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{animalTypeId,jdbcType=INTEGER},
+                #{describe,jdbcType=VARCHAR}, #{enable,jdbcType=BOOLEAN}, #{createTime,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" parameterType="org.gyh.forestry.domain.AnimalManage" useGeneratedKeys="true" keyProperty="id">
+        <!--@mbg.generated-->
+        insert into animal_manage
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="name != null">
+                "name",
+            </if>
+            <if test="animalTypeId != null">
+                animal_type_id,
+            </if>
+            <if test="describe != null">
+                "describe",
+            </if>
+            <if test="enable != null">
+                "enable",
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="animalTypeId != null">
+                #{animalTypeId,jdbcType=INTEGER},
+            </if>
+            <if test="describe != null">
+                #{describe,jdbcType=VARCHAR},
+            </if>
+            <if test="enable != null">
+                #{enable,jdbcType=BOOLEAN},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="org.gyh.forestry.domain.AnimalManage">
+        <!--@mbg.generated-->
+        update animal_manage
+        <set>
+            <if test="name != null">
+                "name" = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="animalTypeId != null">
+                animal_type_id = #{animalTypeId,jdbcType=INTEGER},
+            </if>
+            <if test="describe != null">
+                "describe" = #{describe,jdbcType=VARCHAR},
+            </if>
+            <if test="enable != null">
+                "enable" = #{enable,jdbcType=BOOLEAN},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="org.gyh.forestry.domain.AnimalManage">
+        <!--@mbg.generated-->
+        update animal_manage
+        set "name"         = #{name,jdbcType=VARCHAR},
+            animal_type_id = #{animalTypeId,jdbcType=INTEGER},
+            "describe"     = #{describe,jdbcType=VARCHAR},
+            "enable"       = #{enable,jdbcType=BOOLEAN},
+            create_time    = #{createTime,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="selectByPage" resultType="org.gyh.forestry.dto.resp.AnimalManageResp">
+        select
+        a.id,
+        a.name,
+        a.describe,
+        b.name as animal_type,
+        a.enable,
+        a.create_time
+        from animal_manage a
+        left join animal_type b on a.animal_type_id = b.id
+        <where>
+            <if test="name != null and name != ''">
+                and a.name like concat('%', #{name}, '%')
+            </if>
+            <if test="animalTypeId != null">
+                and a.animal_type_id = #{animalTypeId}
+            </if>
+            <if test="startTime != null">
+                and a.create_time &gt;= #{startTime}
+            </if>
+            <if test="endTime != null">
+                and a.create_time &lt;= #{endTime}
+            </if>
+        </where>
+    </select>
+</mapper>

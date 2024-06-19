@@ -13,8 +13,9 @@ import org.gyh.forestry.dto.req.AnimalTypePageReq;
 import org.gyh.forestry.dto.req.UpdateAnimalTypeReq;
 import org.gyh.forestry.service.AnimalTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * create by GYH on 2024/6/15
@@ -26,14 +27,14 @@ public class AnimalTypeController {
     @Autowired
     private AnimalTypeService animalTypeService;
 
-    @PostMapping(value = "/add", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PostMapping("/add")
     @Operation(summary = "添加动物类型", security = {@SecurityRequirement(name = "Authorization")})
     @LogRecord(model = "动物类型", method = "添加动物类型")
     public ResponseInfo<AnimalType> addAnimalType(@RequestBody @Valid AddAnimalTypeReq req) {
         return ResponseInfo.ok(animalTypeService.addAnimalType(req));
     }
 
-    @PostMapping(value = "/update", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PostMapping("/update")
     @Operation(summary = "更新动物类型", security = {@SecurityRequirement(name = "Authorization")})
     @LogRecord(model = "动物类型", method = "更新动物类型")
     public ResponseInfo<AnimalType> updateAnimalType(@RequestBody @Valid UpdateAnimalTypeReq req) {
@@ -44,6 +45,12 @@ public class AnimalTypeController {
     @PostMapping("/page")
     public PageInfo<AnimalType> selectByPage(@RequestBody AnimalTypePageReq pageReq) {
         return animalTypeService.selectByPage(pageReq);
+    }
+
+    @PostMapping("/all")
+    @Operation(summary = "查询全部动物类型", security = {@SecurityRequirement(name = "Authorization")})
+    public ResponseInfo<List<AnimalType>> selectAll() {
+        return ResponseInfo.ok(animalTypeService.selectAll());
     }
 
     @Operation(summary = "删除动物类型", security = {@SecurityRequirement(name = "Authorization")})

@@ -23,7 +23,7 @@ public class AnimalManageResp {
      * 动物类型id
      */
     @Schema(description = "动物类型id")
-    private String animalType;
+    private Integer animalTypeId;
 
     /**
      * 动物描述

@@ -12,7 +12,6 @@ import org.gyh.forestry.dto.req.AnimalTypePageReq;
 import org.gyh.forestry.dto.req.UpdateAnimalTypeReq;
 import org.gyh.forestry.mapper.AnimalTypeMapper;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -43,12 +42,9 @@ public class AnimalTypeService {
      */
     public AnimalType updateAnimalType(UpdateAnimalTypeReq updateAnimalTypeReq) {
         AnimalType animalType = new AnimalType();
-        if (updateAnimalTypeReq.getEnable() != null) {
-            animalType.setEnable(updateAnimalTypeReq.getEnable());
-        }
-        if (StringUtils.hasLength(updateAnimalTypeReq.getName())) {
-            animalType.setName(updateAnimalTypeReq.getName());
-        }
+        animalType.setId(updateAnimalTypeReq.getId());
+        animalType.setEnable(updateAnimalTypeReq.getEnable());
+        animalType.setName(updateAnimalTypeReq.getName());
         animalTypeMapper.updateByPrimaryKeySelective(animalType);
         return animalType;
     }

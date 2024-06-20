@@ -77,16 +77,20 @@ public class AnimalRecognitionService {
         return resp;
     }
 
+    /**
+     * 分页查询动物
+     */
     public PageInfo<AnimalRecognitionResp> selectByPage(AnimalRecognitionPageReq pageReq) {
-        Page<AnimalRecognition> page = PageHelper.startPage(pageReq.getPage(), pageReq.getPageSize());
-        List<AnimalRecognition> animalRecognitions = animalRecognitionMapper.selectByQuery(pageReq);
-        List<AnimalRecognitionResp> list = animalRecognitions.stream().map(it -> {
-            AnimalRecognitionResp resp = new AnimalRecognitionResp();
-            BeanUtils.copyProperties(it, resp);
-            JsonPoint jsonPoint = new JsonPoint(it.getLocation());
-            resp.setLocation(jsonPoint);
-            return resp;
-        }).toList();
-        return PageInfo.ok(page.getTotal(), pageReq, list);
+        try (Page<AnimalRecognition> page = PageHelper.startPage(pageReq.getPage(), pageReq.getPageSize())) {
+            List<AnimalRecognition> animalRecognitions = animalRecognitionMapper.selectByQuery(pageReq);
+            List<AnimalRecognitionResp> list = animalRecognitions.stream().map(it -> {
+                AnimalRecognitionResp resp = new AnimalRecognitionResp();
+                BeanUtils.copyProperties(it, resp);
+                JsonPoint jsonPoint = new JsonPoint(it.getLocation());
+                resp.setLocation(jsonPoint);
+                return resp;
+            }).toList();
+            return PageInfo.ok(page.getTotal(), pageReq, list);
+        }
     }
 }

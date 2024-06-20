@@ -34,6 +34,11 @@ public class AnimalManageService {
         return animalManage;
     }
 
+    /**
+     * 更新动物
+     * @param req 更新参数
+     * @return 是否更新成功
+     */
     public boolean updateAnimalManage(UpdateAnimalManageReq req) {
         AnimalManage animalManage = new AnimalManage();
         animalManage.setId(req.getId());
@@ -45,6 +50,11 @@ public class AnimalManageService {
         return animalManageMapper.updateByPrimaryKeySelective(animalManage) == 1;
     }
 
+    /**
+     * 分页查询动物
+     * @param pageReq 分页参数
+     * @return 返回分页数据
+     */
     public PageInfo<AnimalManageResp> selectByPage(AnimalManagePageReq pageReq) {
         try (Page<AnimalManageResp> page = PageHelper.startPage(pageReq.getPage(), pageReq.getPageSize())) {
             List<AnimalManageResp> all = animalManageMapper.selectByPage(pageReq);

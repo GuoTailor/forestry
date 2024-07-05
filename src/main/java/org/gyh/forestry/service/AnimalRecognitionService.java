@@ -3,7 +3,6 @@ package org.gyh.forestry.service;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import jakarta.annotation.Resource;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.gyh.forestry.domain.AnimalRecognition;
 import org.gyh.forestry.domain.User;
@@ -13,7 +12,6 @@ import org.gyh.forestry.dto.req.AddAnimalRecognitionReq;
 import org.gyh.forestry.dto.req.AnimalRecognitionPageReq;
 import org.gyh.forestry.dto.resp.AnimalRecognitionResp;
 import org.gyh.forestry.dto.resp.RecognitionResp;
-import org.gyh.forestry.exception.BusinessException;
 import org.gyh.forestry.mapper.AnimalRecognitionMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,16 +68,17 @@ public class AnimalRecognitionService {
         }).toList();
     }
 
-    public boolean addAnimal(AddAnimalRecognitionReq animalReq, HttpServletRequest request) {
-        if (!request.getRemoteAddr().equals("0:0:0:0:0:0:0:1")) {
-            throw new BusinessException("该接口只允许内部调用");
+    public boolean addAnimal(AddAnimalRecognitionReq animalReq) {
+        for (AddAnimalRecognitionReq.AnimalInfo animalInfo : animalReq.getAnimalInfo()) {
+            AnimalRecognition animalRecognition = new AnimalRecognition();
+            BeanUtils.copyProperties(animalReq, animalRecognition);
+            animalRecognition.setType(animalInfo.getType());
+            animalRecognition.setName(animalInfo.getName());
+            animalRecognition.setDetails(animalInfo.getDetails());
+            animalRecognition.setCreateTime(LocalDateTime.now());
+            animalRecognitionMapper.insertSelective(animalRecognition);
         }
-        AnimalRecognition animalRecognition = new AnimalRecognition();
-        BeanUtils.copyProperties(animalReq, animalRecognition);
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        animalRecognition.setCreator(user.getUsername());
-        animalRecognition.setCreateTime(LocalDateTime.now());
-        return animalRecognitionMapper.insertSelective(animalRecognition) == 1;
+        return true;
     }
 
     public AnimalRecognitionResp selectById(Integer id) {

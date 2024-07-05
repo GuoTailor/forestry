@@ -53,4 +53,10 @@ public class AnimalRecognitionController {
     public ResponseInfo<List<AnimalRecognitionResp>> addAnimal(@RequestBody List<AddAnimalRecognitionReq> animalReqs) {
         return ResponseInfo.ok(animalRecognitionService.addAnimal(animalReqs));
     }
+
+    @Operation(summary = "算法添加动物识别结果")
+    @PostMapping("/addAnimal")
+    public ResponseInfo<Boolean> addAnimal(@RequestBody AddAnimalRecognitionReq animalReq) {
+        return ResponseInfo.ok(animalRecognitionService.addAnimal(animalReq));
+    }
 }

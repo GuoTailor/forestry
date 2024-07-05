@@ -3,6 +3,7 @@ package org.gyh.forestry.dto.req;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import org.gyh.forestry.dto.PageReq;
+import org.gyh.forestry.enums.PointTypeEnum;
 
 import java.time.LocalDateTime;
 
@@ -20,4 +21,13 @@ public class PointInfoPageReq extends PageReq {
     private LocalDateTime startTime;
     @Schema(description = "结束时间")
     private LocalDateTime endTime;
+    @Schema(description = "类型")
+    private PointTypeEnum type;
+
+    public PointInfoPageReq(PointInfoAllReq req) {
+        this.type = req.getType();
+    }
+
+    public PointInfoPageReq() {
+    }
 }

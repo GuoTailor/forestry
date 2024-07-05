@@ -14,7 +14,6 @@ spring:
       lettuce:
         pool:
           enabled: true
-      password: foobared
     jdbc:
       dialect: postgresql
   web:

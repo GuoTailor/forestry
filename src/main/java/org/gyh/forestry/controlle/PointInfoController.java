@@ -8,6 +8,7 @@ import org.gyh.forestry.aspect.LogRecord;
 import org.gyh.forestry.dto.PageInfo;
 import org.gyh.forestry.dto.ResponseInfo;
 import org.gyh.forestry.dto.req.AddPointInfo;
+import org.gyh.forestry.dto.req.PointInfoAllReq;
 import org.gyh.forestry.dto.req.PointInfoPageReq;
 import org.gyh.forestry.dto.req.UpdatePointInfo;
 import org.gyh.forestry.dto.resp.PointInfoResp;
@@ -63,7 +64,7 @@ public class PointInfoController {
 
     @PostMapping("/all")
     @Operation(summary = "获取全部点列表信息", security = {@SecurityRequirement(name = "Authorization")})
-    public ResponseInfo<List<PointInfoResp>> getAll() {
-        return ResponseInfo.ok(pointInfoService.getAll());
+    public ResponseInfo<List<PointInfoResp>> getAll(@RequestBody PointInfoAllReq req) {
+        return ResponseInfo.ok(pointInfoService.getAll(req));
     }
 }

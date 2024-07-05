@@ -8,6 +8,7 @@ import org.gyh.forestry.domain.PointInfo;
 import org.gyh.forestry.domain.User;
 import org.gyh.forestry.dto.PageInfo;
 import org.gyh.forestry.dto.req.AddPointInfo;
+import org.gyh.forestry.dto.req.PointInfoAllReq;
 import org.gyh.forestry.dto.req.PointInfoPageReq;
 import org.gyh.forestry.dto.req.UpdatePointInfo;
 import org.gyh.forestry.dto.JsonPoint;
@@ -79,8 +80,8 @@ public class PointInfoService {
         }
     }
 
-    public List<PointInfoResp> getAll() {
-        List<PointInfo> pointInfoResps = pointInfoMapper.selectByPage(new PointInfoPageReq());
+    public List<PointInfoResp> getAll(PointInfoAllReq req) {
+        List<PointInfo> pointInfoResps = pointInfoMapper.selectByPage(new PointInfoPageReq(req));
         return pointInfoResps.stream().map(it -> {
             PointInfoResp resp = new PointInfoResp();
             BeanUtils.copyProperties(it, resp);

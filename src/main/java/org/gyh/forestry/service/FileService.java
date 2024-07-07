@@ -21,11 +21,45 @@ import java.util.UUID;
 public class FileService {
     @Value("${fileUploadPath}")
     private String fileUploadPath;
+    private final String fileAiPath = "upload";
 
     public String uploadFile(MultipartFile file) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Integer userId = user.getId();
         return uploadFile(userId, file);
+    }
+
+    public String uploadRecognitionFile(MultipartFile file) {
+        if (file != null) {
+            String originalFilename = file.getOriginalFilename();
+            var suffix = "";
+            if (StringUtils.hasText(originalFilename)) {
+                var split = originalFilename.split("\\.");
+                if (split.length > 0) {
+                    suffix = "." + split[split.length - 1];
+                }
+            }
+            var fileName = UUID.randomUUID() + suffix;
+            String pathname = fileUploadPath + File.separator + fileName;
+            var dest = new File(pathname);
+
+            try {
+                if (!dest.getParentFile().exists()) {
+                    boolean mkdirs = dest.getParentFile().mkdirs();
+                    if (!mkdirs) throw new BusinessException("创建目录失败");
+                }
+                file.transferTo(dest.getAbsoluteFile());
+            } catch (IOException e) {
+                log.error("上传文件失败", e);
+                throw new BusinessException(e);
+            }
+            return fileName;
+        }
+        throw new BusinessException("上传文件不能为空");
+    }
+
+    public String getPath(String fileName) {
+        return fileUploadPath + File.separator + fileAiPath + File.separator + fileName;
     }
 
     public String uploadFile(Integer userId, MultipartFile file) {

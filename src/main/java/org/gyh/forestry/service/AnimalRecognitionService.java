@@ -37,11 +37,8 @@ public class AnimalRecognitionService {
      * 图片识别
      */
     public List<RecognitionResp> recognition(List<MultipartFile> files) {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Integer userId = user.getId();
-        log.info("1 {}", Thread.currentThread().isVirtual());
-        return files.parallelStream().map(it -> {
-            String path = fileService.uploadFile(userId, it);
+        return files.stream().map(it -> {
+            String path = fileService.uploadRecognitionFile(it);
             log.info("2 {}", Thread.currentThread().isVirtual());
             RecognitionResp resp = new RecognitionResp();
             resp.setPic(path);
@@ -68,6 +65,9 @@ public class AnimalRecognitionService {
         }).toList();
     }
 
+    /**
+     * ai识别后调用
+     */
     public boolean addAnimal(AddAnimalRecognitionReq animalReq) {
         for (AddAnimalRecognitionReq.AnimalInfo animalInfo : animalReq.getAnimalInfo()) {
             AnimalRecognition animalRecognition = new AnimalRecognition();
@@ -76,6 +76,7 @@ public class AnimalRecognitionService {
             animalRecognition.setName(animalInfo.getName());
             animalRecognition.setDetails(animalInfo.getDetails());
             animalRecognition.setCreateTime(LocalDateTime.now());
+            animalRecognition.setPic(fileService.getPath(animalReq.getPic()));
             animalRecognitionMapper.insertSelective(animalRecognition);
         }
         return true;

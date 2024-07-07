@@ -1,5 +1,6 @@
 package org.gyh.forestry.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import reactor.core.publisher.Mono;
 
 /**
@@ -8,8 +9,11 @@ import reactor.core.publisher.Mono;
 public class ResponseInfo<T> {
     public static final int OK_CODE = 1;
     public static final int FAILED_CODE = 0;
+    @Schema(description = "状态码，成功：1，失败：0")
     private Integer code = 1;
+    @Schema(description = "消息")
     private String msg;
+    @Schema(description = "数据")
     private T data;
 
     public ResponseInfo(int code, String msg, T data) {

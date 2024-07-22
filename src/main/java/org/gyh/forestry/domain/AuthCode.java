@@ -1,10 +1,10 @@
 package org.gyh.forestry.domain;
 
-import java.time.LocalDateTime;
-import java.util.Date;
 import lombok.Data;
 import org.gyh.forestry.enums.CodeStateEnum;
 import org.springframework.data.annotation.Id;
+
+import java.time.LocalDateTime;
 
 /**
  * create by GYH on 2024/5/18

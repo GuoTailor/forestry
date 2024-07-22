@@ -163,15 +163,26 @@
 
     <select id="selectByQuery" resultMap="BaseResultMap">
         select
-        <include refid="Base_Column_List"/>
-        from animal_recognition
+        ar.id,
+        ar.location_zh,
+        ar."location",
+        ar.create_time,
+        ar.creator,
+        ar."name",
+        ar.pic,
+        ar.details,
+        at.name as type
+        from animal_recognition as ar
+        left join animal_manage an on ar.name = an.name
+        left join animal_type at on at.id = an.animal_type_id
         <where>
             <if test="name != null and name != ''">
-                name = #{name}
+                ar.name = #{name}
             </if>
             <if test="type != null and type != ''">
-                and type = #{type}
+                and ar.type = #{type}
             </if>
         </where>
+        order by ar.create_time desc
     </select>
 </mapper>

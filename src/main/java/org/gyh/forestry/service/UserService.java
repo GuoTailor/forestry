@@ -82,6 +82,10 @@ public class UserService implements UserDetailsService {
 
     public User addUser(AddUserInfo addUserInfo) {
         User user = addUserInfo.toUser();
+        User userByUserName = userMapper.findUserByUserName(user.getUsername());
+        if (userByUserName != null) {
+            throw new RuntimeException("用户名已存在");
+        }
         user.setPassword(passwordEncoder.encode(addUserInfo.password()));
         user.setCreateTime(LocalDateTime.now());
         userMapper.insertSelective(user);

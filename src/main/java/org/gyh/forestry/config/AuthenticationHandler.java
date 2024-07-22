@@ -117,8 +117,8 @@ public class AuthenticationHandler implements AuthenticationSuccessHandler,
         String authToken = null;
         if (StringUtils.hasText(authHeader) && authHeader.startsWith("Bearer ")) {
             authToken = authHeader.replaceFirst("Bearer ", "");
-        } else if (Objects.equals("/room", httpRequestResponseHolder.getRequest().getRequestURI())) {
-            authToken = getQueryMap(httpRequestResponseHolder.getRequest().getQueryString()).get("bearer");
+        } else {
+            authToken = getQueryMap(httpRequestResponseHolder.getRequest().getQueryString()).get("access_token");
         }
         if (authToken != null) {
             try {

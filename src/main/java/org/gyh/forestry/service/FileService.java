@@ -59,7 +59,7 @@ public class FileService {
     }
 
     public String getPath(String fileName) {
-        return fileUploadPath + File.separator + fileAiPath + File.separator + fileName;
+        return fileAiPath + File.separator + fileName;
     }
 
     public String uploadFile(Integer userId, MultipartFile file) {

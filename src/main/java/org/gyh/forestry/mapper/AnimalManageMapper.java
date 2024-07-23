@@ -22,5 +22,11 @@ public interface AnimalManageMapper {
 
     int updateByPrimaryKey(AnimalManage record);
 
+    int disableByTypeId(Integer typeId);
+
+    long count();
+
     List<AnimalManageResp> selectByPage(AnimalManagePageReq pageReq);
+
+    boolean selectEnableByAnimalId(Integer id);
 }

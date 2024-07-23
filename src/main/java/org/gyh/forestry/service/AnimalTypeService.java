@@ -10,6 +10,7 @@ import org.gyh.forestry.dto.PageInfo;
 import org.gyh.forestry.dto.req.AddAnimalTypeReq;
 import org.gyh.forestry.dto.req.AnimalTypePageReq;
 import org.gyh.forestry.dto.req.UpdateAnimalTypeReq;
+import org.gyh.forestry.mapper.AnimalManageMapper;
 import org.gyh.forestry.mapper.AnimalTypeMapper;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,8 @@ import java.util.List;
 public class AnimalTypeService {
     @Resource
     private AnimalTypeMapper animalTypeMapper;
+    @Resource
+    private AnimalManageMapper animalManageMapper;
 
     /**
      * 添加动物类型
@@ -46,6 +49,10 @@ public class AnimalTypeService {
         animalType.setEnable(updateAnimalTypeReq.getEnable());
         animalType.setName(updateAnimalTypeReq.getName());
         animalTypeMapper.updateByPrimaryKeySelective(animalType);
+        if (Boolean.FALSE.equals(updateAnimalTypeReq.getEnable())) {
+            log.info("动物类型{}禁用", animalType.getName());
+            animalManageMapper.disableByTypeId(animalType.getId());
+        }
         return animalType;
     }
 

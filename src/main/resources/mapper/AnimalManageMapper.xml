@@ -141,4 +141,24 @@
             </if>
         </where>
     </select>
+
+    <select id="count" resultType="long">
+        select count(1)
+        from animal_manage a
+        where enable = true
+    </select>
+
+    <select id="disableByTypeId" resultType="int">
+        update animal_manage
+        set enable = false
+        where animal_type_id = #{id}
+          and enable = true
+    </select>
+
+    <select id="selectEnableByAnimalId" resultType="boolean">
+        select at.enable
+        from animal_type at
+                 join animal_manage am on at.id = am.animal_type_id
+        where am.id = #{id}
+    </select>
 </mapper>

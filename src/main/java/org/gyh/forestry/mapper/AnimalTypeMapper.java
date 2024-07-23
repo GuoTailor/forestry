@@ -22,4 +22,6 @@ public interface AnimalTypeMapper {
     int updateByPrimaryKey(AnimalType record);
 
     List<AnimalType> findByPage(AnimalTypePageReq pageReq);
+
+    long count();
 }

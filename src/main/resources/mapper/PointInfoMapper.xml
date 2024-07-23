@@ -163,4 +163,14 @@
         </where>
         order by create_time desc
     </select>
+
+    <select id="countByType" resultType="long">
+        select count(1)
+        from point_info
+        <where>
+            <if test="type != null">
+                and "type" = #{type}
+            </if>
+        </where>
+    </select>
 </mapper>

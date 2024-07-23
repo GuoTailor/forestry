@@ -9,6 +9,7 @@ import org.gyh.forestry.dto.req.AddAnimalManageReq;
 import org.gyh.forestry.dto.req.AnimalManagePageReq;
 import org.gyh.forestry.dto.req.UpdateAnimalManageReq;
 import org.gyh.forestry.dto.resp.AnimalManageResp;
+import org.gyh.forestry.exception.BusinessException;
 import org.gyh.forestry.mapper.AnimalManageMapper;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +37,7 @@ public class AnimalManageService {
 
     /**
      * 更新动物
+     *
      * @param req 更新参数
      * @return 是否更新成功
      */
@@ -46,12 +48,15 @@ public class AnimalManageService {
         animalManage.setAnimalTypeId(req.getAnimalTypeId());
         animalManage.setName(req.getName());
         animalManage.setDescribe(req.getDescribe());
-
+        if (Boolean.TRUE.equals(req.getEnable()) && animalManageMapper.selectEnableByAnimalId(req.getId())) {
+            throw new BusinessException("动物类型已禁用");
+        }
         return animalManageMapper.updateByPrimaryKeySelective(animalManage) == 1;
     }
 
     /**
      * 分页查询动物
+     *
      * @param pageReq 分页参数
      * @return 返回分页数据
      */

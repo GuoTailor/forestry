@@ -5,8 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.gyh.forestry.domain.OperationRecord;
 import org.gyh.forestry.domain.User;
 import org.gyh.forestry.dto.ResponseInfo;
+import org.gyh.forestry.service.OperationRecordService;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -28,7 +30,11 @@ import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.time.Duration;
-import java.util.*;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 /**
  * create by GYH on 2023/5/12
@@ -41,9 +47,11 @@ public class AuthenticationHandler implements AuthenticationSuccessHandler,
         AuthenticationEntryPoint {
     private final ObjectMapper json = new ObjectMapper();
     private final RedisTemplate<String, Object> redisTemplate;
+    private final OperationRecordService operationRecordService;
 
-    public AuthenticationHandler(RedisTemplate<String, Object> redisTemplate) {
+    public AuthenticationHandler(RedisTemplate<String, Object> redisTemplate, OperationRecordService operationRecordService) {
         this.redisTemplate = redisTemplate;
+        this.operationRecordService = operationRecordService;
     }
 
     /**
@@ -82,7 +90,9 @@ public class AuthenticationHandler implements AuthenticationSuccessHandler,
         httpServletResponse.setCharacterEncoding("UTF-8");
         String msg = e.getLocalizedMessage();
         try {
-            httpServletResponse.getWriter().write(json.writeValueAsString(ResponseInfo.failed(msg)));
+            String requestJson = json.writeValueAsString(ResponseInfo.failed(msg));
+            httpServletResponse.getWriter().write(requestJson);
+            record(httpServletRequest, "登录失败", false, requestJson);
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         }
@@ -106,15 +116,31 @@ public class AuthenticationHandler implements AuthenticationSuccessHandler,
             }
             redisTemplate.opsForValue().set(redisKey, user, expired);
             httpServletResponse.getWriter().write(value);
+            record(httpServletRequest, "登录成功", true, value);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
     }
 
+    private void record(HttpServletRequest httpServletRequest, String operation, boolean success, String requestJson) {
+        OperationRecord record = new OperationRecord();
+        record.setModelName("登录");
+        record.setOperation(operation);
+        record.setMethod("POST");
+        record.setUrl("/login");
+        record.setIp(httpServletRequest.getRemoteAddr());
+        record.setState(success);
+        record.setFunction("login");
+        record.setRequest("\"username\":" + httpServletRequest.getParameter("username") + "," + "\"password\":" + httpServletRequest.getParameter("password"));
+        record.setResponse(requestJson);
+        record.setCreateTime(LocalDateTime.now());
+        operationRecordService.insertSelective(record);
+    }
+
     @Override
     public SecurityContext loadContext(HttpRequestResponseHolder httpRequestResponseHolder) {
         String authHeader = httpRequestResponseHolder.getRequest().getHeader(HttpHeaders.AUTHORIZATION);
-        String authToken = null;
+        String authToken;
         if (StringUtils.hasText(authHeader) && authHeader.startsWith("Bearer ")) {
             authToken = authHeader.replaceFirst("Bearer ", "");
         } else {

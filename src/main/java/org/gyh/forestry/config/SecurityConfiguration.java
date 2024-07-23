@@ -4,6 +4,7 @@ import org.gyh.forestry.domain.Role;
 import org.gyh.forestry.domain.vo.MenuWithRole;
 import org.gyh.forestry.service.MenuService;
 import lombok.extern.slf4j.Slf4j;
+import org.gyh.forestry.service.OperationRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -44,6 +45,8 @@ public class SecurityConfiguration {
     private RedisTemplate<String, Object> redisTemplate;
     @Autowired
     private MenuService menuService;
+    @Autowired
+    private OperationRecordService operationRecordService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -52,7 +55,7 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        AuthenticationHandler authenticationHandler = new AuthenticationHandler(redisTemplate);
+        AuthenticationHandler authenticationHandler = new AuthenticationHandler(redisTemplate, operationRecordService);
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)

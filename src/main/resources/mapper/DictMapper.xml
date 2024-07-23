@@ -104,4 +104,21 @@
             describe = #{describe,jdbcType=VARCHAR}
         where id = #{id,jdbcType=INTEGER}
     </update>
+
+    <delete id="deleteByKey">
+        delete
+        from dict
+        where "key"    = #{key,jdbcType=VARCHAR}
+    </delete>
+
+    <select id="selectByKey" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
+        from dict
+        where "key"    = #{key,jdbcType=VARCHAR}
+    </select>
+
+    <select id="findByPage" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
+        from dict
+    </select>
 </mapper>

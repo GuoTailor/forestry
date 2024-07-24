@@ -2,8 +2,7 @@ package org.gyh.forestry.service;
 
 import jakarta.annotation.Resource;
 import org.gyh.forestry.dto.req.StatisticAnimalTypeReq;
-import org.gyh.forestry.dto.resp.GeneralInforResp;
-import org.gyh.forestry.dto.resp.StatisticAnimalTypeResp;
+import org.gyh.forestry.dto.resp.*;
 import org.gyh.forestry.mapper.AnimalManageMapper;
 import org.gyh.forestry.mapper.AnimalRecognitionMapper;
 import org.gyh.forestry.mapper.AnimalTypeMapper;
@@ -43,4 +42,33 @@ public class StatisticsService {
     public List<StatisticAnimalTypeResp> statisticAnimalType(StatisticAnimalTypeReq req) {
         return animalRecognitionMapper.statisticAnimalType(req);
     }
+
+    /**
+     * 统计每月动物数量
+     */
+    public List<StatisticAnimalByMonthResp> statisticAnimalByMonth(StatisticAnimalTypeReq req) {
+        return animalRecognitionMapper.statisticAnimalByMonth(req);
+    }
+
+    /**
+     * 统计动物出现频次
+     */
+    public List<StatisticAnimalByCount> statisticAnimalByCount(StatisticAnimalTypeReq req) {
+        return animalRecognitionMapper.statisticAnimalByCount(req);
+    }
+
+    /**
+     * 统计动物出现比例
+     */
+    public List<StatisticAnimalProportion> statisticAnimalProportion() {
+        List<StatisticAnimalTypeResp> statisticAnimalTypeResp = animalRecognitionMapper.statisticAnimalType(null);
+        double count = statisticAnimalTypeResp.stream().mapToLong(StatisticAnimalTypeResp::getCount).sum();
+        return statisticAnimalTypeResp.stream().map(it -> {
+            StatisticAnimalProportion statisticAnimalProportion = new StatisticAnimalProportion();
+            statisticAnimalProportion.setName(it.getName());
+            statisticAnimalProportion.setProportion(it.getCount() / count);
+            return statisticAnimalProportion;
+        }).toList();
+    }
+
 }

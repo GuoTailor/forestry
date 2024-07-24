@@ -14,5 +14,4 @@ public class StatisticAnimalTypeReq {
     private LocalDateTime startTime;
     @Schema(description = "结束时间")
     private LocalDateTime endTime;
-
 }

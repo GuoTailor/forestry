@@ -48,7 +48,8 @@
                 #{type,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR},
                 #{name,jdbcType=VARCHAR}, #{pic,jdbcType=VARCHAR}, #{details,jdbcType=VARCHAR})
     </insert>
-    <insert id="insertSelective" parameterType="org.gyh.forestry.domain.AnimalRecognition" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertSelective" parameterType="org.gyh.forestry.domain.AnimalRecognition" useGeneratedKeys="true"
+            keyProperty="id">
         <!--@mbg.generated-->
         insert into animal_recognition
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -162,19 +163,18 @@
     </select>
 
     <select id="selectByQuery" resultMap="BaseResultMap">
-        select
-        ar.id,
-        ar.location_zh,
-        ar."location",
-        ar.create_time,
-        ar.creator,
-        ar."name",
-        ar.pic,
-        ar.details,
-        at.name as type
+        select ar.id,
+               ar.location_zh,
+               ar."location",
+               ar.create_time,
+               ar.creator,
+               ar."name",
+               ar.pic,
+               ar.details,
+               at.name as type
         from animal_recognition as ar
-        left join animal_manage an on ar.name = an.name and an.enable = true
-        left join animal_type at on at.id = an.animal_type_id
+                 left join animal_manage an on ar.name = an.name and an.enable = true
+                 left join animal_type at on at.id = an.animal_type_id
         <where>
             <if test="name != null and name != ''">
                 ar.name = #{name}
@@ -187,15 +187,46 @@
     </select>
 
     <select id="statisticAnimalType" resultType="org.gyh.forestry.dto.resp.StatisticAnimalTypeResp">
-        select
-        ar.type as name,
-        count(ar.type) as count
+        select at.name        as name,
+               count(at.name) as count
         from animal_recognition as ar
-        left join animal_manage an on ar.name = an.name and an.enable = true
-        left join animal_type at on at.id = an.animal_type_id
+                 left join animal_manage an on ar.name = an.name and an.enable = true
+                 left join animal_type at on at.id = an.animal_type_id
         <where>
             <if test="startTime != null">
-                and ar.create_time &gt;= #{startTime}
+                ar.create_time &gt;= #{startTime}
+            </if>
+            <if test="endTime != null">
+                and ar.create_time &lt;= #{endTime}
+            </if>
+        </where>
+    </select>
+
+    <select id="statisticAnimalByMonth" resultType="org.gyh.forestry.dto.resp.StatisticAnimalByMonthResp">
+        SELECT EXTRACT(YEAR FROM create_time)  AS year,
+               EXTRACT(MONTH FROM create_time) AS month,
+               COUNT(*)                        AS count
+        FROM animal_recognition
+        <where>
+            <if test="startTime != null">
+                create_time &gt;= #{startTime}
+            </if>
+            <if test="endTime != null">
+                and create_time &lt;= #{endTime}
+            </if>
+        </where>
+        GROUP BY year, month
+        ORDER BY year, month;
+    </select>
+
+    <select id="statisticAnimalByCount" resultType="org.gyh.forestry.dto.resp.StatisticAnimalByCount">
+        SELECT ar.type  AS name,
+               COUNT(*) AS count
+        FROM animal_recognition AS ar
+                 LEFT JOIN animal_manage an ON ar.name = an.name AND an.enable = true
+        <where>
+            <if test="startTime != null">
+                ar.create_time &gt;= #{startTime}
             </if>
             <if test="endTime != null">
                 and ar.create_time &lt;= #{endTime}

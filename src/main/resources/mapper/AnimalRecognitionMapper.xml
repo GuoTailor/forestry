@@ -192,14 +192,14 @@
         from animal_recognition as ar
                  left join animal_manage an on ar.name = an.name and an.enable = true
                  left join animal_type at on at.id = an.animal_type_id
-        <where>
-            <if test="startTime != null">
-                ar.create_time &gt;= #{startTime}
-            </if>
-            <if test="endTime != null">
-                and ar.create_time &lt;= #{endTime}
-            </if>
-        </where>
+        where at.name is not null
+        <if test="startTime != null">
+            and ar.create_time &gt;= #{startTime}
+        </if>
+        <if test="endTime != null">
+            and ar.create_time &lt;= #{endTime}
+        </if>
+        group by at.name
     </select>
 
     <select id="statisticAnimalByMonth" resultType="org.gyh.forestry.dto.resp.StatisticAnimalByMonthResp">
@@ -220,7 +220,7 @@
     </select>
 
     <select id="statisticAnimalByCount" resultType="org.gyh.forestry.dto.resp.StatisticAnimalByCount">
-        SELECT ar.type  AS name,
+        SELECT ar.name  AS name,
                COUNT(*) AS count
         FROM animal_recognition AS ar
                  LEFT JOIN animal_manage an ON ar.name = an.name AND an.enable = true
@@ -232,5 +232,6 @@
                 and ar.create_time &lt;= #{endTime}
             </if>
         </where>
+        group by ar.name
     </select>
 </mapper>

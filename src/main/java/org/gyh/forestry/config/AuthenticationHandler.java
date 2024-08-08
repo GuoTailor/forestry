@@ -134,6 +134,7 @@ public class AuthenticationHandler implements AuthenticationSuccessHandler,
         record.setRequest("\"username\":" + httpServletRequest.getParameter("username") + "," + "\"password\":" + httpServletRequest.getParameter("password"));
         record.setResponse(requestJson);
         record.setCreateTime(LocalDateTime.now());
+        record.setOperationUser(httpServletRequest.getParameter("username"));
         operationRecordService.insertSelective(record);
     }
 

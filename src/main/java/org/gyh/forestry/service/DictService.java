@@ -28,10 +28,10 @@ public class DictService {
      * 添加字典
      */
     public Dict addDict(AddDictReq addDictReq) {
-        Dict dict = new Dict();
-        if (!dict.getType().parse(dict.getKey())) {
+        if (!addDictReq.getType().parse(addDictReq.getKey())) {
             throw new RuntimeException("字典类型错误");
         }
+        Dict dict = new Dict();
         BeanUtils.copyProperties(addDictReq, dict);
         dictMapper.insertSelective(dict);
         return dict;

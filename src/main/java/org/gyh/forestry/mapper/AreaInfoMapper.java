@@ -22,6 +22,8 @@ public interface AreaInfoMapper {
 
     List<AreaInfoResp> selectByPage(AreaInfoPageReq pageReq);
 
+    List<AreaInfo> selectAll();
+
     int updateByPrimaryKeySelective(AreaInfo record);
 
     int updateByPrimaryKey(AreaInfo record);

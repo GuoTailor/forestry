@@ -69,4 +69,13 @@ public class StatisticsController {
     public ResponseInfo<List<StatisticAnimalProportion>> statisticAnimalProportion() {
         return ResponseInfo.ok(statisticsService.statisticAnimalProportion());
     }
+
+    /**
+     * 森林火险统计
+     */
+    @PostMapping("/forest/fire")
+    @Operation(summary = "森林火险统计", security = {@SecurityRequirement(name = "Authorization")})
+    public ResponseInfo<List<ForestFire>> forestFire() {
+        return ResponseInfo.ok(statisticsService.forestFire());
+    }
 }

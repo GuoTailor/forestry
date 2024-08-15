@@ -1,12 +1,11 @@
 package org.gyh.forestry.service;
 
 import jakarta.annotation.Resource;
+import org.gyh.forestry.domain.AreaInfo;
+import org.gyh.forestry.domain.Moxing;
 import org.gyh.forestry.dto.req.StatisticAnimalTypeReq;
 import org.gyh.forestry.dto.resp.*;
-import org.gyh.forestry.mapper.AnimalManageMapper;
-import org.gyh.forestry.mapper.AnimalRecognitionMapper;
-import org.gyh.forestry.mapper.AnimalTypeMapper;
-import org.gyh.forestry.mapper.PointInfoMapper;
+import org.gyh.forestry.mapper.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,6 +23,10 @@ public class StatisticsService {
     private AnimalTypeMapper animalTypeMapper;
     @Resource
     private AnimalRecognitionMapper animalRecognitionMapper;
+    @Resource
+    private AreaInfoMapper areaInfoMapper;
+    @Resource
+    private MoxingMapper moxingMapper;
 
     /**
      * 总览
@@ -68,6 +71,19 @@ public class StatisticsService {
             statisticAnimalProportion.setName(it.getName());
             statisticAnimalProportion.setProportion(it.getCount() / count);
             return statisticAnimalProportion;
+        }).toList();
+    }
+
+    public List<ForestFire> forestFire() {
+        List<AreaInfo> areaInfos = areaInfoMapper.selectAll();
+        return areaInfos.parallelStream().map(it -> {
+            ForestFire forestFire = new ForestFire();
+            forestFire.setName(it.getName());
+            forestFire.setArea(it.getArea());
+            forestFire.setTemperature(it.getTemperature());
+            forestFire.setMoistureContent(it.getMoistureContent());
+            forestFire.setLevel(moxingMapper.selectLaveByName(it.getName()));
+            return forestFire;
         }).toList();
     }
 

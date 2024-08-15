@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.gyh.forestry.mapper.MoxingMapper">
+    <resultMap id="BaseResultMap" type="org.gyh.forestry.domain.Moxing">
+        <!--@mbg.generated-->
+        <!--@Table moxing-->
+        <id column="gid" jdbcType="INTEGER" property="gid"/>
+        <result column="优势树" jdbcType="VARCHAR" property="tree"/>
+        <result column="县" jdbcType="VARCHAR" property="prefecture"/>
+        <result column="乡" jdbcType="VARCHAR" property="village"/>
+        <result column="村" jdbcType="VARCHAR" property="hamlet"/>
+        <result column="社" jdbcType="VARCHAR" property="agency"/>
+        <result column="高程" jdbcType="NUMERIC" property="elevation"/>
+        <result column="bsm" jdbcType="INTEGER" property="bsm"/>
+        <result column="qy" jdbcType="VARCHAR" property="qy"/>
+        <result column="nljg" jdbcType="VARCHAR" property="nljg"/>
+        <result column="ybddj" jdbcType="VARCHAR" property="ybddj"/>
+        <result column="szzc" jdbcType="VARCHAR" property="szzc"/>
+        <result column="nl" jdbcType="VARCHAR" property="nl"/>
+        <result column="分类" jdbcType="VARCHAR" property="classify"/>
+        <result column="pd" jdbcType="VARCHAR" property="pd"/>
+        <result column="gc" jdbcType="VARCHAR" property="gc"/>
+        <result column="px" jdbcType="VARCHAR" property="px"/>
+        <result column="清理" jdbcType="VARCHAR" property="clean"/>
+        <result column="p" jdbcType="DOUBLE" property="p"/>
+        <result column="level" jdbcType="SMALLINT" property="level"/>
+        <result column="k" jdbcType="VARCHAR" property="k"/>
+        <result column="d1" jdbcType="SMALLINT" property="d1"/>
+        <result column="d2" jdbcType="SMALLINT" property="d2"/>
+        <result column="d3" jdbcType="SMALLINT" property="d3"/>
+        <result column="f" jdbcType="DOUBLE" property="f"/>
+        <result column="geom" jdbcType="OTHER" property="geom"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        gid,
+        优势树,
+        县,
+        乡,
+        村,
+        社,
+        高程,
+        bsm,
+        qy,
+        nljg,
+        ybddj,
+        szzc,
+        nl,
+        分类,
+        pd,
+        gc,
+        px,
+        清理,
+        p,
+        "level",
+        "k",
+        d1,
+        d2,
+        d3,
+        f,
+        geom
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from moxing
+        where gid = #{gid,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        <!--@mbg.generated-->
+        delete
+        from moxing
+        where gid = #{gid,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="org.gyh.forestry.domain.Moxing">
+        <!--@mbg.generated-->
+        insert into moxing (gid, 优势树, 县,
+        乡, 村, 社, 高程,
+        bsm, qy, nljg, ybddj,
+        szzc, nl, 分类, pd,
+        gc, px, 清理, p,
+        "level", "k", d1, d2,
+        d3, f, geom)
+        values (#{gid,jdbcType=INTEGER}, #{tree,jdbcType=VARCHAR}, #{prefecture,jdbcType=VARCHAR},
+        #{village,jdbcType=VARCHAR}, #{hamlet,jdbcType=VARCHAR}, #{agency,jdbcType=VARCHAR},
+        #{elevation,jdbcType=NUMERIC},
+        #{bsm,jdbcType=INTEGER}, #{qy,jdbcType=VARCHAR}, #{nljg,jdbcType=VARCHAR}, #{ybddj,jdbcType=VARCHAR},
+        #{szzc,jdbcType=VARCHAR}, #{nl,jdbcType=VARCHAR}, #{classify,jdbcType=VARCHAR}, #{pd,jdbcType=VARCHAR},
+        #{gc,jdbcType=VARCHAR}, #{px,jdbcType=VARCHAR}, #{clean,jdbcType=VARCHAR}, #{p,jdbcType=DOUBLE},
+        #{level,jdbcType=SMALLINT}, #{k,jdbcType=VARCHAR}, #{d1,jdbcType=SMALLINT}, #{d2,jdbcType=SMALLINT},
+        #{d3,jdbcType=SMALLINT}, #{f,jdbcType=DOUBLE}, #{geom,jdbcType=OTHER})
+    </insert>
+    <insert id="insertSelective" parameterType="org.gyh.forestry.domain.Moxing">
+        <!--@mbg.generated-->
+        insert into moxing
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="gid != null">
+                gid,
+            </if>
+            <if test="tree != null">
+                优势树,
+            </if>
+            <if test="prefecture != null">
+                县,
+            </if>
+            <if test="village != null">
+                乡,
+            </if>
+            <if test="hamlet != null">
+                村,
+            </if>
+            <if test="agency != null">
+                社,
+            </if>
+            <if test="elevation != null">
+                高程,
+            </if>
+            <if test="bsm != null">
+                bsm,
+            </if>
+            <if test="qy != null">
+                qy,
+            </if>
+            <if test="nljg != null">
+                nljg,
+            </if>
+            <if test="ybddj != null">
+                ybddj,
+            </if>
+            <if test="szzc != null">
+                szzc,
+            </if>
+            <if test="nl != null">
+                nl,
+            </if>
+            <if test="classify != null">
+                分类,
+            </if>
+            <if test="pd != null">
+                pd,
+            </if>
+            <if test="gc != null">
+                gc,
+            </if>
+            <if test="px != null">
+                px,
+            </if>
+            <if test="clean != null">
+                清理,
+            </if>
+            <if test="p != null">
+                p,
+            </if>
+            <if test="level != null">
+                "level",
+            </if>
+            <if test="k != null">
+                "k",
+            </if>
+            <if test="d1 != null">
+                d1,
+            </if>
+            <if test="d2 != null">
+                d2,
+            </if>
+            <if test="d3 != null">
+                d3,
+            </if>
+            <if test="f != null">
+                f,
+            </if>
+            <if test="geom != null">
+                geom,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="gid != null">
+                #{gid,jdbcType=INTEGER},
+            </if>
+            <if test="tree != null">
+                #{tree,jdbcType=VARCHAR},
+            </if>
+            <if test="prefecture != null">
+                #{prefecture,jdbcType=VARCHAR},
+            </if>
+            <if test="village != null">
+                #{village,jdbcType=VARCHAR},
+            </if>
+            <if test="hamlet != null">
+                #{hamlet,jdbcType=VARCHAR},
+            </if>
+            <if test="agency != null">
+                #{agency,jdbcType=VARCHAR},
+            </if>
+            <if test="elevation != null">
+                #{elevation,jdbcType=NUMERIC},
+            </if>
+            <if test="bsm != null">
+                #{bsm,jdbcType=INTEGER},
+            </if>
+            <if test="qy != null">
+                #{qy,jdbcType=VARCHAR},
+            </if>
+            <if test="nljg != null">
+                #{nljg,jdbcType=VARCHAR},
+            </if>
+            <if test="ybddj != null">
+                #{ybddj,jdbcType=VARCHAR},
+            </if>
+            <if test="szzc != null">
+                #{szzc,jdbcType=VARCHAR},
+            </if>
+            <if test="nl != null">
+                #{nl,jdbcType=VARCHAR},
+            </if>
+            <if test="classify != null">
+                #{classify,jdbcType=VARCHAR},
+            </if>
+            <if test="pd != null">
+                #{pd,jdbcType=VARCHAR},
+            </if>
+            <if test="gc != null">
+                #{gc,jdbcType=VARCHAR},
+            </if>
+            <if test="px != null">
+                #{px,jdbcType=VARCHAR},
+            </if>
+            <if test="clean != null">
+                #{clean,jdbcType=VARCHAR},
+            </if>
+            <if test="p != null">
+                #{p,jdbcType=DOUBLE},
+            </if>
+            <if test="level != null">
+                #{level,jdbcType=SMALLINT},
+            </if>
+            <if test="k != null">
+                #{k,jdbcType=VARCHAR},
+            </if>
+            <if test="d1 != null">
+                #{d1,jdbcType=SMALLINT},
+            </if>
+            <if test="d2 != null">
+                #{d2,jdbcType=SMALLINT},
+            </if>
+            <if test="d3 != null">
+                #{d3,jdbcType=SMALLINT},
+            </if>
+            <if test="f != null">
+                #{f,jdbcType=DOUBLE},
+            </if>
+            <if test="geom != null">
+                #{geom,jdbcType=OTHER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="org.gyh.forestry.domain.Moxing">
+        <!--@mbg.generated-->
+        update moxing
+        <set>
+            <if test="tree != null">
+                优势树 = #{tree,jdbcType=VARCHAR},
+            </if>
+            <if test="prefecture != null">
+                县 = #{prefecture,jdbcType=VARCHAR},
+            </if>
+            <if test="village != null">
+                乡 = #{village,jdbcType=VARCHAR},
+            </if>
+            <if test="hamlet != null">
+                村 = #{hamlet,jdbcType=VARCHAR},
+            </if>
+            <if test="agency != null">
+                社 = #{agency,jdbcType=VARCHAR},
+            </if>
+            <if test="elevation != null">
+                高程 = #{elevation,jdbcType=NUMERIC},
+            </if>
+            <if test="bsm != null">
+                bsm = #{bsm,jdbcType=INTEGER},
+            </if>
+            <if test="qy != null">
+                qy = #{qy,jdbcType=VARCHAR},
+            </if>
+            <if test="nljg != null">
+                nljg = #{nljg,jdbcType=VARCHAR},
+            </if>
+            <if test="ybddj != null">
+                ybddj = #{ybddj,jdbcType=VARCHAR},
+            </if>
+            <if test="szzc != null">
+                szzc = #{szzc,jdbcType=VARCHAR},
+            </if>
+            <if test="nl != null">
+                nl = #{nl,jdbcType=VARCHAR},
+            </if>
+            <if test="classify != null">
+                分类 = #{classify,jdbcType=VARCHAR},
+            </if>
+            <if test="pd != null">
+                pd = #{pd,jdbcType=VARCHAR},
+            </if>
+            <if test="gc != null">
+                gc = #{gc,jdbcType=VARCHAR},
+            </if>
+            <if test="px != null">
+                px = #{px,jdbcType=VARCHAR},
+            </if>
+            <if test="clean != null">
+                清理 = #{clean,jdbcType=VARCHAR},
+            </if>
+            <if test="p != null">
+                p = #{p,jdbcType=DOUBLE},
+            </if>
+            <if test="level != null">
+                "level" = #{level,jdbcType=SMALLINT},
+            </if>
+            <if test="k != null">
+                "k" = #{k,jdbcType=VARCHAR},
+            </if>
+            <if test="d1 != null">
+                d1 = #{d1,jdbcType=SMALLINT},
+            </if>
+            <if test="d2 != null">
+                d2 = #{d2,jdbcType=SMALLINT},
+            </if>
+            <if test="d3 != null">
+                d3 = #{d3,jdbcType=SMALLINT},
+            </if>
+            <if test="f != null">
+                f = #{f,jdbcType=DOUBLE},
+            </if>
+            <if test="geom != null">
+                geom = #{geom,jdbcType=OTHER},
+            </if>
+        </set>
+        where gid = #{gid,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="org.gyh.forestry.domain.Moxing">
+        <!--@mbg.generated-->
+        update moxing
+        set 优势树 = #{tree,jdbcType=VARCHAR},
+        县 = #{prefecture,jdbcType=VARCHAR},
+        乡 = #{village,jdbcType=VARCHAR},
+        村 = #{hamlet,jdbcType=VARCHAR},
+        社 = #{agency,jdbcType=VARCHAR},
+        高程 = #{elevation,jdbcType=NUMERIC},
+        bsm = #{bsm,jdbcType=INTEGER},
+        qy = #{qy,jdbcType=VARCHAR},
+        nljg = #{nljg,jdbcType=VARCHAR},
+        ybddj = #{ybddj,jdbcType=VARCHAR},
+        szzc = #{szzc,jdbcType=VARCHAR},
+        nl = #{nl,jdbcType=VARCHAR},
+        分类 = #{classify,jdbcType=VARCHAR},
+        pd = #{pd,jdbcType=VARCHAR},
+        gc = #{gc,jdbcType=VARCHAR},
+        px = #{px,jdbcType=VARCHAR},
+        清理 = #{clean,jdbcType=VARCHAR},
+        p = #{p,jdbcType=DOUBLE},
+        "level" = #{level,jdbcType=SMALLINT},
+        "k" = #{k,jdbcType=VARCHAR},
+        d1 = #{d1,jdbcType=SMALLINT},
+        d2 = #{d2,jdbcType=SMALLINT},
+        d3 = #{d3,jdbcType=SMALLINT},
+        f = #{f,jdbcType=DOUBLE},
+        geom = #{geom,jdbcType=OTHER}
+        where gid = #{gid,jdbcType=INTEGER}
+    </update>
+
+    <select id="selectByName" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from moxing
+        where 县 = #{name}
+    </select>
+
+    <select id="selectLaveByName" resultType="short">
+        select level
+        from moxing
+        where 县 = #{name}
+        group by level
+        order by level desc
+        limit 1
+    </select>
+</mapper>

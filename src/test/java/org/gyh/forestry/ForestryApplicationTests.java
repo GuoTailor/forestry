@@ -3,13 +3,16 @@ package org.gyh.forestry;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.annotation.Resource;
 import org.gyh.forestry.domain.AnimalRecognition;
+import org.gyh.forestry.domain.Moxing;
 import org.gyh.forestry.domain.User;
 import org.gyh.forestry.dto.JsonPoint;
 import org.gyh.forestry.dto.PageInfo;
 import org.gyh.forestry.dto.req.AddAnimalRecognitionReq;
 import org.gyh.forestry.dto.req.AnimalRecognitionPageReq;
 import org.gyh.forestry.dto.resp.AnimalRecognitionResp;
+import org.gyh.forestry.mapper.MoxingMapper;
 import org.gyh.forestry.mapper.UserMapper;
 import org.gyh.forestry.service.AnimalRecognitionService;
 import org.junit.jupiter.api.Test;
@@ -28,6 +31,8 @@ class ForestryApplicationTests {
     private UserMapper userMapper;
     @Autowired
     private ObjectMapper json;
+    @Resource
+    private MoxingMapper moxingMapper;
 
     @Test
     void testQuery() throws InterruptedException {
@@ -48,6 +53,12 @@ class ForestryApplicationTests {
         Thread.sleep(1000);
         queue.add(new MyDelayed(1000, "22"));
         Thread.sleep(3000);
+    }
+
+    @Test
+    void testMoxing() {
+        Moxing moxing = moxingMapper.selectByPrimaryKey(1);
+        System.out.println(moxing);
     }
 
     @Test

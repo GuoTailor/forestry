@@ -3,6 +3,7 @@ package org.gyh.forestry.service;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import org.gyh.forestry.domain.AreaInfo;
 import org.gyh.forestry.dto.PageInfo;
 import org.gyh.forestry.dto.req.AddAreaInfo;
@@ -15,12 +16,16 @@ import org.gyh.forestry.mapper.AreaInfoMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.time.LocalDateTime;
 import java.util.List;
 
 /**
  * create by GYH on 2024/8/13
  */
+@Slf4j
 @Service
 public class AreaInfoService {
     @Resource
@@ -42,14 +47,31 @@ public class AreaInfoService {
     }
 
     public void updateAreaInfo(UpdateAreaInfo updateAreaInfo) {
-        if (updateAreaInfo.getName() != null) {
-            if (areaInfoMapper.findByName(updateAreaInfo.getName()) != null) {
-                throw new BusinessException("区域名字已存在");
-            }
-        }
         AreaInfo areaInfo = new AreaInfo();
         BeanUtils.copyProperties(updateAreaInfo, areaInfo);
         areaInfoMapper.updateByPrimaryKeySelective(areaInfo);
+        if (updateAreaInfo.getMoistureContent() != null) {
+            String[] command = new String[]{"python3.8", "./pydir/11.py"};
+            try {
+                log.info("开始执行命令");
+                Process process = Runtime.getRuntime().exec(command);
+                // 读取输出流
+                BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    log.info(line);
+                }
+                reader.close();
+                int exitVal = process.waitFor();
+                if (exitVal == 0) {
+                    log.info("Command executed successfully");
+                } else {
+                    log.info("There was an error executing the command.");
+                }
+            } catch (IOException | InterruptedException e) {
+                log.error("执行命令出错", e);
+            }
+        }
     }
 
     /**

@@ -2,7 +2,6 @@ package org.gyh.forestry.service;
 
 import jakarta.annotation.Resource;
 import org.gyh.forestry.domain.AreaInfo;
-import org.gyh.forestry.domain.Moxing;
 import org.gyh.forestry.dto.req.StatisticAnimalTypeReq;
 import org.gyh.forestry.dto.resp.*;
 import org.gyh.forestry.mapper.*;
@@ -74,6 +73,9 @@ public class StatisticsService {
         }).toList();
     }
 
+    /**
+     * 统计森林火险的数据
+     */
     public List<ForestFire> forestFire() {
         List<AreaInfo> areaInfos = areaInfoMapper.selectAll();
         return areaInfos.parallelStream().map(it -> {

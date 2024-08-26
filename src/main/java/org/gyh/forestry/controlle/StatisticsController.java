@@ -8,10 +8,7 @@ import org.gyh.forestry.dto.req.StatisticAnimalTypeReq;
 import org.gyh.forestry.dto.resp.*;
 import org.gyh.forestry.service.StatisticsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -77,5 +74,11 @@ public class StatisticsController {
     @Operation(summary = "森林火险统计", security = {@SecurityRequirement(name = "Authorization")})
     public ResponseInfo<List<ForestFire>> forestFire() {
         return ResponseInfo.ok(statisticsService.forestFire());
+    }
+
+    @GetMapping("/forest/fire/proportion")
+    @Operation(summary = "查询火险等级占比", security = {@SecurityRequirement(name = "Authorization")})
+    public ResponseInfo<List<FireRankProportion>> fireRankProportion(@RequestParam("name") String name) {
+        return ResponseInfo.ok(statisticsService.fireRankProportion(name));
     }
 }

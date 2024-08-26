@@ -16,6 +16,25 @@ public class ForestFire {
     /**
      * 温度
      */
+    @Schema(description = "温度")
     private Float temperature;
+    /**
+     * 湿度
+     */
+    @Schema(description = "湿度")
+    private Float humidity;
+
+    /**
+     * 风速
+     */
+    @Schema(description = "风速")
+    private Float windSpeed;
+
+    /**
+     * 风向
+     */
+    @Schema(description = "风向")
+    private String windDirection;
+    @Schema(description = "火险等级")
     private Short level;
 }

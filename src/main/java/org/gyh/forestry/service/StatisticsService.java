@@ -7,6 +7,8 @@ import org.gyh.forestry.dto.resp.*;
 import org.gyh.forestry.mapper.*;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 /**
@@ -84,9 +86,29 @@ public class StatisticsService {
             forestFire.setArea(it.getArea());
             forestFire.setTemperature(it.getTemperature());
             forestFire.setMoistureContent(it.getMoistureContent());
+            forestFire.setHumidity(it.getHumidity());
+            forestFire.setWindSpeed(it.getWindSpeed());
+            forestFire.setWindDirection(it.getWindDirection());
             forestFire.setLevel(moxingMapper.selectLaveByName(it.getName()));
             return forestFire;
         }).toList();
+    }
+
+    /**
+     * 查询火险等级占比
+     * @param name 区域名字
+     */
+    public List<FireRankProportion> fireRankProportion(String name) {
+        List<FireRankProportion> fireRankProportions = moxingMapper.selectFireRankProportion(name);
+        int sum = 0;
+        for (FireRankProportion fireRankProportion : fireRankProportions) {
+            sum += fireRankProportion.getCount();
+        }
+        BigDecimal sumDecimal = new BigDecimal(sum);
+        for (FireRankProportion fireRankProportion : fireRankProportions) {
+            fireRankProportion.setProportion(new BigDecimal(fireRankProportion.getCount()).divide(sumDecimal, RoundingMode.HALF_UP));
+        }
+        return fireRankProportions;
     }
 
 }

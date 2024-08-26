@@ -14,6 +14,7 @@ import org.gyh.forestry.dto.resp.AreaInfoResp;
 import org.gyh.forestry.exception.BusinessException;
 import org.gyh.forestry.mapper.AreaInfoMapper;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -30,6 +31,8 @@ import java.util.List;
 public class AreaInfoService {
     @Resource
     private AreaInfoMapper areaInfoMapper;
+    @Value("${spring.datasource.password}")
+    private String password;
 
     /**
      * 添加区域
@@ -50,16 +53,15 @@ public class AreaInfoService {
         AreaInfo areaInfo = new AreaInfo();
         BeanUtils.copyProperties(updateAreaInfo, areaInfo);
         areaInfoMapper.updateByPrimaryKeySelective(areaInfo);
+        areaInfo = areaInfoMapper.selectByPrimaryKey(updateAreaInfo.getId());
         if (updateAreaInfo.getMoistureContent() != null) {
-            String[] command = new String[]{"python3.8", "./pydir/11.py"};
+            String[] command = new String[]{"python3.8", "./pydir/825.py", "forestry", "postgres", password, areaInfo.getName()};
             try {
                 log.info("开始执行命令");
                 Process process = Runtime.getRuntime().exec(command);
                 // 读取输出流
                 BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    log.info(line);
+                for (String line; (line = reader.readLine()) != null; log.info(line)) {
                 }
                 reader.close();
                 int exitVal = process.waitFor();
@@ -87,6 +89,7 @@ public class AreaInfoService {
 
     /**
      * 删除区域
+     *
      * @param id 区域id
      */
     public void delete(Integer id) {

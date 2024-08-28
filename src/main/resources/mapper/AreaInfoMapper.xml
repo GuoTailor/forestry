@@ -13,6 +13,7 @@
         <result column="wind_speed" jdbcType="REAL" property="windSpeed"/>
         <result column="wind_direction" jdbcType="VARCHAR" property="windDirection"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="weather_address" jdbcType="VARCHAR" property="weatherAddress"/>
     </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
@@ -24,7 +25,8 @@
         humidity,
         wind_speed,
         wind_direction,
-        create_time
+        create_time,
+        weather_address
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         <!--@mbg.generated-->
@@ -43,10 +45,12 @@
         <!--@mbg.generated-->
         insert into area_info (id, "name", area,
                                moisture_content, temperature, humidity,
-                               wind_speed, wind_direction, create_time)
+                               wind_speed, wind_direction, create_time,
+                               weather_address)
         values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{area,jdbcType=REAL},
                 #{moistureContent,jdbcType=REAL}, #{temperature,jdbcType=REAL}, #{humidity,jdbcType=REAL},
-                #{windSpeed,jdbcType=REAL}, #{windDirection,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP})
+                #{windSpeed,jdbcType=REAL}, #{windDirection,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+                #{weatherAddress,jdbcType=VARCHAR})
     </insert>
     <insert id="insertSelective" parameterType="org.gyh.forestry.domain.AreaInfo" useGeneratedKeys="true" keyProperty="id">
         <!--@mbg.generated-->
@@ -79,6 +83,9 @@
             <if test="createTime != null">
                 create_time,
             </if>
+            <if test="weatherAddress != null">
+                weather_address,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -107,6 +114,9 @@
             </if>
             <if test="createTime != null">
                 #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="weatherAddress != null">
+                #{weatherAddress,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -138,6 +148,9 @@
             <if test="createTime != null">
                 create_time = #{createTime,jdbcType=TIMESTAMP},
             </if>
+            <if test="weatherAddress != null">
+                weather_address = #{weatherAddress,jdbcType=VARCHAR},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -151,18 +164,21 @@
             humidity         = #{humidity,jdbcType=REAL},
             wind_speed       = #{windSpeed,jdbcType=REAL},
             wind_direction   = #{windDirection,jdbcType=VARCHAR},
-            create_time      = #{createTime,jdbcType=TIMESTAMP}
+            create_time      = #{createTime,jdbcType=TIMESTAMP},
+            weather_address  = #{weatherAddress,jdbcType=VARCHAR}
         where id = #{id,jdbcType=INTEGER}
     </update>
 
     <select id="findByName" resultMap="BaseResultMap">
-        select <include refid="Base_Column_List"/>
+        select
+        <include refid="Base_Column_List"/>
         from area_info
         where name = #{name}
     </select>
 
     <select id="selectByPage" resultType="org.gyh.forestry.dto.resp.AreaInfoResp">
-        select <include refid="Base_Column_List"/>
+        select
+        <include refid="Base_Column_List"/>
         from area_info
         <where>
             <if test="name != null">

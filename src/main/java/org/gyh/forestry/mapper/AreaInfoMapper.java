@@ -7,7 +7,7 @@ import org.gyh.forestry.dto.resp.AreaInfoResp;
 import java.util.List;
 
 /**
- * create by GYH on 2024/8/13
+ * create by GYH on 2024/8/28
  */
 public interface AreaInfoMapper {
     int deleteByPrimaryKey(Integer id);
@@ -16,15 +16,15 @@ public interface AreaInfoMapper {
 
     int insertSelective(AreaInfo record);
 
-    AreaInfo findByName(String name);
-
     AreaInfo selectByPrimaryKey(Integer id);
-
-    List<AreaInfoResp> selectByPage(AreaInfoPageReq pageReq);
-
-    List<AreaInfo> selectAll();
 
     int updateByPrimaryKeySelective(AreaInfo record);
 
     int updateByPrimaryKey(AreaInfo record);
+
+    AreaInfo findByName(String name);
+
+    List<AreaInfoResp> selectByPage(AreaInfoPageReq pageReq);
+
+    List<AreaInfo> selectAll();
 }

@@ -53,4 +53,10 @@ public class UpdateAreaInfo {
      */
     @Schema(description = "风向")
     private String windDirection;
+
+    /**
+     * 天气地址
+     */
+    @Schema(description = "天气地址")
+    private String weatherAddress;
 }

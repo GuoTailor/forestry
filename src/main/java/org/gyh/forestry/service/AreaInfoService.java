@@ -55,14 +55,18 @@ public class AreaInfoService {
         areaInfoMapper.updateByPrimaryKeySelective(areaInfo);
         areaInfo = areaInfoMapper.selectByPrimaryKey(updateAreaInfo.getId());
         if (updateAreaInfo.getMoistureContent() != null) {
-            String[] command = new String[]{"python3.8", "./pydir/825.py", "forestry", "postgres", password, areaInfo.getName()};
+            String[] command = new String[]{"python3.8", "./pydir/main.py", "forestry", "postgres", password, areaInfo.getName(), areaInfo.getWeatherAddress()};
             try {
                 log.info("开始执行命令");
                 Process process = Runtime.getRuntime().exec(command);
                 // 读取输出流
                 BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                BufferedReader errReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
                 for (String line; (line = reader.readLine()) != null; log.info(line)) {
                 }
+                for (String line; (line = errReader.readLine()) != null; log.info(line)) {
+                }
+                reader.close();
                 reader.close();
                 int exitVal = process.waitFor();
                 if (exitVal == 0) {

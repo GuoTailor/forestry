@@ -74,7 +74,7 @@ public class UserService implements UserDetailsService {
      * @param pageReq 分页条件
      */
     public PageInfo<UserInfo> findByPage(UserPageReq pageReq) {
-        try (Page<OperationRecord> page = PageHelper.startPage(pageReq.getPage(), pageReq.getPageSize())) {
+        try (Page<UserInfo> page = PageHelper.startPage(pageReq.getPage(), pageReq.getPageSize())) {
             List<UserInfo> all = userMapper.findByPage(pageReq);
             return PageInfo.ok(page.getTotal(), pageReq, all);
         }

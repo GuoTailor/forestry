@@ -1,7 +1,6 @@
 package org.gyh.forestry.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import reactor.core.publisher.Mono;
 
 /**
  * Created by gyh on 2021/2/4
@@ -57,10 +56,6 @@ public class ResponseInfo<T> {
 
     public static <T> ResponseInfo<T> failed(int code, String msg) {
         return new ResponseInfo<>(code, msg);
-    }
-
-    public Mono<ResponseInfo<T>> toMono() {
-        return Mono.just(this);
     }
 
     public Integer getCode() {

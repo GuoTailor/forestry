@@ -55,7 +55,7 @@ public class AreaInfoService {
         areaInfoMapper.updateByPrimaryKeySelective(areaInfo);
         areaInfo = areaInfoMapper.selectByPrimaryKey(updateAreaInfo.getId());
         if (updateAreaInfo.getMoistureContent() != null) {
-            String[] command = new String[]{"python3.8", "./pydir/main.py", "forestry", "postgres", password, areaInfo.getName(), areaInfo.getWeatherAddress()};
+            String[] command = new String[]{"python3.8", "./pydir/main.py", "forestry", "postgres", password, areaInfo.getName(), areaInfo.getWeatherAddress() == null ? areaInfo.getName() : areaInfo.getWeatherAddress()};
             try {
                 log.info("开始执行命令");
                 Process process = Runtime.getRuntime().exec(command);

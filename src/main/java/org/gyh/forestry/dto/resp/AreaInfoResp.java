@@ -59,4 +59,10 @@ public class AreaInfoResp {
      */
     @Schema(description = "创建时间")
     private LocalDateTime createTime;
+
+    /**
+     * 天气地址
+     */
+    @Schema(description = "天气地址")
+    private String weatherAddress;
 }

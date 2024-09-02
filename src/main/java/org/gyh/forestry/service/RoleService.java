@@ -2,7 +2,6 @@ package org.gyh.forestry.service;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import org.gyh.forestry.domain.OperationRecord;
 import org.gyh.forestry.domain.Role;
 import org.gyh.forestry.dto.PageInfo;
 import org.gyh.forestry.dto.req.AddRole;
@@ -16,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
+ *
  */
 @Service
 public class RoleService {
@@ -29,7 +29,7 @@ public class RoleService {
     }
 
     public PageInfo<Role> getRoleByPage(RolePageReq pageReq) {
-        try (Page<OperationRecord> page = PageHelper.startPage(pageReq.getPage(), pageReq.getPageSize())) {
+        try (Page<Role> page = PageHelper.startPage(pageReq.getPage(), pageReq.getPageSize())) {
             List<Role> byReq = roleMapper.getByReq(pageReq);
             return PageInfo.ok(page.getTotal(), pageReq, byReq);
         }

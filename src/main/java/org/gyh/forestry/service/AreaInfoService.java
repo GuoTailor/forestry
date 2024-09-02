@@ -49,7 +49,7 @@ public class AreaInfoService {
         return areaInfo;
     }
 
-    public void updateAreaInfo(UpdateAreaInfo updateAreaInfo) {
+    public String updateAreaInfo(UpdateAreaInfo updateAreaInfo) {
         AreaInfo areaInfo = new AreaInfo();
         BeanUtils.copyProperties(updateAreaInfo, areaInfo);
         areaInfoMapper.updateByPrimaryKeySelective(areaInfo);
@@ -62,22 +62,28 @@ public class AreaInfoService {
                 // 读取输出流
                 BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
                 BufferedReader errReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+                StringBuilder sb = new StringBuilder();
                 for (String line; (line = reader.readLine()) != null; log.info(line)) {
+                    sb.append(line).append("\n");
                 }
-                for (String line; (line = errReader.readLine()) != null; log.info(line)) {
+                for (String line; (line = errReader.readLine()) != null; log.error(line)) {
+                    sb.append(line).append("\n");
                 }
                 reader.close();
                 reader.close();
                 int exitVal = process.waitFor();
                 if (exitVal == 0) {
-                    log.info("Command executed successfully");
+                    log.info("命令执行成功。");
                 } else {
-                    log.info("There was an error executing the command.");
+                    log.info("执行命令出错。");
                 }
+                return sb.toString();
             } catch (IOException | InterruptedException e) {
                 log.error("执行命令出错", e);
+                return e.getMessage();
             }
         }
+        return "success";
     }
 
     /**

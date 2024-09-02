@@ -36,9 +36,8 @@ public class AreaInfoController {
     @PostMapping("/update")
     @Operation(summary = "更新区域", security = {@SecurityRequirement(name = "Authorization")})
     @LogRecord(model = "区域", method = "更新区域")
-    public ResponseInfo<Void> updateAreaInfo(@RequestBody @Valid UpdateAreaInfo updateAreaInfo) {
-        areaInfoService.updateAreaInfo(updateAreaInfo);
-        return ResponseInfo.ok();
+    public ResponseInfo<String> updateAreaInfo(@RequestBody @Valid UpdateAreaInfo updateAreaInfo) {
+        return ResponseInfo.ok(areaInfoService.updateAreaInfo(updateAreaInfo));
     }
 
     @PostMapping("/page")

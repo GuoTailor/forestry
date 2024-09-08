@@ -7,7 +7,7 @@ import org.gyh.forestry.dto.resp.AreaInfoResp;
 import java.util.List;
 
 /**
- * create by GYH on 2024/8/28
+ * create by GYH on 2024/9/8
  */
 public interface AreaInfoMapper {
     int deleteByPrimaryKey(Integer id);

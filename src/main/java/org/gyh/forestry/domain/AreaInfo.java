@@ -6,7 +6,7 @@ import org.springframework.data.annotation.Id;
 import java.time.LocalDateTime;
 
 /**
- * create by GYH on 2024/8/28
+ * create by GYH on 2024/9/8
  */
 @Data
 public class AreaInfo {
@@ -52,6 +52,11 @@ public class AreaInfo {
      * 创建时间
      */
     private LocalDateTime createTime;
+
+    /**
+     * 更新时间
+     */
+    private LocalDateTime updateTime;
 
     /**
      * 天气地址

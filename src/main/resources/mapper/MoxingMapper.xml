@@ -385,6 +385,6 @@
     </select>
 
     <select id="selectFireRankProportion" resultType="org.gyh.forestry.dto.resp.FireRankProportion">
-        select level, count(1) count from moxing where 县 = #{name} group by level
+        select level, count(1) count from moxing where 县 = #{name} group by level order by level
     </select>
 </mapper>

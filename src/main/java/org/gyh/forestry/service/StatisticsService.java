@@ -106,7 +106,7 @@ public class StatisticsService {
         }
         BigDecimal sumDecimal = new BigDecimal(sum);
         for (FireRankProportion fireRankProportion : fireRankProportions) {
-            fireRankProportion.setProportion(new BigDecimal(fireRankProportion.getCount()).divide(sumDecimal, RoundingMode.HALF_UP));
+            fireRankProportion.setProportion(new BigDecimal(fireRankProportion.getCount()).divide(sumDecimal, 4, RoundingMode.HALF_UP));
         }
         return fireRankProportions;
     }

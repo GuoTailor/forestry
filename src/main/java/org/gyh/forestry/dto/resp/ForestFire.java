@@ -3,6 +3,8 @@ package org.gyh.forestry.dto.resp;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 /**
  * create by GYH on 2024/8/14
  */
@@ -37,4 +39,6 @@ public class ForestFire {
     private String windDirection;
     @Schema(description = "火险等级")
     private Short level;
+    @Schema(description = "更新时间")
+    private LocalDateTime updateTime;
 }

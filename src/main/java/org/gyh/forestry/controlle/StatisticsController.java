@@ -3,6 +3,7 @@ package org.gyh.forestry.controlle;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.gyh.forestry.domain.Pachong;
 import org.gyh.forestry.dto.ResponseInfo;
 import org.gyh.forestry.dto.req.StatisticAnimalTypeReq;
 import org.gyh.forestry.dto.resp.*;
@@ -80,5 +81,11 @@ public class StatisticsController {
     @Operation(summary = "查询火险等级占比", security = {@SecurityRequirement(name = "Authorization")})
     public ResponseInfo<List<FireRankProportion>> fireRankProportion(@RequestParam("name") String name) {
         return ResponseInfo.ok(statisticsService.fireRankProportion(name));
+    }
+
+    @GetMapping("/forest/fire/pachong")
+    @Operation(summary = "查询火险预报", security = {@SecurityRequirement(name = "Authorization")})
+    public ResponseInfo<List<Pachong>> pachongList() {
+        return ResponseInfo.ok(statisticsService.pachongList());
     }
 }

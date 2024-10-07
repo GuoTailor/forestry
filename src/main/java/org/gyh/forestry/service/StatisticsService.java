@@ -2,6 +2,7 @@ package org.gyh.forestry.service;
 
 import jakarta.annotation.Resource;
 import org.gyh.forestry.domain.AreaInfo;
+import org.gyh.forestry.domain.Pachong;
 import org.gyh.forestry.dto.req.StatisticAnimalTypeReq;
 import org.gyh.forestry.dto.resp.*;
 import org.gyh.forestry.mapper.*;
@@ -28,6 +29,8 @@ public class StatisticsService {
     private AreaInfoMapper areaInfoMapper;
     @Resource
     private MoxingMapper moxingMapper;
+    @Resource
+    private PachongMapper pachongMapper;
 
     /**
      * 总览
@@ -90,6 +93,7 @@ public class StatisticsService {
             forestFire.setWindSpeed(it.getWindSpeed());
             forestFire.setWindDirection(it.getWindDirection());
             forestFire.setLevel(moxingMapper.selectLaveByName(it.getName()));
+            forestFire.setUpdateTime(it.getUpdateTime());
             return forestFire;
         }).toList();
     }
@@ -111,4 +115,10 @@ public class StatisticsService {
         return fireRankProportions;
     }
 
+    /**
+     * 查询所有的森林火险气象等级预报
+     */
+    public List<Pachong> pachongList() {
+        return pachongMapper.selectAll();
+    }
 }

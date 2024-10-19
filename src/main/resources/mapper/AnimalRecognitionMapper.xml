@@ -234,4 +234,11 @@
         </where>
         group by ar.name
     </select>
+
+    <select id="animalByArea" resultType="org.gyh.forestry.dto.resp.StatisticAnimalArea">
+        SELECT ar.name, ar.area_id, at.name as type_name
+        FROM "animal_recognition" ar
+                 LEFT JOIN animal_manage am on am."name" = ar."name"
+                 LEFT JOIN animal_type at on at."id" = am.animal_type_id
+    </select>
 </mapper>

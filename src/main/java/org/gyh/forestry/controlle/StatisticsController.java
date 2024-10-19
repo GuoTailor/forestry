@@ -88,4 +88,10 @@ public class StatisticsController {
     public ResponseInfo<List<Pachong>> pachongList() {
         return ResponseInfo.ok(statisticsService.pachongList());
     }
+
+    @GetMapping("/animal/area")
+    @Operation(summary = "统计不同区域的动物种类占比", security = {@SecurityRequirement(name = "Authorization")})
+    public ResponseInfo<List<AreaAnimalResp>> animalByArea() {
+        return ResponseInfo.ok(statisticsService.animalByArea());
+    }
 }

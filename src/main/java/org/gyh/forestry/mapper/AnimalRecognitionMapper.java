@@ -3,6 +3,7 @@ package org.gyh.forestry.mapper;
 import org.gyh.forestry.domain.AnimalRecognition;
 import org.gyh.forestry.dto.req.AnimalRecognitionPageReq;
 import org.gyh.forestry.dto.req.StatisticAnimalTypeReq;
+import org.gyh.forestry.dto.resp.StatisticAnimalArea;
 import org.gyh.forestry.dto.resp.StatisticAnimalByCount;
 import org.gyh.forestry.dto.resp.StatisticAnimalByMonthResp;
 import org.gyh.forestry.dto.resp.StatisticAnimalTypeResp;
@@ -34,4 +35,6 @@ public interface AnimalRecognitionMapper {
     List<StatisticAnimalByMonthResp> statisticAnimalByMonth(StatisticAnimalTypeReq req);
 
     List<StatisticAnimalByCount> statisticAnimalByCount(StatisticAnimalTypeReq req);
+
+    List<StatisticAnimalArea> animalByArea();
 }

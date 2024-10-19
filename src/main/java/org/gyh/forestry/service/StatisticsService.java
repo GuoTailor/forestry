@@ -7,10 +7,14 @@ import org.gyh.forestry.dto.req.StatisticAnimalTypeReq;
 import org.gyh.forestry.dto.resp.*;
 import org.gyh.forestry.mapper.*;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * create by GYH on 2024/7/23
@@ -120,5 +124,31 @@ public class StatisticsService {
      */
     public List<Pachong> pachongList() {
         return pachongMapper.selectAll();
+    }
+
+    /**
+     * 统计不同区域的动物种类占比
+     */
+    public List<AreaAnimalResp> animalByArea() {
+        List<AreaInfo> areaInfos = areaInfoMapper.selectAll();
+        List<StatisticAnimalArea> statisticAnimalAreas = animalRecognitionMapper.animalByArea();
+        Map<Integer, List<StatisticAnimalArea>> collect = statisticAnimalAreas.stream().collect(Collectors.groupingBy(StatisticAnimalArea::getAreaId));
+        return areaInfos.stream().map(it -> {
+            AreaAnimalResp areaAnimalResp = new AreaAnimalResp();
+            areaAnimalResp.setAreaName(it.getName());
+            areaAnimalResp.setAnimalInfo(new ArrayList<>());
+            List<StatisticAnimalArea> animalAreas = collect.get(it.getId());
+            if (!CollectionUtils.isEmpty(animalAreas)) {
+                Map<String, List<StatisticAnimalArea>> typeNames = animalAreas.stream().collect(Collectors.groupingBy(StatisticAnimalArea::getTypeName));
+                typeNames.forEach((k, v) -> {
+                    AreaAnimalResp.AnimalInfo animalInfo = new AreaAnimalResp.AnimalInfo();
+                    animalInfo.setAnimalType(k);
+                    animalInfo.setCount(v.size());
+                    animalInfo.setProportion(new BigDecimal(v.size()).divide(new BigDecimal(animalAreas.size()), 4, RoundingMode.HALF_UP));
+                    areaAnimalResp.getAnimalInfo().add(animalInfo);
+                });
+            }
+            return areaAnimalResp;
+        }).toList();
     }
 }

@@ -53,4 +53,8 @@ public class AnimalRecognition {
      * 动物详情
      */
     private String details;
+    /**
+     * 地区id
+     */
+    private Integer areaId;
 }

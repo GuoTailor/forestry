@@ -12,17 +12,11 @@
         <result column="device_id" jdbcType="INTEGER" property="deviceId"/>
         <result column="creator" jdbcType="VARCHAR" property="creator"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="scenic_spot_id" jdbcType="INTEGER" property="scenicSpotId"/>
     </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
-        id,
-        point,
-        "name",
-        "type",
-        "describe",
-        device_id,
-        creator,
-        create_time
+        id, point, "name", "type", "describe", device_id, creator, create_time, scenic_spot_id
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         <!--@mbg.generated-->
@@ -33,20 +27,21 @@
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         <!--@mbg.generated-->
-        delete
-        from point_info
+        delete from point_info
         where id = #{id,jdbcType=INTEGER}
     </delete>
     <insert id="insert" parameterType="org.gyh.forestry.domain.PointInfo">
         <!--@mbg.generated-->
         insert into point_info (id, point, "name",
         "type", "describe", device_id,
-        creator, create_time)
+        creator, create_time, scenic_spot_id
+        )
         values (#{id,jdbcType=INTEGER}, #{point,jdbcType=OTHER}, #{name,jdbcType=VARCHAR},
         #{type,jdbcType=VARCHAR}, #{describe,jdbcType=VARCHAR}, #{deviceId,jdbcType=INTEGER},
-        #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP})
+        #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{scenicSpotId,jdbcType=INTEGER}
+        )
     </insert>
-    <insert id="insertSelective" parameterType="org.gyh.forestry.domain.PointInfo" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertSelective" parameterType="org.gyh.forestry.domain.PointInfo">
         <!--@mbg.generated-->
         insert into point_info
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -74,6 +69,9 @@
             <if test="createTime != null">
                 create_time,
             </if>
+            <if test="scenicSpotId != null">
+                scenic_spot_id,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -99,6 +97,9 @@
             </if>
             <if test="createTime != null">
                 #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="scenicSpotId != null">
+                #{scenicSpotId,jdbcType=INTEGER},
             </if>
         </trim>
     </insert>
@@ -127,6 +128,9 @@
             <if test="createTime != null">
                 create_time = #{createTime,jdbcType=TIMESTAMP},
             </if>
+            <if test="scenicSpotId != null">
+                scenic_spot_id = #{scenicSpotId,jdbcType=INTEGER},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -139,7 +143,8 @@
         "describe" = #{describe,jdbcType=VARCHAR},
         device_id = #{deviceId,jdbcType=INTEGER},
         creator = #{creator,jdbcType=VARCHAR},
-        create_time = #{createTime,jdbcType=TIMESTAMP}
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+        scenic_spot_id = #{scenicSpotId,jdbcType=INTEGER}
         where id = #{id,jdbcType=INTEGER}
     </update>
 
@@ -172,5 +177,14 @@
                 and "type" = #{type}
             </if>
         </where>
+    </select>
+
+    <select id="selelctDistance">
+        SELECT id,
+               name,
+               ST_DistanceSphere(point, ST_SetSRID(ST_MakePoint(116.4074, 39.9042), 4326)) AS distance
+        FROM point_info
+        ORDER BY distance
+        LIMIT 1;
     </select>
 </mapper>

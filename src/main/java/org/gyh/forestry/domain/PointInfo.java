@@ -8,7 +8,7 @@ import org.springframework.data.annotation.Id;
 import java.time.LocalDateTime;
 
 /**
- * create by GYH on 2024/5/29
+ * create by GYH on 2024/10/20
  */
 @Data
 public class PointInfo {
@@ -49,4 +49,9 @@ public class PointInfo {
      * 创建时间
      */
     private LocalDateTime createTime;
+
+    /**
+     * 所属景区
+     */
+    private Integer scenicSpotId;
 }

@@ -132,14 +132,22 @@ public class StatisticsService {
     public List<AreaAnimalResp> animalByArea() {
         List<AreaInfo> areaInfos = areaInfoMapper.selectAll();
         List<StatisticAnimalArea> statisticAnimalAreas = animalRecognitionMapper.animalByArea();
-        Map<Integer, List<StatisticAnimalArea>> collect = statisticAnimalAreas.stream().collect(Collectors.groupingBy(StatisticAnimalArea::getAreaId));
+        Map<Integer, List<StatisticAnimalArea>> collect = statisticAnimalAreas.stream()
+                .filter(it -> it.getAreaId() != null)
+                .collect(Collectors.groupingBy(StatisticAnimalArea::getAreaId));
         return areaInfos.stream().map(it -> {
             AreaAnimalResp areaAnimalResp = new AreaAnimalResp();
             areaAnimalResp.setAreaName(it.getName());
             areaAnimalResp.setAnimalInfo(new ArrayList<>());
             List<StatisticAnimalArea> animalAreas = collect.get(it.getId());
             if (!CollectionUtils.isEmpty(animalAreas)) {
-                Map<String, List<StatisticAnimalArea>> typeNames = animalAreas.stream().collect(Collectors.groupingBy(StatisticAnimalArea::getTypeName));
+                Map<String, List<StatisticAnimalArea>> typeNames = animalAreas.stream()
+                        .peek(ar -> {
+                            if (ar.getTypeName() == null) {
+                                ar.setTypeName("未归类");
+                            }
+                        })
+                        .collect(Collectors.groupingBy(StatisticAnimalArea::getTypeName));
                 typeNames.forEach((k, v) -> {
                     AreaAnimalResp.AnimalInfo animalInfo = new AreaAnimalResp.AnimalInfo();
                     animalInfo.setAnimalType(k);

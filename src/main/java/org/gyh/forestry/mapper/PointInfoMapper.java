@@ -8,7 +8,7 @@ import org.gyh.forestry.enums.PointTypeEnum;
 import java.util.List;
 
 /**
- * create by GYH on 2024/5/29
+ * create by GYH on 2024/10/20
  */
 public interface PointInfoMapper {
     int deleteByPrimaryKey(Integer id);
@@ -25,5 +25,7 @@ public interface PointInfoMapper {
 
     List<PointInfo> selectByPage(PointInfoPageReq pageReq);
 
-    long countByType(@Param("type")PointTypeEnum type);
+    long countByType(@Param("type") PointTypeEnum type);
+
+
 }

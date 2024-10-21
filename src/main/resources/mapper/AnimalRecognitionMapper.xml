@@ -9,22 +9,16 @@
         <result column="location" jdbcType="OTHER" property="location"/>
         <result column="type" jdbcType="VARCHAR" property="type"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
-        <result column="creator" jdbcType="VARCHAR" property="creator"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="creator" jdbcType="VARCHAR" property="creator"/>
         <result column="pic" jdbcType="VARCHAR" property="pic"/>
         <result column="details" jdbcType="VARCHAR" property="details"/>
+        <result column="point_id" jdbcType="INTEGER" property="pointId"/>
     </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
-        id,
-        location_zh,
-        "location",
-        "type",
-        create_time,
-        creator,
-        "name",
-        pic,
-        details
+        id, location_zh, "location", "type", create_time, "name", creator, pic, details,
+        point_id
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         <!--@mbg.generated-->
@@ -35,18 +29,19 @@
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         <!--@mbg.generated-->
-        delete
-        from animal_recognition
+        delete from animal_recognition
         where id = #{id,jdbcType=INTEGER}
     </delete>
     <insert id="insert" parameterType="org.gyh.forestry.domain.AnimalRecognition">
         <!--@mbg.generated-->
         insert into animal_recognition (id, location_zh, "location",
-                                        "type", create_time, creator,
-                                        "name", pic, details)
+        "type", create_time, "name",
+        creator, pic, details,
+        point_id)
         values (#{id,jdbcType=INTEGER}, #{locationZh,jdbcType=VARCHAR}, #{location,jdbcType=OTHER},
-                #{type,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR},
-                #{name,jdbcType=VARCHAR}, #{pic,jdbcType=VARCHAR}, #{details,jdbcType=VARCHAR})
+        #{type,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{name,jdbcType=VARCHAR},
+        #{creator,jdbcType=VARCHAR}, #{pic,jdbcType=VARCHAR}, #{details,jdbcType=VARCHAR},
+        #{pointId,jdbcType=INTEGER})
     </insert>
     <insert id="insertSelective" parameterType="org.gyh.forestry.domain.AnimalRecognition" useGeneratedKeys="true"
             keyProperty="id">
@@ -68,17 +63,20 @@
             <if test="createTime != null">
                 create_time,
             </if>
-            <if test="creator != null">
-                creator,
-            </if>
             <if test="name != null">
                 "name",
+            </if>
+            <if test="creator != null">
+                creator,
             </if>
             <if test="pic != null">
                 pic,
             </if>
             <if test="details != null">
                 details,
+            </if>
+            <if test="pointId != null">
+                point_id,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -97,17 +95,20 @@
             <if test="createTime != null">
                 #{createTime,jdbcType=TIMESTAMP},
             </if>
-            <if test="creator != null">
-                #{creator,jdbcType=VARCHAR},
-            </if>
             <if test="name != null">
                 #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="creator != null">
+                #{creator,jdbcType=VARCHAR},
             </if>
             <if test="pic != null">
                 #{pic,jdbcType=VARCHAR},
             </if>
             <if test="details != null">
                 #{details,jdbcType=VARCHAR},
+            </if>
+            <if test="pointId != null">
+                #{pointId,jdbcType=INTEGER},
             </if>
         </trim>
     </insert>
@@ -127,17 +128,20 @@
             <if test="createTime != null">
                 create_time = #{createTime,jdbcType=TIMESTAMP},
             </if>
-            <if test="creator != null">
-                creator = #{creator,jdbcType=VARCHAR},
-            </if>
             <if test="name != null">
                 "name" = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="creator != null">
+                creator = #{creator,jdbcType=VARCHAR},
             </if>
             <if test="pic != null">
                 pic = #{pic,jdbcType=VARCHAR},
             </if>
             <if test="details != null">
                 details = #{details,jdbcType=VARCHAR},
+            </if>
+            <if test="pointId != null">
+                point_id = #{pointId,jdbcType=INTEGER},
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
@@ -146,13 +150,14 @@
         <!--@mbg.generated-->
         update animal_recognition
         set location_zh = #{locationZh,jdbcType=VARCHAR},
-            "location"  = #{location,jdbcType=OTHER},
-            "type"      = #{type,jdbcType=VARCHAR},
-            create_time = #{createTime,jdbcType=TIMESTAMP},
-            creator     = #{creator,jdbcType=VARCHAR},
-            "name"      = #{name,jdbcType=VARCHAR},
-            pic         = #{pic,jdbcType=VARCHAR},
-            details     = #{details,jdbcType=VARCHAR}
+        "location" = #{location,jdbcType=OTHER},
+        "type" = #{type,jdbcType=VARCHAR},
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+        "name" = #{name,jdbcType=VARCHAR},
+        creator = #{creator,jdbcType=VARCHAR},
+        pic = #{pic,jdbcType=VARCHAR},
+        details = #{details,jdbcType=VARCHAR},
+        point_id = #{pointId,jdbcType=INTEGER}
         where id = #{id,jdbcType=INTEGER}
     </update>
 
@@ -164,17 +169,17 @@
 
     <select id="selectByQuery" resultMap="BaseResultMap">
         select ar.id,
-               ar.location_zh,
-               ar."location",
-               ar.create_time,
-               ar.creator,
-               ar."name",
-               ar.pic,
-               ar.details,
-               at.name as type
+        ar.location_zh,
+        ar."location",
+        ar.create_time,
+        ar.creator,
+        ar."name",
+        ar.pic,
+        ar.details,
+        at.name as type
         from animal_recognition as ar
-                 left join animal_manage an on ar.name = an.name and an.enable = true
-                 left join animal_type at on at.id = an.animal_type_id
+        left join animal_manage an on ar.name = an.name and an.enable = true
+        left join animal_type at on at.id = an.animal_type_id
         <where>
             <if test="name != null and name != ''">
                 ar.name = #{name}
@@ -187,11 +192,11 @@
     </select>
 
     <select id="statisticAnimalType" resultType="org.gyh.forestry.dto.resp.StatisticAnimalTypeResp">
-        select at.name        as name,
-               count(at.name) as count
+        select at.name as name,
+        count(at.name) as count
         from animal_recognition as ar
-                 left join animal_manage an on ar.name = an.name and an.enable = true
-                 left join animal_type at on at.id = an.animal_type_id
+        left join animal_manage an on ar.name = an.name and an.enable = true
+        left join animal_type at on at.id = an.animal_type_id
         where at.name is not null
         <if test="startTime != null">
             and ar.create_time &gt;= #{startTime}
@@ -203,9 +208,9 @@
     </select>
 
     <select id="statisticAnimalByMonth" resultType="org.gyh.forestry.dto.resp.StatisticAnimalByMonthResp">
-        SELECT EXTRACT(YEAR FROM create_time)  AS year,
-               EXTRACT(MONTH FROM create_time) AS month,
-               COUNT(*)                        AS count
+        SELECT EXTRACT(YEAR FROM create_time) AS year,
+        EXTRACT(MONTH FROM create_time) AS month,
+        COUNT(*) AS count
         FROM animal_recognition
         <where>
             <if test="startTime != null">
@@ -220,10 +225,10 @@
     </select>
 
     <select id="statisticAnimalByCount" resultType="org.gyh.forestry.dto.resp.StatisticAnimalByCount">
-        SELECT ar.name  AS name,
-               COUNT(*) AS count
+        SELECT ar.name AS name,
+        COUNT(*) AS count
         FROM animal_recognition AS ar
-                 LEFT JOIN animal_manage an ON ar.name = an.name AND an.enable = true
+        LEFT JOIN animal_manage an ON ar.name = an.name AND an.enable = true
         <where>
             <if test="startTime != null">
                 ar.create_time &gt;= #{startTime}
@@ -236,9 +241,9 @@
     </select>
 
     <select id="animalByArea" resultType="org.gyh.forestry.dto.resp.StatisticAnimalArea">
-        SELECT ar.name, ar.area_id, at.name as type_name
+        SELECT ar.name, ss.id as point_id, ss.name as type_name
         FROM "animal_recognition" ar
-                 LEFT JOIN animal_manage am on am."name" = ar."name"
-                 LEFT JOIN animal_type at on at."id" = am.animal_type_id
+                 LEFT JOIN point_info pi on ar.point_id = pi.id
+                 LEFT JOIN scenic_spot ss on ss.id = pi.scenic_spot_id
     </select>
 </mapper>

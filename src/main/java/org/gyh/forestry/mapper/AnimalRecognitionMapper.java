@@ -11,7 +11,7 @@ import org.gyh.forestry.dto.resp.StatisticAnimalTypeResp;
 import java.util.List;
 
 /**
- * create by GYH on 2024/6/15
+ * create by GYH on 2024/10/21
  */
 public interface AnimalRecognitionMapper {
     int deleteByPrimaryKey(Integer id);

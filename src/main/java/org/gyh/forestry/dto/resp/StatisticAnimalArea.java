@@ -11,7 +11,7 @@ public class StatisticAnimalArea {
     @Schema(description = "动物类型名称")
     private String name;
     @Schema(description = "区域id")
-    private Integer areaId;
+    private Integer pointId;
     @Schema(description = "区域名称")
     private String typeName;
 }

@@ -8,10 +8,10 @@ import org.gyh.forestry.enums.PointTypeEnum;
 import java.time.LocalDateTime;
 
 /**
- * create by GYH on 2024/4/7
+ * create by GYH on 2024/10/21
  */
 @Data
-public class PointInfoResp {
+public class SelectDistance {
     private Integer id;
 
     /**
@@ -58,6 +58,5 @@ public class PointInfoResp {
     @Schema(description = "景区id")
     private Integer scenicSpotId;
 
-    @Schema(description = "景区名称")
-    private String scenicSpotName;
+    private double distance;
 }

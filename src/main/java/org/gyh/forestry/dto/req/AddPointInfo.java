@@ -31,4 +31,11 @@ public class AddPointInfo {
      */
     @Schema(description = "类型（预警点，动物位置）")
     private PointTypeEnum type;
+
+
+    /**
+     * 所属景区
+     */
+    @Schema(description = "景区id")
+    private Integer scenicSpotId;
 }

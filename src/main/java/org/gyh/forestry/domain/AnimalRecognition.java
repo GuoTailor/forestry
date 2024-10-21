@@ -7,7 +7,7 @@ import org.springframework.data.annotation.Id;
 import java.time.LocalDateTime;
 
 /**
- * create by GYH on 2024/6/15
+ * create by GYH on 2024/10/21
  */
 @Data
 public class AnimalRecognition {
@@ -53,8 +53,9 @@ public class AnimalRecognition {
      * 动物详情
      */
     private String details;
+
     /**
-     * 地区id
+     * 区域id
      */
-    private Integer areaId;
+    private Integer pointId;
 }

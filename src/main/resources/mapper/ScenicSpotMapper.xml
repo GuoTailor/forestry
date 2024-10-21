@@ -31,7 +31,7 @@
         values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}
         )
     </insert>
-    <insert id="insertSelective" parameterType="org.gyh.forestry.domain.ScenicSpot">
+    <insert id="insertSelective" parameterType="org.gyh.forestry.domain.ScenicSpot" useGeneratedKeys="true" keyProperty="id">
         <!--@mbg.generated-->
         insert into scenic_spot
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -77,55 +77,10 @@
         create_time = #{createTime,jdbcType=TIMESTAMP}
         where id = #{id,jdbcType=INTEGER}
     </update>
-    <insert id="insertOrUpdate" parameterType="org.gyh.forestry.domain.ScenicSpot">
-        <!--@mbg.generated-->
-        insert into scenic_spot
-        (id, "name", create_time)
-        values
-        (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}
-        )
-        on duplicate key update
-        id = #{id,jdbcType=INTEGER},
-        "name" = #{name,jdbcType=VARCHAR},
-        create_time = #{createTime,jdbcType=TIMESTAMP}
-    </insert>
-    <insert id="insertOrUpdateSelective" parameterType="org.gyh.forestry.domain.ScenicSpot">
-        <!--@mbg.generated-->
-        insert into scenic_spot
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="id != null">
-                id,
-            </if>
-            <if test="name != null">
-                "name",
-            </if>
-            <if test="createTime != null">
-                create_time,
-            </if>
-        </trim>
-        values
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="id != null">
-                #{id,jdbcType=INTEGER},
-            </if>
-            <if test="name != null">
-                #{name,jdbcType=VARCHAR},
-            </if>
-            <if test="createTime != null">
-                #{createTime,jdbcType=TIMESTAMP},
-            </if>
-        </trim>
-        on duplicate key update
-        <trim suffixOverrides=",">
-            <if test="id != null">
-                id = #{id,jdbcType=INTEGER},
-            </if>
-            <if test="name != null">
-                "name" = #{name,jdbcType=VARCHAR},
-            </if>
-            <if test="createTime != null">
-                create_time = #{createTime,jdbcType=TIMESTAMP},
-            </if>
-        </trim>
-    </insert>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from scenic_spot
+    </select>
 </mapper>

@@ -32,4 +32,7 @@ public class UpdatePointInfo {
      * 类型（预警点，动物位置）
      */
     private PointTypeEnum type;
+
+    @Schema(description = "景区id")
+    private Integer scenicSpotId;
 }

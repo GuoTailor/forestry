@@ -5,15 +5,17 @@ import com.github.pagehelper.PageHelper;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.gyh.forestry.domain.PointInfo;
+import org.gyh.forestry.domain.ScenicSpot;
 import org.gyh.forestry.domain.User;
+import org.gyh.forestry.dto.JsonPoint;
 import org.gyh.forestry.dto.PageInfo;
 import org.gyh.forestry.dto.req.AddPointInfo;
 import org.gyh.forestry.dto.req.PointInfoAllReq;
 import org.gyh.forestry.dto.req.PointInfoPageReq;
 import org.gyh.forestry.dto.req.UpdatePointInfo;
-import org.gyh.forestry.dto.JsonPoint;
 import org.gyh.forestry.dto.resp.PointInfoResp;
 import org.gyh.forestry.mapper.PointInfoMapper;
+import org.gyh.forestry.mapper.ScenicSpotMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -29,7 +31,8 @@ import java.util.List;
 public class PointInfoService {
     @Resource
     private PointInfoMapper pointInfoMapper;
-
+    @Resource
+    private ScenicSpotMapper scenicSpotMapper;
 
     /**
      * 新增点位
@@ -73,6 +76,12 @@ public class PointInfoService {
             List<PointInfoResp> list = pointInfoResps.stream().map(it -> {
                 PointInfoResp resp = new PointInfoResp();
                 BeanUtils.copyProperties(it, resp);
+                if (it.getScenicSpotId() != null) {
+                    ScenicSpot scenicSpot = scenicSpotMapper.selectByPrimaryKey(it.getScenicSpotId());
+                    if (scenicSpot != null) {
+                        resp.setScenicSpotName(scenicSpot.getName());
+                    }
+                }
                 resp.setPoint(new JsonPoint(it.getPoint()));
                 return resp;
             }).toList();
@@ -85,8 +94,27 @@ public class PointInfoService {
         return pointInfoResps.stream().map(it -> {
             PointInfoResp resp = new PointInfoResp();
             BeanUtils.copyProperties(it, resp);
+            if (it.getScenicSpotId() != null) {
+                ScenicSpot scenicSpot = scenicSpotMapper.selectByPrimaryKey(it.getScenicSpotId());
+                if (scenicSpot != null) {
+                    resp.setScenicSpotName(scenicSpot.getName());
+                }
+            }
             resp.setPoint(new JsonPoint(it.getPoint()));
             return resp;
         }).toList();
+    }
+
+    /**
+     * 添加景区
+     *
+     * @param name 景区名字
+     */
+    public ScenicSpot addScenicSpot(String name) {
+        ScenicSpot scenicSpot = new ScenicSpot();
+        scenicSpot.setName(name);
+        scenicSpot.setCreateTime(LocalDateTime.now());
+        scenicSpotMapper.insertSelective(scenicSpot);
+        return scenicSpot;
     }
 }

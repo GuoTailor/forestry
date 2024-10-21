@@ -5,7 +5,6 @@ import com.github.pagehelper.PageHelper;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.gyh.forestry.domain.AnimalRecognition;
-import org.gyh.forestry.domain.AreaInfo;
 import org.gyh.forestry.domain.User;
 import org.gyh.forestry.dto.JsonPoint;
 import org.gyh.forestry.dto.PageInfo;
@@ -13,8 +12,10 @@ import org.gyh.forestry.dto.req.AddAnimalRecognitionReq;
 import org.gyh.forestry.dto.req.AnimalRecognitionPageReq;
 import org.gyh.forestry.dto.resp.AnimalRecognitionResp;
 import org.gyh.forestry.dto.resp.RecognitionResp;
+import org.gyh.forestry.dto.resp.SelectDistance;
 import org.gyh.forestry.mapper.AnimalRecognitionMapper;
 import org.gyh.forestry.mapper.AreaInfoMapper;
+import org.gyh.forestry.mapper.PointInfoMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,7 +24,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Random;
 
 /**
  * create by GYH on 2024/3/24
@@ -37,6 +37,8 @@ public class AnimalRecognitionService {
     private FileService fileService;
     @Resource
     private AreaInfoMapper areaInfoMapper;
+    @Autowired
+    private PointInfoMapper pointInfoMapper;
 
     /**
      * 图片识别
@@ -74,20 +76,19 @@ public class AnimalRecognitionService {
      * ai识别后调用
      */
     public boolean addAnimal(AddAnimalRecognitionReq animalReq) {
-        List<AreaInfo> areaInfos = areaInfoMapper.selectAll();
-        //随机获取一个元素
-        Random random = new Random();
-        int index = random.nextInt(areaInfos.size());
-        AreaInfo areaInfo = areaInfos.get(index);
+        SelectDistance selectDistance = pointInfoMapper.selectDistance(animalReq.getLocation().getX(), animalReq.getLocation().getY());
         for (AddAnimalRecognitionReq.AnimalInfo animalInfo : animalReq.getAnimalInfo()) {
             AnimalRecognition animalRecognition = new AnimalRecognition();
             BeanUtils.copyProperties(animalReq, animalRecognition);
+            if (selectDistance != null && selectDistance.getDistance() < 50) {
+                animalRecognition.setPointId(selectDistance.getId());
+            }
             animalRecognition.setType(animalInfo.getType());
             animalRecognition.setName(animalInfo.getName());
             animalRecognition.setDetails(animalInfo.getDetails());
             animalRecognition.setCreateTime(LocalDateTime.now());
             animalRecognition.setPic(fileService.getPath(animalReq.getPic()));
-            animalRecognition.setAreaId(areaInfo.getId());
+            animalRecognition.setLocation(animalReq.getLocation().toPoint());
             animalRecognitionMapper.insertSelective(animalRecognition);
         }
         return true;

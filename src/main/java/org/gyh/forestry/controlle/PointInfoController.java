@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.gyh.forestry.aspect.LogRecord;
+import org.gyh.forestry.domain.ScenicSpot;
 import org.gyh.forestry.dto.PageInfo;
 import org.gyh.forestry.dto.ResponseInfo;
 import org.gyh.forestry.dto.req.AddPointInfo;
@@ -66,5 +67,11 @@ public class PointInfoController {
     @Operation(summary = "获取全部点列表信息", security = {@SecurityRequirement(name = "Authorization")})
     public ResponseInfo<List<PointInfoResp>> getAll(@RequestBody PointInfoAllReq req) {
         return ResponseInfo.ok(pointInfoService.getAll(req));
+    }
+
+    @PostMapping("/scenicSpot/add")
+    @Operation(summary = "添加景区", security = {@SecurityRequirement(name = "Authorization")})
+    public ResponseInfo<ScenicSpot> addScenicSpot(@RequestParam("name") String name) {
+        return ResponseInfo.ok(pointInfoService.addScenicSpot(name));
     }
 }

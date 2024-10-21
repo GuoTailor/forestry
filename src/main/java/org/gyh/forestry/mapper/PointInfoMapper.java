@@ -3,6 +3,7 @@ package org.gyh.forestry.mapper;
 import org.apache.ibatis.annotations.Param;
 import org.gyh.forestry.domain.PointInfo;
 import org.gyh.forestry.dto.req.PointInfoPageReq;
+import org.gyh.forestry.dto.resp.SelectDistance;
 import org.gyh.forestry.enums.PointTypeEnum;
 
 import java.util.List;
@@ -27,5 +28,5 @@ public interface PointInfoMapper {
 
     long countByType(@Param("type") PointTypeEnum type);
 
-
+    SelectDistance selectDistance(@Param("x") double x, @Param("y") double y);
 }

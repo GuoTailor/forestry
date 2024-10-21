@@ -3,6 +3,7 @@ package org.gyh.forestry.service;
 import jakarta.annotation.Resource;
 import org.gyh.forestry.domain.AreaInfo;
 import org.gyh.forestry.domain.Pachong;
+import org.gyh.forestry.domain.ScenicSpot;
 import org.gyh.forestry.dto.req.StatisticAnimalTypeReq;
 import org.gyh.forestry.dto.resp.*;
 import org.gyh.forestry.mapper.*;
@@ -35,6 +36,8 @@ public class StatisticsService {
     private MoxingMapper moxingMapper;
     @Resource
     private PachongMapper pachongMapper;
+    @Resource
+    private ScenicSpotMapper scenicSpotMapper;
 
     /**
      * 总览
@@ -130,11 +133,11 @@ public class StatisticsService {
      * 统计不同区域的动物种类占比
      */
     public List<AreaAnimalResp> animalByArea() {
-        List<AreaInfo> areaInfos = areaInfoMapper.selectAll();
+        List<ScenicSpot> areaInfos = scenicSpotMapper.selectAll();
         List<StatisticAnimalArea> statisticAnimalAreas = animalRecognitionMapper.animalByArea();
         Map<Integer, List<StatisticAnimalArea>> collect = statisticAnimalAreas.stream()
-                .filter(it -> it.getAreaId() != null)
-                .collect(Collectors.groupingBy(StatisticAnimalArea::getAreaId));
+                .filter(it -> it.getPointId() != null)
+                .collect(Collectors.groupingBy(StatisticAnimalArea::getPointId));
         return areaInfos.stream().map(it -> {
             AreaAnimalResp areaAnimalResp = new AreaAnimalResp();
             areaAnimalResp.setAreaName(it.getName());

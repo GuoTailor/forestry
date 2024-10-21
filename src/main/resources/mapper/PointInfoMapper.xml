@@ -41,7 +41,7 @@
         #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{scenicSpotId,jdbcType=INTEGER}
         )
     </insert>
-    <insert id="insertSelective" parameterType="org.gyh.forestry.domain.PointInfo">
+    <insert id="insertSelective" parameterType="org.gyh.forestry.domain.PointInfo" useGeneratedKeys="true" keyProperty="id">
         <!--@mbg.generated-->
         insert into point_info
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -179,10 +179,8 @@
         </where>
     </select>
 
-    <select id="selelctDistance">
-        SELECT id,
-               name,
-               ST_DistanceSphere(point, ST_SetSRID(ST_MakePoint(116.4074, 39.9042), 4326)) AS distance
+    <select id="selectDistance" resultType="org.gyh.forestry.dto.resp.SelectDistance">
+        SELECT *, ST_DistanceSphere(point, ST_SetSRID(ST_MakePoint(#{x}, #{y}), 4326)) AS distance
         FROM point_info
         ORDER BY distance
         LIMIT 1;

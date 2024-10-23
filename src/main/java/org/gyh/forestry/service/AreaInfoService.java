@@ -14,12 +14,8 @@ import org.gyh.forestry.dto.resp.AreaInfoResp;
 import org.gyh.forestry.exception.BusinessException;
 import org.gyh.forestry.mapper.AreaInfoMapper;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -31,8 +27,6 @@ import java.util.List;
 public class AreaInfoService {
     @Resource
     private AreaInfoMapper areaInfoMapper;
-    @Value("${spring.datasource.password}")
-    private String password;
 
     /**
      * 添加区域
@@ -53,36 +47,7 @@ public class AreaInfoService {
         AreaInfo areaInfo = new AreaInfo();
         BeanUtils.copyProperties(updateAreaInfo, areaInfo);
         areaInfoMapper.updateByPrimaryKeySelective(areaInfo);
-        areaInfo = areaInfoMapper.selectByPrimaryKey(updateAreaInfo.getId());
-        if (updateAreaInfo.getMoistureContent() != null) {
-            String[] command = new String[]{"python3.8", "./pydir/main.py", "forestry", "postgres", password, areaInfo.getName(), areaInfo.getWeatherAddress() == null ? areaInfo.getName() : areaInfo.getWeatherAddress()};
-            try {
-                log.info("开始执行命令");
-                Process process = Runtime.getRuntime().exec(command);
-                // 读取输出流
-                BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-                BufferedReader errReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
-                StringBuilder sb = new StringBuilder();
-                for (String line; (line = reader.readLine()) != null; log.info(line)) {
-                    sb.append(line).append("\n");
-                }
-                for (String line; (line = errReader.readLine()) != null; log.error(line)) {
-                    sb.append(line).append("\n");
-                }
-                reader.close();
-                reader.close();
-                int exitVal = process.waitFor();
-                if (exitVal == 0) {
-                    log.info("命令执行成功。");
-                } else {
-                    log.info("执行命令出错。");
-                }
-                return sb.toString();
-            } catch (IOException | InterruptedException e) {
-                log.error("执行命令出错", e);
-                return e.getMessage();
-            }
-        }
+        areaInfoMapper.selectByPrimaryKey(updateAreaInfo.getId());
         return "success";
     }
 

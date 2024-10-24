@@ -145,12 +145,7 @@ public class StatisticsService {
             List<StatisticAnimalArea> animalAreas = collect.get(it.getId());
             if (!CollectionUtils.isEmpty(animalAreas)) {
                 Map<String, List<StatisticAnimalArea>> typeNames = animalAreas.stream()
-                        .peek(ar -> {
-                            if (ar.getTypeName() == null) {
-                                ar.setTypeName("未归类");
-                            }
-                        })
-                        .collect(Collectors.groupingBy(StatisticAnimalArea::getTypeName));
+                        .collect(Collectors.groupingBy(StatisticAnimalArea::getName));
                 typeNames.forEach((k, v) -> {
                     AreaAnimalResp.AnimalInfo animalInfo = new AreaAnimalResp.AnimalInfo();
                     animalInfo.setAnimalType(k);

@@ -83,4 +83,27 @@
         <include refid="Base_Column_List"/>
         from scenic_spot
     </select>
+
+    <select id="selectByName" resultMap="BaseResultMap">
+        select sc.*
+        from scenic_spot sc
+        left join point_info pi on sc.id = pi.scenic_spot_id
+        <where>
+            <if test="scenicSpotName != null and scenicSpotName != ''">
+                sc."name" like concat('%', #{scenicSpotName}, '%')
+            </if>
+            <if test="name != null and name != ''">
+                and pi."name" like concat('%', #{name}, '%')
+            </if>
+            <if test="startTime != null">
+                and pi.create_time &gt;= #{startTime}
+            </if>
+            <if test="endTime != null">
+                and pi.create_time &lt;= #{endTime}
+            </if>
+            <if test="type != null">
+                and pi."type" = #{type}
+            </if>
+        </where>
+    </select>
 </mapper>

@@ -8,11 +8,9 @@ import org.gyh.forestry.aspect.LogRecord;
 import org.gyh.forestry.domain.ScenicSpot;
 import org.gyh.forestry.dto.PageInfo;
 import org.gyh.forestry.dto.ResponseInfo;
-import org.gyh.forestry.dto.req.AddPointInfo;
-import org.gyh.forestry.dto.req.PointInfoAllReq;
-import org.gyh.forestry.dto.req.PointInfoPageReq;
-import org.gyh.forestry.dto.req.UpdatePointInfo;
+import org.gyh.forestry.dto.req.*;
 import org.gyh.forestry.dto.resp.PointInfoResp;
+import org.gyh.forestry.dto.resp.ScenicSpotPointInfoResp;
 import org.gyh.forestry.service.PointInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -61,6 +59,12 @@ public class PointInfoController {
     @Operation(summary = "查询点列表信息", security = {@SecurityRequirement(name = "Authorization")})
     public PageInfo<PointInfoResp> selectByPage(@RequestBody PointInfoPageReq pageReq) {
         return pointInfoService.selectByPage(pageReq);
+    }
+
+    @PostMapping("/animal/page")
+    @Operation(summary = "查询动物检测点列表信息", security = {@SecurityRequirement(name = "Authorization")})
+    public PageInfo<ScenicSpotPointInfoResp> selectAnimalByPage(@RequestBody ScenicSpotPointPageReq pageReq) {
+        return pointInfoService.selectAnimalByPage(pageReq);
     }
 
     @PostMapping("/all")

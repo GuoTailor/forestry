@@ -9,11 +9,9 @@ import org.gyh.forestry.domain.ScenicSpot;
 import org.gyh.forestry.domain.User;
 import org.gyh.forestry.dto.JsonPoint;
 import org.gyh.forestry.dto.PageInfo;
-import org.gyh.forestry.dto.req.AddPointInfo;
-import org.gyh.forestry.dto.req.PointInfoAllReq;
-import org.gyh.forestry.dto.req.PointInfoPageReq;
-import org.gyh.forestry.dto.req.UpdatePointInfo;
+import org.gyh.forestry.dto.req.*;
 import org.gyh.forestry.dto.resp.PointInfoResp;
+import org.gyh.forestry.dto.resp.ScenicSpotPointInfoResp;
 import org.gyh.forestry.mapper.PointInfoMapper;
 import org.gyh.forestry.mapper.ScenicSpotMapper;
 import org.springframework.beans.BeanUtils;
@@ -89,6 +87,27 @@ public class PointInfoService {
         }
     }
 
+    public PageInfo<ScenicSpotPointInfoResp> selectAnimalByPage(ScenicSpotPointPageReq pageReq) {
+        try (Page<ScenicSpot> page = PageHelper.startPage(pageReq.getPage(), pageReq.getPageSize())) {
+            List<ScenicSpot> scenicSpots = scenicSpotMapper.selectByName(pageReq);
+            PointInfoPageReq pointPageReq = new PointInfoPageReq();
+            BeanUtils.copyProperties(pageReq, pointPageReq);
+            List<ScenicSpotPointInfoResp> list = scenicSpots.parallelStream().map(it -> {
+                ScenicSpotPointInfoResp resp = new ScenicSpotPointInfoResp();
+                BeanUtils.copyProperties(it, resp);
+                List<PointInfo> pointInfoResps = pointInfoMapper.selectByPage(pointPageReq);
+                resp.setPoints(pointInfoResps.stream().map(pointResponse -> {
+                    PointInfoResp pointInfoResp = new PointInfoResp();
+                    BeanUtils.copyProperties(pointResponse, pointInfoResp);
+                    pointInfoResp.setPoint(new JsonPoint(pointResponse.getPoint()));
+                    return pointInfoResp;
+                }).toList());
+                return resp;
+            }).toList();
+            return PageInfo.ok(page.getTotal(), pageReq, list);
+        }
+    }
+
     public List<PointInfoResp> getAll(PointInfoAllReq req) {
         List<PointInfo> pointInfoResps = pointInfoMapper.selectByPage(new PointInfoPageReq(req));
         return pointInfoResps.stream().map(it -> {
@@ -114,6 +133,8 @@ public class PointInfoService {
         ScenicSpot scenicSpot = new ScenicSpot();
         scenicSpot.setName(name);
         scenicSpot.setCreateTime(LocalDateTime.now());
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        scenicSpot.setCreator(user.getUsername());
         scenicSpotMapper.insertSelective(scenicSpot);
         return scenicSpot;
     }

@@ -6,7 +6,7 @@ import org.gyh.forestry.dto.req.ScenicSpotPointPageReq;
 import java.util.List;
 
 /**
- * create by GYH on 2024/10/20
+ * create by GYH on 2024/10/31
  */
 public interface ScenicSpotMapper {
     int deleteByPrimaryKey(Integer id);

@@ -95,6 +95,8 @@ public class PointInfoService {
             List<ScenicSpotPointInfoResp> list = scenicSpots.parallelStream().map(it -> {
                 ScenicSpotPointInfoResp resp = new ScenicSpotPointInfoResp();
                 BeanUtils.copyProperties(it, resp);
+                resp.setScenicSpotName(it.getName());
+                resp.setCreator(it.getCreator());
                 List<PointInfo> pointInfoResps = pointInfoMapper.selectByPage(pointPageReq);
                 resp.setPoints(pointInfoResps.stream().map(pointResponse -> {
                     PointInfoResp pointInfoResp = new PointInfoResp();

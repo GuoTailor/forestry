@@ -7,10 +7,11 @@
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="creator" jdbcType="VARCHAR" property="creator"/>
     </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
-        id, "name", create_time
+        id, "name", create_time, creator
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         <!--@mbg.generated-->
@@ -26,12 +27,12 @@
     </delete>
     <insert id="insert" parameterType="org.gyh.forestry.domain.ScenicSpot">
         <!--@mbg.generated-->
-        insert into scenic_spot (id, "name", create_time
-        )
-        values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}
-        )
+        insert into scenic_spot (id, "name", create_time,
+        creator)
+        values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+        #{creator,jdbcType=VARCHAR})
     </insert>
-    <insert id="insertSelective" parameterType="org.gyh.forestry.domain.ScenicSpot" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertSelective" parameterType="org.gyh.forestry.domain.ScenicSpot">
         <!--@mbg.generated-->
         insert into scenic_spot
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -44,6 +45,9 @@
             <if test="createTime != null">
                 create_time,
             </if>
+            <if test="creator != null">
+                creator,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -54,6 +58,9 @@
             </if>
             <if test="createTime != null">
                 #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="creator != null">
+                #{creator,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -67,6 +74,9 @@
             <if test="createTime != null">
                 create_time = #{createTime,jdbcType=TIMESTAMP},
             </if>
+            <if test="creator != null">
+                creator = #{creator,jdbcType=VARCHAR},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -74,7 +84,8 @@
         <!--@mbg.generated-->
         update scenic_spot
         set "name" = #{name,jdbcType=VARCHAR},
-        create_time = #{createTime,jdbcType=TIMESTAMP}
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+        creator = #{creator,jdbcType=VARCHAR}
         where id = #{id,jdbcType=INTEGER}
     </update>
 

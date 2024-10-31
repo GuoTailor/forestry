@@ -1,6 +1,7 @@
 package org.gyh.forestry.controlle;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.Data;
@@ -43,7 +44,9 @@ public class FileController {
 
     @Data
     public static class UploadFileReq {
+        @Schema(description = "经度")
         private double x;
+        @Schema(description = "维度")
         private double y;
     }
 }

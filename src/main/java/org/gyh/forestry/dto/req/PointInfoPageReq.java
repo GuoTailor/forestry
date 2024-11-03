@@ -23,6 +23,7 @@ public class PointInfoPageReq extends PageReq {
     private LocalDateTime endTime;
     @Schema(description = "类型")
     private PointTypeEnum type;
+    private Integer scenicSpotId;
 
     public PointInfoPageReq(PointInfoAllReq req) {
         this.type = req.getType();

@@ -90,13 +90,14 @@ public class PointInfoService {
     public PageInfo<ScenicSpotPointInfoResp> selectAnimalByPage(ScenicSpotPointPageReq pageReq) {
         try (Page<ScenicSpot> page = PageHelper.startPage(pageReq.getPage(), pageReq.getPageSize())) {
             List<ScenicSpot> scenicSpots = scenicSpotMapper.selectByName(pageReq);
-            PointInfoPageReq pointPageReq = new PointInfoPageReq();
-            BeanUtils.copyProperties(pageReq, pointPageReq);
             List<ScenicSpotPointInfoResp> list = scenicSpots.parallelStream().map(it -> {
                 ScenicSpotPointInfoResp resp = new ScenicSpotPointInfoResp();
                 BeanUtils.copyProperties(it, resp);
                 resp.setScenicSpotName(it.getName());
                 resp.setCreator(it.getCreator());
+                PointInfoPageReq pointPageReq = new PointInfoPageReq();
+                BeanUtils.copyProperties(pageReq, pointPageReq);
+                pointPageReq.setScenicSpotId(it.getId());
                 List<PointInfo> pointInfoResps = pointInfoMapper.selectByPage(pointPageReq);
                 resp.setPoints(pointInfoResps.stream().map(pointResponse -> {
                     PointInfoResp pointInfoResp = new PointInfoResp();

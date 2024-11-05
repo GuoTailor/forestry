@@ -78,4 +78,10 @@ public class PointInfoController {
     public ResponseInfo<ScenicSpot> addScenicSpot(@RequestParam("name") String name) {
         return ResponseInfo.ok(pointInfoService.addScenicSpot(name));
     }
+
+    @PostMapping("/scenicSpot/delete")
+    @Operation(summary = "删除景区", security = {@SecurityRequirement(name = "Authorization")})
+    public ResponseInfo<Boolean> deleteScenicSpot(@RequestParam("id") Integer id) {
+        return ResponseInfo.ok(pointInfoService.deleteScenicSpot(id));
+    }
 }

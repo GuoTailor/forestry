@@ -141,4 +141,11 @@ public class PointInfoService {
         scenicSpotMapper.insertSelective(scenicSpot);
         return scenicSpot;
     }
+
+    /**
+     * 删除景区
+     */
+    public boolean deleteScenicSpot(Integer id) {
+        return scenicSpotMapper.deleteByPrimaryKey(id) == 1;
+    }
 }

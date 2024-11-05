@@ -113,5 +113,6 @@
                 and pi.create_time &lt;= #{endTime}
             </if>
         </where>
+        GROUP BY sc.id
     </select>
 </mapper>

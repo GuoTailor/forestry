@@ -37,6 +37,28 @@ public class ForestFire {
      */
     @Schema(description = "风向")
     private String windDirection;
+    /**
+     * 明天温度
+     */
+    @Schema(description = "明天温度")
+    private Float tomorrowTemperature;
+    /**
+     * 明天湿度
+     */
+    @Schema(description = "明天湿度")
+    private Float tomorrowHumidity;
+
+    /**
+     * 明天风速
+     */
+    @Schema(description = "明天风速")
+    private Float tomorrowWindSpeed;
+
+    /**
+     * 明天风向
+     */
+    @Schema(description = "明天风向")
+    private String tomorrowWindDirection;
     @Schema(description = "火险等级")
     private Short level;
     @Schema(description = "更新时间")

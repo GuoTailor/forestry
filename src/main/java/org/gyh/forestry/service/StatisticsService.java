@@ -4,9 +4,11 @@ import jakarta.annotation.Resource;
 import org.gyh.forestry.domain.AreaInfo;
 import org.gyh.forestry.domain.Pachong;
 import org.gyh.forestry.domain.ScenicSpot;
+import org.gyh.forestry.domain.WeatherData;
 import org.gyh.forestry.dto.req.StatisticAnimalTypeReq;
 import org.gyh.forestry.dto.resp.*;
 import org.gyh.forestry.mapper.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -38,6 +40,8 @@ public class StatisticsService {
     private PachongMapper pachongMapper;
     @Resource
     private ScenicSpotMapper scenicSpotMapper;
+    @Autowired
+    private WeatherDataService weatherDataService;
 
     /**
      * 总览
@@ -94,11 +98,18 @@ public class StatisticsService {
             ForestFire forestFire = new ForestFire();
             forestFire.setName(it.getName());
             forestFire.setArea(it.getArea());
-            forestFire.setTemperature(it.getTemperature());
             forestFire.setMoistureContent(it.getMoistureContent());
-            forestFire.setHumidity(it.getHumidity());
-            forestFire.setWindSpeed(it.getWindSpeed());
-            forestFire.setWindDirection(it.getWindDirection());
+            WeatherData todayWeather = weatherDataService.getTodayWeather(it.getWeatherAddress());
+            forestFire.setTemperature(todayWeather.getTemperature());
+            forestFire.setHumidity(todayWeather.getHumidity());
+            forestFire.setWindSpeed(todayWeather.getWindSpeed());
+            forestFire.setWindDirection(todayWeather.getWindDirection());
+
+            forestFire.setTomorrowTemperature(it.getTemperature());
+            forestFire.setTomorrowHumidity(it.getHumidity());
+            forestFire.setTomorrowWindSpeed(it.getWindSpeed());
+            forestFire.setTomorrowWindDirection(it.getWindDirection());
+
             forestFire.setLevel(moxingMapper.selectLaveByName(it.getName()));
             forestFire.setUpdateTime(it.getUpdateTime());
             return forestFire;

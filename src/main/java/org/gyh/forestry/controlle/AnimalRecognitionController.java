@@ -41,6 +41,15 @@ public class AnimalRecognitionController {
         return animalRecognitionService.selectByPage(pageReq);
     }
 
+    /**
+     * 获取随机的10张图片
+     */
+    @Operation(summary = "获取随机的10张图片", security = {@SecurityRequirement(name = "Authorization")})
+    @GetMapping("/random")
+    public ResponseInfo<List<String>> randomImage() {
+        return ResponseInfo.ok(animalRecognitionService.randomImage());
+    }
+
     @Operation(summary = "获取详情", security = {@SecurityRequirement(name = "Authorization")})
     @GetMapping()
     public ResponseInfo<AnimalRecognitionResp> selectById(@RequestParam Integer id) {

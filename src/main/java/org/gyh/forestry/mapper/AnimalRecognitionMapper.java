@@ -37,4 +37,6 @@ public interface AnimalRecognitionMapper {
     List<StatisticAnimalByCount> statisticAnimalByCount(StatisticAnimalTypeReq req);
 
     List<StatisticAnimalArea> animalByArea();
+
+    List<String> randomImage();
 }

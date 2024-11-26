@@ -14,7 +14,6 @@ import org.gyh.forestry.dto.resp.AnimalRecognitionResp;
 import org.gyh.forestry.dto.resp.RecognitionResp;
 import org.gyh.forestry.dto.resp.SelectDistance;
 import org.gyh.forestry.mapper.AnimalRecognitionMapper;
-import org.gyh.forestry.mapper.AreaInfoMapper;
 import org.gyh.forestry.mapper.PointInfoMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +34,6 @@ public class AnimalRecognitionService {
     private AnimalRecognitionMapper animalRecognitionMapper;
     @Autowired
     private FileService fileService;
-    @Resource
-    private AreaInfoMapper areaInfoMapper;
     @Autowired
     private PointInfoMapper pointInfoMapper;
 
@@ -118,5 +115,12 @@ public class AnimalRecognitionService {
             }).toList();
             return PageInfo.ok(page.getTotal(), pageReq, list);
         }
+    }
+
+    /**
+     * 获取随机的10张图片
+     */
+    public List<String> randomImage() {
+        return animalRecognitionMapper.randomImage();
     }
 }

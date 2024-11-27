@@ -29,4 +29,6 @@ public interface AnimalManageMapper {
     List<AnimalManageResp> selectByPage(AnimalManagePageReq pageReq);
 
     boolean selectEnableByAnimalId(Integer id);
+
+    AnimalManage selectByName(String name);
 }

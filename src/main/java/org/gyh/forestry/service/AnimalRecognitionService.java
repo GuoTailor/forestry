@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.gyh.forestry.domain.AnimalManage;
 import org.gyh.forestry.domain.AnimalRecognition;
 import org.gyh.forestry.domain.User;
 import org.gyh.forestry.dto.JsonPoint;
@@ -13,6 +14,7 @@ import org.gyh.forestry.dto.req.AnimalRecognitionPageReq;
 import org.gyh.forestry.dto.resp.AnimalRecognitionResp;
 import org.gyh.forestry.dto.resp.RecognitionResp;
 import org.gyh.forestry.dto.resp.SelectDistance;
+import org.gyh.forestry.mapper.AnimalManageMapper;
 import org.gyh.forestry.mapper.AnimalRecognitionMapper;
 import org.gyh.forestry.mapper.PointInfoMapper;
 import org.springframework.beans.BeanUtils;
@@ -36,6 +38,8 @@ public class AnimalRecognitionService {
     private FileService fileService;
     @Autowired
     private PointInfoMapper pointInfoMapper;
+    @Resource
+    private AnimalManageMapper animalManageMapper;
 
     /**
      * 图片识别
@@ -78,6 +82,10 @@ public class AnimalRecognitionService {
             if (animalRecognitionMapper.selectRepeat(animalReq.getLocation().toPoint(), animalInfo.getType(), animalInfo.getName(), animalReq.getPic()) > 0) {
                 continue;
             }
+            AnimalManage animalManage = animalManageMapper.selectByName(animalInfo.getName());
+            if (animalManage == null) {
+                continue;
+            }
             AnimalRecognition animalRecognition = new AnimalRecognition();
             BeanUtils.copyProperties(animalReq, animalRecognition);
             if (selectDistance != null && selectDistance.getDistance() < 50) {
@@ -89,6 +97,7 @@ public class AnimalRecognitionService {
             animalRecognition.setCreateTime(LocalDateTime.now());
             animalRecognition.setPic(fileService.getPath(animalReq.getPic()));
             animalRecognition.setLocation(animalReq.getLocation().toPoint());
+            animalRecognition.setCreateTime(animalReq.getCreateTime());
             animalRecognitionMapper.insertSelective(animalRecognition);
         }
         return true;

@@ -250,7 +250,7 @@
     <select id="randomImage" resultType="java.lang.String">
         SELECT pic
         FROM "animal_recognition"
-        where type = 'image'
+<!--        where type = 'image'-->
         ORDER BY RANDOM()
         LIMIT 10;
     </select>

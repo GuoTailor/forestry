@@ -161,4 +161,11 @@
                  join animal_manage am on at.id = am.animal_type_id
         where am.id = #{id}
     </select>
+
+    <select id="selectByName" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from animal_manage
+        where "name" = #{name}
+    </select>
 </mapper>

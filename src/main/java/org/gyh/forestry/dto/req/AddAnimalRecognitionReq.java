@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import org.gyh.forestry.dto.JsonPoint;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -32,6 +33,8 @@ public class AddAnimalRecognitionReq {
      */
     @Schema(description = "图片地址")
     private String pic;
+
+    private LocalDateTime createTime;
 
     @Data
     public static class AnimalInfo {

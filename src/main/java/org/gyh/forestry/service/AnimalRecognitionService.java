@@ -75,6 +75,9 @@ public class AnimalRecognitionService {
     public boolean addAnimal(AddAnimalRecognitionReq animalReq) {
         SelectDistance selectDistance = pointInfoMapper.selectDistance(animalReq.getLocation().getX(), animalReq.getLocation().getY());
         for (AddAnimalRecognitionReq.AnimalInfo animalInfo : animalReq.getAnimalInfo()) {
+            if (animalRecognitionMapper.selectRepeat(animalReq.getLocation().toPoint(), animalInfo.getType(), animalInfo.getName(), animalReq.getPic()) > 0) {
+                continue;
+            }
             AnimalRecognition animalRecognition = new AnimalRecognition();
             BeanUtils.copyProperties(animalReq, animalRecognition);
             if (selectDistance != null && selectDistance.getDistance() < 50) {

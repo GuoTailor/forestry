@@ -250,7 +250,17 @@
     <select id="randomImage" resultType="java.lang.String">
         SELECT pic
         FROM "animal_recognition"
+        where type = 'image'
         ORDER BY RANDOM()
         LIMIT 10;
+    </select>
+
+    <select id="selectRepeat" resultType="java.lang.Integer">
+        select count(1)
+        from animal_recognition
+        where name = #{name}
+          and pic = #{pic}
+          and type = #{type}
+          and location = #{location}
     </select>
 </mapper>

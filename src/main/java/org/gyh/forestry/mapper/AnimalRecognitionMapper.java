@@ -1,5 +1,7 @@
 package org.gyh.forestry.mapper;
 
+import net.postgis.jdbc.geometry.Point;
+import org.apache.ibatis.annotations.Param;
 import org.gyh.forestry.domain.AnimalRecognition;
 import org.gyh.forestry.dto.req.AnimalRecognitionPageReq;
 import org.gyh.forestry.dto.req.StatisticAnimalTypeReq;
@@ -39,4 +41,6 @@ public interface AnimalRecognitionMapper {
     List<StatisticAnimalArea> animalByArea();
 
     List<String> randomImage();
+
+    int selectRepeat(@Param("location") Point location, @Param("type") String type, @Param("name") String name, @Param("pic") String pic);
 }

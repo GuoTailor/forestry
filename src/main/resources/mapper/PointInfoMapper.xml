@@ -9,14 +9,14 @@
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="type" jdbcType="VARCHAR" property="type"/>
         <result column="describe" jdbcType="VARCHAR" property="describe"/>
-        <result column="device_id" jdbcType="INTEGER" property="deviceId"/>
         <result column="creator" jdbcType="VARCHAR" property="creator"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="scenic_spot_id" jdbcType="INTEGER" property="scenicSpotId"/>
+        <result column="camera_num" jdbcType="VARCHAR" property="cameraNum"/>
     </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
-        id, point, "name", "type", "describe", device_id, creator, create_time, scenic_spot_id
+        id, point, "name", "type", "describe", creator, create_time, scenic_spot_id, camera_num
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         <!--@mbg.generated-->
@@ -33,15 +33,15 @@
     <insert id="insert" parameterType="org.gyh.forestry.domain.PointInfo">
         <!--@mbg.generated-->
         insert into point_info (id, point, "name",
-        "type", "describe", device_id,
-        creator, create_time, scenic_spot_id
+        "type", "describe", creator,
+        create_time, scenic_spot_id, camera_num
         )
         values (#{id,jdbcType=INTEGER}, #{point,jdbcType=OTHER}, #{name,jdbcType=VARCHAR},
-        #{type,jdbcType=VARCHAR}, #{describe,jdbcType=VARCHAR}, #{deviceId,jdbcType=INTEGER},
-        #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{scenicSpotId,jdbcType=INTEGER}
+        #{type,jdbcType=VARCHAR}, #{describe,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR},
+        #{createTime,jdbcType=TIMESTAMP}, #{scenicSpotId,jdbcType=INTEGER}, #{cameraNum,jdbcType=VARCHAR}
         )
     </insert>
-    <insert id="insertSelective" parameterType="org.gyh.forestry.domain.PointInfo" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertSelective" parameterType="org.gyh.forestry.domain.PointInfo">
         <!--@mbg.generated-->
         insert into point_info
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -60,9 +60,6 @@
             <if test="describe != null">
                 "describe",
             </if>
-            <if test="deviceId != null">
-                device_id,
-            </if>
             <if test="creator != null">
                 creator,
             </if>
@@ -71,6 +68,9 @@
             </if>
             <if test="scenicSpotId != null">
                 scenic_spot_id,
+            </if>
+            <if test="cameraNum != null">
+                camera_num,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -89,9 +89,6 @@
             <if test="describe != null">
                 #{describe,jdbcType=VARCHAR},
             </if>
-            <if test="deviceId != null">
-                #{deviceId,jdbcType=INTEGER},
-            </if>
             <if test="creator != null">
                 #{creator,jdbcType=VARCHAR},
             </if>
@@ -100,6 +97,9 @@
             </if>
             <if test="scenicSpotId != null">
                 #{scenicSpotId,jdbcType=INTEGER},
+            </if>
+            <if test="cameraNum != null">
+                #{cameraNum,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -119,9 +119,6 @@
             <if test="describe != null">
                 "describe" = #{describe,jdbcType=VARCHAR},
             </if>
-            <if test="deviceId != null">
-                device_id = #{deviceId,jdbcType=INTEGER},
-            </if>
             <if test="creator != null">
                 creator = #{creator,jdbcType=VARCHAR},
             </if>
@@ -130,6 +127,9 @@
             </if>
             <if test="scenicSpotId != null">
                 scenic_spot_id = #{scenicSpotId,jdbcType=INTEGER},
+            </if>
+            <if test="cameraNum != null">
+                camera_num = #{cameraNum,jdbcType=VARCHAR},
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
@@ -141,10 +141,10 @@
         "name" = #{name,jdbcType=VARCHAR},
         "type" = #{type,jdbcType=VARCHAR},
         "describe" = #{describe,jdbcType=VARCHAR},
-        device_id = #{deviceId,jdbcType=INTEGER},
         creator = #{creator,jdbcType=VARCHAR},
         create_time = #{createTime,jdbcType=TIMESTAMP},
-        scenic_spot_id = #{scenicSpotId,jdbcType=INTEGER}
+        scenic_spot_id = #{scenicSpotId,jdbcType=INTEGER},
+        camera_num = #{cameraNum,jdbcType=VARCHAR}
         where id = #{id,jdbcType=INTEGER}
     </update>
 
@@ -167,6 +167,9 @@
             </if>
             <if test="scenicSpotId != null">
                 and scenic_spot_id = #{scenicSpotId}
+            </if>
+            <if test="cameraNum != null and cameraNum != ''">
+                and camera_num = #{cameraNum}
             </if>
         </where>
         order by create_time desc

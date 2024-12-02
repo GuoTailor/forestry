@@ -23,6 +23,8 @@ public class PointInfoPageReq extends PageReq {
     private LocalDateTime endTime;
     @Schema(description = "类型")
     private PointTypeEnum type;
+    @Schema(description = "相机编号")
+    private String cameraNum;
     private Integer scenicSpotId;
 
     public PointInfoPageReq(PointInfoAllReq req) {

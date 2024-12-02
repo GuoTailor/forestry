@@ -180,6 +180,9 @@
         from animal_recognition as ar
         left join animal_manage an on ar.name = an.name and an.enable = true
         left join animal_type at on at.id = an.animal_type_id
+        <if test="pointName != null and pointName != ''">
+            left join point_info pi on "pi".id = ar.point_id and "pi".name = #{pointName}
+        </if>
         <where>
             <if test="name != null and name != ''">
                 ar.name = #{name}

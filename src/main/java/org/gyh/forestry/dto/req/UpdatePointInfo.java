@@ -33,6 +33,13 @@ public class UpdatePointInfo {
      */
     private PointTypeEnum type;
 
+
+    /**
+     * 相机编号
+     */
+    @Schema(description = "相机编号")
+    private String cameraNum;
+
     @Schema(description = "景区id")
     private Integer scenicSpotId;
 }

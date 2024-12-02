@@ -13,4 +13,6 @@ public class AnimalRecognitionPageReq extends PageReq {
     private String name;
     @Schema(description = "类型")
     private String type;
+    @Schema(description = "点位名字")
+    private String pointName;
 }

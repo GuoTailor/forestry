@@ -32,6 +32,11 @@ public class AddPointInfo {
     @Schema(description = "类型（预警点，动物位置）")
     private PointTypeEnum type;
 
+    /**
+     * 相机编号
+     */
+    @Schema(description = "相机编号")
+    private String cameraNum;
 
     /**
      * 所属景区

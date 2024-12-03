@@ -253,8 +253,12 @@
     <select id="randomImage" resultType="java.lang.String">
         SELECT pic
         FROM "animal_recognition"
-<!--        where type = 'image'-->
-        ORDER BY RANDOM()
+        <where>
+            <if test="pointName != null and pointName != ''">
+                point_id in (select id from point_info where name = #{pointName})
+            </if>
+        </where>
+        ORDER BY create_time desc
         LIMIT 10;
     </select>
 

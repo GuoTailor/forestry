@@ -40,7 +40,7 @@ public interface AnimalRecognitionMapper {
 
     List<StatisticAnimalArea> animalByArea();
 
-    List<String> randomImage();
+    List<String> randomImage(String pointName);
 
     int selectRepeat(@Param("location") Point location, @Param("type") String type, @Param("name") String name, @Param("pic") String pic);
 }

@@ -132,7 +132,7 @@ public class AnimalRecognitionService {
     /**
      * 获取随机的10张图片
      */
-    public List<String> randomImage() {
-        return animalRecognitionMapper.randomImage();
+    public List<String> randomImage(String pointName) {
+        return animalRecognitionMapper.randomImage(pointName);
     }
 }

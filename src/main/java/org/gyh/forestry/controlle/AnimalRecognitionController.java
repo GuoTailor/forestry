@@ -46,7 +46,7 @@ public class AnimalRecognitionController {
      */
     @Operation(summary = "获取随机的10张图片", security = {@SecurityRequirement(name = "Authorization")})
     @GetMapping("/random")
-    public ResponseInfo<List<String>> randomImage(@RequestParam("pointName") String pointName) {
+    public ResponseInfo<List<String>> randomImage(@RequestParam(value = "pointName", required = false) String pointName) {
         return ResponseInfo.ok(animalRecognitionService.randomImage(pointName));
     }
 

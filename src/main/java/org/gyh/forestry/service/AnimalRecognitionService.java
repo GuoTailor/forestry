@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -133,6 +134,10 @@ public class AnimalRecognitionService {
      * 获取随机的10张图片
      */
     public List<String> randomImage(String pointName) {
-        return animalRecognitionMapper.randomImage(pointName);
+        ArrayList<String> data = new ArrayList<>();
+        data.add("upload/IMG_0239.mp4");
+        List<String> strings = animalRecognitionMapper.randomImage(pointName);
+        data.addAll(strings);
+        return data;
     }
 }

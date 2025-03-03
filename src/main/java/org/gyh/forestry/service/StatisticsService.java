@@ -111,7 +111,7 @@ public class StatisticsService {
             forestFire.setTomorrowWindDirection(it.getWindDirection());
 
             forestFire.setLevel(moxingMapper.selectLaveByName(it.getName()));
-            forestFire.setUpdateTime(it.getUpdateTime());
+            forestFire.setUpdateTime(todayWeather.getUpdateTime());
             return forestFire;
         }).toList();
     }

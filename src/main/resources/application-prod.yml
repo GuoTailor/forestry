@@ -1,0 +1,71 @@
+server:
+  port: 3458
+
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/forestry
+    username: postgres
+    password: admin
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      lettuce:
+        pool:
+          enabled: true
+    jdbc:
+      dialect: postgresql
+  web:
+    resources:
+      static-locations: file:${fileUploadPath}, classpath:/static
+  jackson:
+    serialization:
+      FAIL_ON_EMPTY_BEANS: false
+
+  threads:
+    virtual:
+      enabled: true
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+
+logging:
+  file:
+    path: logs
+  level:
+    org.gyh.forestry.mapper: debug
+  logback:
+    rolling policy:
+      max-history: 30
+      clean-history-on-start: true
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    defaultModelExpandDepth: 4
+    validatorUrl: none
+    persistAuthorization: true
+    use-root-path: true
+    filter: true
+    enabled: false
+
+mybatis-plus:
+  mapper-locations: classpath:/mapper/**/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+  type-aliases-package: org.gyh.forestry.domain
+
+
+fileUploadPath: files/
+mybatis:
+  type-handlers-package: org.gyh.forestry.typehandler
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
+pagehelper:
+  helperDialect: postgresql
+  reasonable: true
+  defaultCount: true

@@ -13,24 +13,16 @@ public class OtherTest {
 
     @Test
     public void test() throws IOException {
-        int[] arr = {2, 0, 1, 6, 7};
-        File file = new File("F:\\password.txt");
-        FileOutputStream fos = new FileOutputStream(file);
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 5; j++) {
-                for (int k = 0; k < 5; k++) {
-                    for (int l = 0; l < 5; l++) {
-                        for (int m = 0; m < 5; m++) {
-                            for (int n = 0; n < 5; n++) {
-                                fos.write(("" + arr[i] + arr[j] + arr[k] + arr[l] + arr[m] + arr[n] + "\n").getBytes());
-                            }
-                        }
-                    }
-                }
-            }
+        //         "order,refund,shop,price,faka,site,tixian,workorder,message,article,shequ,set,account"
+        String s = "order,refund,shop,price,faka,site,tixian,workorder,message,article,shequ,set,account,super,shop";
+        StringBuilder sb = new StringBuilder();
+        char[] charArray = s.toCharArray();
+        for (char c : charArray) {
+            String hexString = Integer.toHexString(c);
+            System.out.println(hexString);
+            sb.append(hexString);
         }
-        fos.flush();
-        fos.close();
+        System.out.println(sb);
     }
 
 }

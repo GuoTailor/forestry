@@ -5,7 +5,6 @@ import com.github.pagehelper.PageHelper;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.gyh.forestry.domain.Dict;
-import org.gyh.forestry.domain.OperationRecord;
 import org.gyh.forestry.dto.PageInfo;
 import org.gyh.forestry.dto.req.AddDictReq;
 import org.gyh.forestry.dto.req.DictPageReq;
@@ -62,7 +61,7 @@ public class DictService {
      * 分页获取字典
      */
     public PageInfo<Dict> findByPage(DictPageReq pageReq) {
-        try (Page<OperationRecord> page = PageHelper.startPage(pageReq.getPage(), pageReq.getPageSize())) {
+        try (Page<Dict> page = PageHelper.startPage(pageReq.getPage(), pageReq.getPageSize())) {
             List<Dict> all = dictMapper.findByPage(pageReq);
             return PageInfo.ok(page.getTotal(), pageReq, all);
         }

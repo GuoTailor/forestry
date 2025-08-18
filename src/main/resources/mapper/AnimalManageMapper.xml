@@ -148,12 +148,12 @@
         where enable = true
     </select>
 
-    <select id="disableByTypeId" resultType="int">
+    <update id="disableByTypeId" >
         update animal_manage
         set enable = false
         where animal_type_id = #{id}
           and enable = true
-    </select>
+    </update>
 
     <select id="selectEnableByAnimalId" resultType="boolean">
         select at.enable

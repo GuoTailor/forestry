@@ -105,6 +105,9 @@
             <if test="endTime != null">
                 and create_time &lt;= #{endTime}
             </if>
+            <if test="name != null">
+                and "name" like concat('%', #{name}, '%')
+            </if>
         </where>
         order by create_time desc
     </select>

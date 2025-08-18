@@ -48,7 +48,7 @@ public class AnimalManageService {
         animalManage.setAnimalTypeId(req.getAnimalTypeId());
         animalManage.setName(req.getName());
         animalManage.setDescribe(req.getDescribe());
-        if (Boolean.TRUE.equals(req.getEnable()) && animalManageMapper.selectEnableByAnimalId(req.getId())) {
+        if (Boolean.TRUE.equals(req.getEnable()) && !animalManageMapper.selectEnableByAnimalId(req.getId())) {
             throw new BusinessException("动物类型已禁用");
         }
         return animalManageMapper.updateByPrimaryKeySelective(animalManage) == 1;

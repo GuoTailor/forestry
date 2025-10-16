@@ -12,9 +12,9 @@ import java.time.LocalDateTime;
 public class ForestFire {
     private String name;
     @Schema(description = "面积")
-    private double area;
+    private Float area;
     @Schema(description = "含水率")
-    private double moistureContent;
+    private Float moistureContent;
     /**
      * 温度
      */

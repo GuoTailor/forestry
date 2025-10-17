@@ -1,6 +1,7 @@
 package org.gyh.forestry;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -23,6 +24,11 @@ public class OtherTest {
             sb.append(hexString);
         }
         System.out.println(sb);
+    }
+
+    @Test
+    public void test2() {
+        System.out.println(PasswordEncoderFactories.createDelegatingPasswordEncoder().encode("123456"));
     }
 
 }

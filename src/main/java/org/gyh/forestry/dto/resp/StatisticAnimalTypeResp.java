@@ -1,5 +1,6 @@
 package org.gyh.forestry.dto.resp;
 
+import com.alibaba.excel.annotation.ExcelProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -9,7 +10,9 @@ import lombok.Data;
 @Data
 public class StatisticAnimalTypeResp {
     @Schema(description = "动物类型名称")
+    @ExcelProperty("动物类型名称")
     private String name;
     @Schema(description = "动物类型数量")
+    @ExcelProperty("动物类型数量")
     private Long count;
 }

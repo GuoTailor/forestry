@@ -11,6 +11,7 @@ import org.gyh.forestry.mapper.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -99,19 +100,20 @@ public class StatisticsService {
             forestFire.setName(it.getName());
             forestFire.setArea(it.getArea());
             forestFire.setMoistureContent(it.getMoistureContent());
-            WeatherData todayWeather = weatherDataService.getTodayWeather(it.getWeatherAddress());
-            forestFire.setTemperature(todayWeather.getTemperature());
-            forestFire.setHumidity(todayWeather.getHumidity());
-            forestFire.setWindSpeed(todayWeather.getWindSpeed());
-            forestFire.setWindDirection(todayWeather.getWindDirection());
-
+            if (StringUtils.hasLength(it.getWeatherAddress())) {
+                WeatherData todayWeather = weatherDataService.getTodayWeather(it.getWeatherAddress());
+                forestFire.setTemperature(todayWeather.getTemperature());
+                forestFire.setHumidity(todayWeather.getHumidity());
+                forestFire.setWindSpeed(todayWeather.getWindSpeed());
+                forestFire.setWindDirection(todayWeather.getWindDirection());
+                forestFire.setUpdateTime(todayWeather.getUpdateTime());
+            }
             forestFire.setTomorrowTemperature(it.getTemperature());
             forestFire.setTomorrowHumidity(it.getHumidity());
             forestFire.setTomorrowWindSpeed(it.getWindSpeed());
             forestFire.setTomorrowWindDirection(it.getWindDirection());
 
             forestFire.setLevel(moxingMapper.selectLaveByName(it.getName()));
-            forestFire.setUpdateTime(todayWeather.getUpdateTime());
             return forestFire;
         }).toList();
     }

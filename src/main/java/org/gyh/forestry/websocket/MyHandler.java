@@ -2,6 +2,7 @@ package org.gyh.forestry.websocket;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
@@ -22,23 +23,26 @@ import java.net.InetSocketAddress;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.DelayQueue;
-import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * create by GYH on 2024/5/24
  */
 @Slf4j
 @Component
-public class MyHandler extends TextWebSocketHandler implements InitializingBean {
+public class MyHandler extends TextWebSocketHandler implements InitializingBean, DisposableBean {
     private final Map<String, WebSocketSession> webSocketSessionMap = new ConcurrentHashMap<>();
     private final DelayQueue<RetryEntity> retryQueue = new DelayQueue<>();
-    private final AtomicLong sequencer = new AtomicLong();
     // 重试消息 毫秒
     private final static long delayTime = 1000L;
+    // 最大重试次数
+    private final static int maxRetries = 3;
+    
     @Autowired
     private DispatcherServlet servlet;
     @Autowired
     private ObjectMapper json;
+    
+    private Thread retryThread;
 
     //成功连接时
     @Override
@@ -49,6 +53,7 @@ public class MyHandler extends TextWebSocketHandler implements InitializingBean 
         session.setBinaryMessageSizeLimit(8 * 1024);
         session.setTextMessageSizeLimit(8 * 1024);
         webSocketSessionMap.put(session.getId(), new ConcurrentWebSocketSessionDecorator(session, 10_000, Integer.MAX_VALUE));
+        log.info("WebSocket连接已建立，当前连接数: {}", webSocketSessionMap.size());
     }
 
     @Override
@@ -63,7 +68,8 @@ public class MyHandler extends TextWebSocketHandler implements InitializingBean 
             retryQueue.removeIf(it -> it.req == serviceRequestInfo.getReq());
             return;
         }
-        log.info(message.getPayload());
+        
+        log.info("处理WebSocket消息: {}", message.getPayload());
         SocketServletRequest socketServletRequest = new SocketServletRequest(HttpMethod.POST.name(), serviceRequestInfo.getOrder());
         socketServletRequest.setContentType(MediaType.APPLICATION_JSON_VALUE);
         socketServletRequest.setContent(json.writeValueAsBytes(serviceRequestInfo.getBody()));
@@ -90,7 +96,7 @@ public class MyHandler extends TextWebSocketHandler implements InitializingBean 
             servlet.service(socketServletRequest, socketServletResponse);
             serviceResponseInfo.setBody(socketServletResponse.getContentAsString());
         } catch (Exception e) {
-            log.error("socket异常", e);
+            log.error("处理WebSocket请求异常: {}", serviceRequestInfo.getOrder(), e);
             serviceResponseInfo.setBody(e.getMessage());
         }
         byte[] bytes;
@@ -101,24 +107,27 @@ public class MyHandler extends TextWebSocketHandler implements InitializingBean 
         } else {
             bytes = json.writeValueAsBytes(serviceResponseInfo);
         }
-        session = webSocketSessionMap.get(session.getId());
-        TextMessage textMessage = new TextMessage(bytes);
-        RetryEntity entity = new RetryEntity(delayTime, serviceRequestInfo.getReq(),3, session, textMessage);
-        session.sendMessage(textMessage);
-        boolean add = retryQueue.add(entity);
-        log.info("socket添加重试{}", add);
+        
+        WebSocketSession decoratedSession = webSocketSessionMap.get(session.getId());
+        if (decoratedSession != null && decoratedSession.isOpen()) {
+            TextMessage textMessage = new TextMessage(bytes);
+            RetryEntity entity = new RetryEntity(delayTime, serviceRequestInfo.getReq(), maxRetries, decoratedSession, textMessage);
+            decoratedSession.sendMessage(textMessage);
+            retryQueue.add(entity);
+            log.debug("添加重试消息: req={}", serviceRequestInfo.getReq());
+        }
     }
 
     //报错时
     @Override
     public void handleTransportError(WebSocketSession session, Throwable exception) throws Exception {
-        super.handleTransportError(session, exception);
-        log.warn("handleTransportError:: sessionId: {} {}", session.getId(), exception.getMessage(), exception);
+        log.warn("WebSocket传输错误: sessionId={}", session.getId(), exception);
+        webSocketSessionMap.remove(session.getId());
         if (session.isOpen()) {
             try {
-                session.close();
+                session.close(CloseStatus.SERVER_ERROR);
             } catch (Exception ex) {
-                // ignore
+                log.error("关闭WebSocket会话异常", ex);
             }
         }
     }
@@ -128,30 +137,59 @@ public class MyHandler extends TextWebSocketHandler implements InitializingBean 
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         super.afterConnectionClosed(session, status);
         webSocketSessionMap.remove(session.getId());
-        if (session.isOpen()) {
-            try {
-                session.close();
-            } catch (Exception ex) {
-                // ignore
-            }
-        }
+        log.info("WebSocket连接已关闭: sessionId={}, status={}", session.getId(), status);
     }
 
     @Override
     public void afterPropertiesSet() {
-        Thread.ofVirtual().name("socketRetryThread").start(() -> {
-            while (true) {
+        retryThread = Thread.ofVirtual().name("socketRetryThread").start(() -> {
+            while (!Thread.currentThread().isInterrupted()) {
                 try {
                     RetryEntity take = retryQueue.take();
-                    take.session.sendMessage(take.textMessage);
-                    if (take.retryCount - 1 > 0) {
-                        boolean add = retryQueue.add(new RetryEntity(delayTime, take.req, take.retryCount - 1, take.session, take.textMessage));
-                        log.info("socket添加重试{} 第{}次", add, 3 - take.retryCount);
+                    WebSocketSession session = take.session;
+                    if (session.isOpen()) {
+                        session.sendMessage(take.textMessage);
+                        if (take.retryCount - 1 > 0) {
+                            RetryEntity newEntity = new RetryEntity(delayTime, take.req, take.retryCount - 1, take.session, take.textMessage);
+                            retryQueue.add(newEntity);
+                            log.debug("添加重试消息: req={}, 剩余重试次数: {}", take.req, take.retryCount - 1);
+                        }
+                    } else {
+                        log.debug("会话已关闭，取消重试: req={}", take.req);
                     }
+                } catch (InterruptedException e) {
+                    log.info("重试线程被中断");
+                    Thread.currentThread().interrupt();
+                    break;
                 } catch (Exception e) {
-                    log.info("socket重试异常", e);
+                    log.error("处理重试消息异常", e);
                 }
             }
+            log.info("重试线程已退出");
         });
+    }
+    
+    @Override
+    public void destroy() {
+        log.info("销毁WebSocket处理器");
+        
+        // 关闭所有WebSocket连接
+        for (WebSocketSession session : webSocketSessionMap.values()) {
+            try {
+                if (session.isOpen()) {
+                    session.close();
+                }
+            } catch (Exception e) {
+                log.error("关闭WebSocket会话异常", e);
+            }
+        }
+        webSocketSessionMap.clear();
+        
+        // 中断重试线程
+        if (retryThread != null && retryThread.isAlive()) {
+            retryThread.interrupt();
+        }
+        
+        retryQueue.clear();
     }
 }

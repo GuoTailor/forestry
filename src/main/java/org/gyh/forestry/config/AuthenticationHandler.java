@@ -25,15 +25,14 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.context.HttpRequestResponseHolder;
 import org.springframework.security.web.context.SecurityContextRepository;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -104,19 +103,20 @@ public class AuthenticationHandler implements AuthenticationSuccessHandler,
         httpServletResponse.setContentType(MediaType.APPLICATION_JSON_VALUE);
         httpServletResponse.setCharacterEncoding("UTF-8");
         UsernamePasswordAuthenticationToken userToken = (UsernamePasswordAuthenticationToken) authentication;
-        String token = UUID.randomUUID().toString();
         User user = (User) userToken.getPrincipal();
-        String redisKey = Constant.tokenKey + user.getUsername() + Constant.tokenInfix + token;
+        String accountRedisKey = Constant.accountPrefix + user.getUsername();
+        String token = (String) redisTemplate.opsForValue().get(accountRedisKey);
+        Duration expired = Duration.ofMillis(Constant.tokenTtlMillis);
         try {
-            String value = json.writeValueAsString(new ResponseInfo<>(ResponseInfo.OK_CODE, "登录成功", token));
-            Duration expired = Duration.ofMillis(Constant.tokenTtlMillis);
-            Set<String> keys = redisTemplate.keys(Constant.tokenKey + user.getUsername() + Constant.tokenInfix + "*");
-            if (keys != null) {
-                redisTemplate.delete(keys);
+            if (token != null) {
+                String tokenRedisKey = Constant.tokenKey + token;
+                redisTemplate.delete(tokenRedisKey);
             }
-            redisTemplate.opsForValue().set(redisKey, user, expired);
+            token = UUID.randomUUID().toString();
+            String value = json.writeValueAsString(new ResponseInfo<>(ResponseInfo.OK_CODE, "登录成功", token));
+            redisTemplate.opsForValue().set(Constant.tokenKey + token, user, expired);
+            redisTemplate.opsForValue().set(accountRedisKey, token, expired);
             httpServletResponse.getWriter().write(value);
-            record(httpServletRequest, "登录成功", true, value);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
@@ -149,16 +149,10 @@ public class AuthenticationHandler implements AuthenticationSuccessHandler,
         }
         if (authToken != null) {
             try {
-                Set<String> keys = redisTemplate.keys(Constant.tokenKey + "*" + Constant.tokenInfix + authToken);
-                if (!CollectionUtils.isEmpty(keys)) {
-                    for (String key : keys) {
-                        User user = (User) redisTemplate.opsForValue().get(key);
-                        log.info("授权取用户信息 {}", user);
-                        if (user != null) {
-                            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, "", user.getAuthorities());
-                            return new SecurityContextImpl(authentication);
-                        }
-                    }
+                User user = (User) redisTemplate.opsForValue().get(Constant.tokenKey + authToken);
+                if (user != null) {
+                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, "", List.of());
+                    return new SecurityContextImpl(authentication);
                 }
             } catch (BadCredentialsException e) {
                 log.error(e.getLocalizedMessage());

@@ -17,6 +17,8 @@ spring:
           enabled: true
     jdbc:
       dialect: postgresql
+  cache:
+    type: redis
   web:
     resources:
       static-locations: file:${fileUploadPath}, classpath:/static

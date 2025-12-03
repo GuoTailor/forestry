@@ -7,6 +7,7 @@ import org.gyh.forestry.domain.ScenicSpot;
 import org.gyh.forestry.domain.WeatherData;
 import org.gyh.forestry.dto.req.StatisticAnimalTypeReq;
 import org.gyh.forestry.dto.resp.*;
+import org.gyh.forestry.enums.PointTypeEnum;
 import org.gyh.forestry.mapper.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,7 +50,7 @@ public class StatisticsService {
      */
     public GeneralInforResp generalInfor() {
         return new GeneralInforResp(
-                pointInfoMapper.countByType(null),
+                pointInfoMapper.countByType(PointTypeEnum.ANIMAL),
                 animalManageMapper.count(),
                 animalTypeMapper.count()
         );
